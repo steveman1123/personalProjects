@@ -6,7 +6,7 @@ This is a home for past software projects that are done, half baked, or whatever
 
 These are some templates of files that I use to keep track of my finances. I check/update these around once per week.
 
-## htmlFile
+## htmlFiles
 
 Misc html applets. Usually they're meant for calcuations that are too advanced for a calculator, but not complex enough to constitute purchasing a better setup.
 
