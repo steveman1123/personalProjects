@@ -10,7 +10,7 @@ order = neopixel.GRB
 pixels = neopixel.NeoPixel(pin, numLights, brightness=0.5, auto_write=False, pixel_order=order)
 
 #lights that are dead or partially dead, in this strip, only the red lights here are dead
-deadR = [0,1,2,4,5,6,7,8] #,9,10,11,13,15,17,19,20,23,25,27,28,35,36,38,39,45,52,80]
+deadR = [0,1,2,4,5,6,7,8,9,10,11,13,15,17,19,20,23,25,27,28,35,36,38,39,45,52,80]
 
 col = {
 'r':(0,255,0),
@@ -21,9 +21,9 @@ col = {
 'i':(0,64,255),
 'v':(0,192,255),
 
-'w':(255,255,255),
-'p':(32,96,192),
-'c':(192,0,255)
+'w':(255,255,255), #white
+'p':(32,96,192), #purple
+'c':(192,0,255) #cyan
 }
 
 
