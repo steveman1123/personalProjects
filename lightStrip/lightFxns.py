@@ -10,12 +10,14 @@ order = neopixel.GRB
 pixels = neopixel.NeoPixel(pin, numLights, brightness=0.5, auto_write=False, pixel_order=order)
 
 #lights that are dead or partially dead, in this strip, only the red lights here are dead
+
 deadR = [0,1,2,4,5,6,7,8,9,10,11,13,15,17,19,20,23,25,27,28,35,36,38,39,45,52,80]
+#deadR = []
 
 col = {
 'r':(0,255,0),
-'o':(92,255,0),
-'y':(255,192,0),
+'o':(80,255,0),
+'y':(180,216,0),
 'g':(255,0,0),
 'b':(0,0,255),
 'i':(0,64,255),
@@ -34,6 +36,7 @@ def clearDead():
   for e in deadR:
     if(pixels[e][1]>0): #only turn off lights using red
       pixels[e] = (0,0,0)
+
 
 def updateLights():
   clearDead()
@@ -67,6 +70,20 @@ def fade2color(pixelNum, color, step=1):
     elif(start[i]>color[i]):
       start[i] -= min(step,start[i]-color[i])
   pixels[pixelNum] = start
+  clearDead()
+  return tuple(start)==tuple(color) #return status if light reached desired color
+
+
+#fade the whole strip to another strip colorset - colorset should be same size as strip
+def fadeStrip(newStrip, step=1): #newStrip should be a list of 3 value color tuples [(x,x,x),(x,x,x),...]
+  #TODO: add error checking to make sure newStrip is same length as pixels
+  for i,e in enumerate(newStrip):
+    fade2color(i,e,step)
+  return (sum([tuple(e)==(0,0,0) or e==newStrip[i] for i,e in enumerate(list(pixels))]) == numLights)
+
+
+
+
 
 
 ### main functions
@@ -77,7 +94,7 @@ def everyNthLight(colorList,lightsPerColor):
   for e in colorList:
     pattern = (pattern+(e,)*lightsPerColor)
   pixels[0:numLights] = (pattern*int(numLights/len(pattern)+1))[0:numLights] #loop pattern till filled, then trim off extra
-
+  return list(pixels)
 
 def color_chase(color, wait):
   for i in range(numLights):
