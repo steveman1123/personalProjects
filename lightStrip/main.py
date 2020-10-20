@@ -1,27 +1,30 @@
 import lightFxns as l
+import datetime as dt
+import threading
 
-def main():
+while True:
+  startTime = dt.time(19,00) #time of day to start (7pm)
+  endTime = dt.time(6,00) #time of day to stop (6am)
+  l.clearLights()
+  runFadeStrip(
+    l.everyNthLight([l.col['o'],l.col['p']],1),
+    l.everyNthLight([l.col['r']],1),
+    -1,
+    startTime,
+    endTime
+    )
 
-  #halloween colors (red for blood, orange and purple
-  endSet = l.everyNthLight([l.col['r']],1)
-  startSet = l.everyNthLight([l.col['o'],l.col['p']],1)
-  
-  l.updateLights()
-  
-  #run the fade strip once
-  runFadeStrip(startSet, endSet, -1)
-
-  #run the pix tower with 2 lights, 3 times
-  runTower(20,0)
+#run the pix tower with 2 lights, 3 times
+#runTower(20,0)
 
 
 
 
 
 #fade between two sets, default to running forever
-def runFadeStrip(startSet, endSet, n=-1):
+def runFadeStrip(startSet, endSet, n=-1, startTime=dt.time(0), endTime=dt.time(0)):
   c=0
-  while c<n or n<0:
+  while (c<n or n<0) and (dt.datetime.now().time()<=startTime or dt.datetime.now().time()>endTime):
     if(n>=0):
       c+=1
     done = False
@@ -45,10 +48,4 @@ def runTower(lightNum=1, n=-1):
     if(n>=0):
       c+=1
     l.pixTower(lightNum)
-
-
-
-
-if __name__=='__main__':
-  main()
 
