@@ -9,11 +9,16 @@ def main():
     endTime = dt.time(6,00) #time of day to stop (6am)
     l.clearLights()
     runFadeStrip(
+      #halloween colors
       l.everyNthLight([l.col['o'],l.col['v']],1),
       l.everyNthLight([l.col['r']],1),
-      #the following for general fall colors
+      #generic fall colors
       #l.everyNthLight([l.col['o'],l.col['p'],l.col['y'],l.col['r']],1),
       #l.everyNthLight([l.col['o'],l.col['y']],1),
+      #christmas colors
+      # l.everyNthLight([l.col['r'],l.col['g'],l.col['w']],5),
+      # l.everyNthLight([l.col['c'],l.col['w']],3),
+      
       
       -1,
       startTime,
