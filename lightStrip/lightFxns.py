@@ -7,7 +7,7 @@ numLights = 99
 
 # define pixels
 order = neopixel.GRB
-pixels = neopixel.NeoPixel(pin, numLights, brightness=0.25, auto_write=False, pixel_order=order)
+pixels = neopixel.NeoPixel(pin, numLights, brightness=0.2, auto_write=False, pixel_order=order)
 
 #lights that are dead or partially dead, in this strip, only the red lights here are dead
 
