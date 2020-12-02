@@ -24,8 +24,6 @@ def main():
       startTime,
       endTime
     )
-    print(str(dt.datetime.now().time()))
-    print(str(dt.datetime.now().time()>=startTime)+" - "+str(dt.datetime.now().time()<endTime))
     time.sleep(15)
     l.clearLights()
 
