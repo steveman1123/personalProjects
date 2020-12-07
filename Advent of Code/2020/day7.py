@@ -1,7 +1,3 @@
-import json
-#>75k, <165k
-
-
 #return whether bag of color 'color' contains bag of color 'wantedColor' based on rules defined in 'bagList'
 def hasBag(bagList, color, wantedColor, isTop=0):
   if(wantedColor in bagList[color]):
@@ -25,6 +21,8 @@ def bagsWithin(bagList, color):
       total += (int(bagsWithin(bagList, b))+1)*int(bagList[color][b]) #multiply the number of bags within each on of those with the number of that bag in the selected bag (add 1 to account for that bag itself)
     return total
 
+
+
 with open('day7in.txt','r') as f:
   r = f.read().split('\n')
 
@@ -46,6 +44,5 @@ pt1 = [e for e in bags if hasBag(bags, e, bagColor,1)]
 #count the number of bags within a single bagColor bag
 pt2 = bagsWithin(bags, bagColor)
 
-print len(pt1)
-
-print pt2
+print(len(pt1))
+print(pt2)
