@@ -86,5 +86,5 @@ document.onload = updateCompliment();
 document.onload = time();
 window.setInterval(updateWeather,60*60*1000); //update every hour
 window.setInterval(updateCompliment,6*60*60*1000); //update every 6 hours
-//window.setInterval(updateQuote,24*60*60*1000); //update every day
+window.setInterval(updateQuote,24*60*60*1000); //update every day
 window.setInterval(time, 500); //update time every half second
