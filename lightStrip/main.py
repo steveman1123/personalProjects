@@ -5,19 +5,19 @@ import threading, time
 
 def main():
   while True:
-    startTime = dt.time(19,00) #time of day to start (7pm)
-    endTime = dt.time(6,00) #time of day to stop (6am)
+    startTime = dt.time(17,30) #time of day to start (7pm)
+    endTime = dt.time(0,0) #time of day to stop (6am)
     
     runFadeStrip(
       #halloween colors
       #l.everyNthLight([l.col['o'],l.col['v']],1),
       #l.everyNthLight([l.col['r']],1),
       #generic fall colors
-      l.everyNthLight([l.col['o'],l.col['p'],l.col['y'],l.col['r']],1),
-      l.everyNthLight([l.col['o'],l.col['y']],1),
+      #l.everyNthLight([l.col['o'],l.col['p'],l.col['y'],l.col['r']],1),
+      #l.everyNthLight([l.col['o'],l.col['y']],1),
       #christmas colors
-      # l.everyNthLight([l.col['r'],l.col['g'],l.col['w']],5),
-      # l.everyNthLight([l.col['c'],l.col['b'],l.col['c'],l.col['w']],1),
+       l.everyNthLight([l.col['r'],l.col['g'],l.col['w']],5),
+       l.everyNthLight([l.col['c'],l.col['b'],l.col['c'],l.col['w']],1),
       
       
       -1,
