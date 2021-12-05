@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Financial Tracker</title>
+    <meta name="description" content="A basic financial tracker for tracking expenses, net worth, and making a budget.">
+    <link rel="stylesheet" type="text/css" href="./finTracker.css">
+    <link rel="shortcut icon" href="./icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body onload="init();">
+    <div id="header">
+      <h1>This is a basic personal financial tracker. It requires Javascript to run, but your information never leaves your computer. You can save your information to a text file, and upload it at a later time so you don't lose your place.</h1>
+      <button onclick="save();">Save Now</button>
+
+      <p>Load your saved data: <input type="file" id="loadFile" oninput="load();"></p>
+      <p id="list"></p>
+
+    </div>
+    <div id="wrapper">
+      <div id="xtns">
+        <h2>Transactions</h2>
+        <table id="xtnList">
+          <tr><th>Date</th><th>Account</th><th>Amount</th><th>Reason</th></tr>
+        </table>
+        <button onclick="addXtn();">Add Transaction</button>
+      </div>
+
+      <div id="networth">
+        <h2>Net Worth</h2>
+        <canvas id="nwGraph">JS Not Enabled</canvas>
+        <p style="font-size: 9pt;">Net Worth Over Time</p>
+        <canvas id="laGraph">JS Not Enabled</canvas>
+        <p style="font-size: 9pt;">Liability to Asset Ratio</p>
+        <table id="laTable">
+          <tr><th colspan=2>Assets</th><th colspan=2>Liabilities</th></tr>
+        </table>
+        <button onclick="addLA();">Add Asset/Liability</button>
+        <table id="stocks">
+          <tr><th>Symbol</th><th>Price</th><th>Shares Held</th></tr>
+
+        </table>
+        <button onclick="addStock();">Add Stock</button>
+        <p>Current Net Worth: <span id="nw"></span></p>
+        <p>Current L/A Ratio: <span id="la"></span></p>
+      </div>
+
+      <div id="budget">
+        <h2>Budget Estimator</h2>
+        <p><input type="checkbox" id="wageType" oninput="updateBudget();"> Use Salary</p>
+        <table id="wageInfo">
+          <tr id="salRateRow"><td>Salary</td><td><input type="text" placeholder="Salary" id="salRate" oninput="updateBudget();"></td></tr>
+          <tr id="hrRateRow"><td>Hourly Rate</td><td><input type="text" placeholder="Hourly Rate" id="hrRate" oninput="updateBudget();"></td></tr>
+          <tr id="hpwRow"><td>Hours/Week</td><td><input type="text" placeholder="Hours/Week" id="hrPerWk" oninput="updateBudget();"></td></tr>
+          <tr><td>Weeks/Paycheck</td><td><input type="text" placeholder="Weeks/Paycheck" id="wkPerCh" oninput="updateBudget();"></td></tr>
+          <tr><td>Retirement Rate (%)</td><td><input type="text" placeholder="Retirement Rate" id="retRate" oninput="updateBudget();"></td></tr>
+          <tr><td>Tax Rate (%)</td><td><input type="text" placeholder="Tax Rate" id="taxRate" oninput="updateBudget();"></td></tr>
+        </table>
+        <br>
+
+        <table id="firstResults">
+          <tr><td>Gross Income/Paycheck</td><td id="grossPerCh">$0</td></tr>
+          <tr><td>Expendable Income/Paycheck</td><td id="expPerCh">$0</td></tr>
+          <tr><td>Expendable Income/Week</td><td id="expPerWk">$0</td></tr>
+          <tr><td>Expendable Income/Month</td><td id="expPerMo">$0</td></tr>
+        </table>
+
+        <p>Monthly Expenses:</p>
+        <table id="moExp">
+        </table>
+        <button onclick="addMoExpense();">Add Monthly Expense</button>
+
+        <p>Weekly Expenses:</p>
+        <table id="wkExp">
+        </table>
+       <button onclick="addWkExpense();">Add Weekly Expense</button>
+       <p><table><tr><td>Remaining/Month</td><td id="remaining">$0</td></tr></table></p>
+
+      </div>
+    </div>
+  </body>
+
+<script src="./commonFxns.js"></script>
+<script src="./xtnFxns.js"></script>
+<script src="./nwFxns.js"></script>
+<script src="./budgetFxns.js"></script>
+</html>

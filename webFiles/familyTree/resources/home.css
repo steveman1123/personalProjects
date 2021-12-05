@@ -1,0 +1,33 @@
+html,body {
+  width: 100%;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+body div {
+  border: solid black 1px;
+  width: 45vw;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 1vh;
+}
+
+#canvDiv {
+  /*height: 98vh;*/
+  margin-left: 1vw;
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: 640px) {
+  html,body {
+    text-align: center;
+  }
+  #canvDiv {
+    width: 95vw;
+    height: 70vh;
+  }
+}

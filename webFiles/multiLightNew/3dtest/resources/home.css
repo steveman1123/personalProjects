@@ -1,0 +1,74 @@
+body * {
+  font-size: 14pt;
+  font-family: sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5);
+}
+
+.trashPic {
+  background-image: url("./trash.png");
+  background-size: cover;
+  width: 20px;
+  height: 1.15em;
+}
+
+.trashPic:hover {
+  background-image: url("./trashOpen.png");
+}
+
+.fileName, .trash {
+  border: none;
+  background-color: transparent;
+}
+
+.fileName:hover {
+  font-weight: bold;
+}
+
+.button {
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.25s;
+}
+
+.button:hover {
+  background-color: red;
+}
+
+#color, #colorText {
+  width: 4em;
+}
+
+.list, .listWrap {
+  border: solid black 1px;
+  padding: 5px;
+}
+
+.list {
+  text-align: left;
+}
+
+.listWrap {
+  max-width: 50%;
+  margin: 10px auto;
+}
+
+#foot {
+  color: #aaa;
+  text-align: center;
+  font-size: 10pt;
+}
+
+@media screen and (max-width: 640px){
+  .listWrap {
+    max-width: 90%;
+  }
+}

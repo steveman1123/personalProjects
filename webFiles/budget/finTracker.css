@@ -1,0 +1,89 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: sans-serif;
+  margin: 0;
+}
+
+#header {
+  width: 75%;
+  text-align: center;
+  margin: 10px auto;
+}
+
+h1 {
+  font-size: 12pt;
+  font-weight: normal;
+}
+
+h2 {
+  font-size: 14pt;
+}
+
+#wrapper {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#xtns, #networth, #budget {
+  display: inline-block;
+  vertical-align: top;
+  width: 30%;
+  margin: 5px auto;
+  border: solid black 1px;
+  padding: 5px;
+}
+
+.trash {
+  vertical-align: top;
+  border: none;
+  background-color: transparent;
+}
+
+.trashPic {
+  background-image: url("./trash.png");
+  background-size: cover;
+  width: 20px;
+  height: 1.5em;
+}
+
+.trashPic:hover {
+  background-image: url("./trashOpen.png");
+}
+
+canvas {
+  border: solid black 1px;
+}
+
+table {
+  text-align: right;
+  width: 85%;
+  border-spacing: 0;
+  margin: 0 auto;
+}
+
+th {
+  text-align: center;
+}
+
+table, th, td {
+  border: solid #ccc 1px;
+}
+
+td input {
+  width: 98%;
+  border: none;
+  text-align: left;
+}
+
+#budget #firstResults td, #remaining td {
+  width: 50%;
+}
+
+@media screen and (max-width: 640px) {
+
+  #xtns, #networth, #budget {
+    width: 90%;
+  }
+
+}
