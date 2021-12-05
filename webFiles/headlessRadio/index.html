@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Radio</title>
+    <style>
+      html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        font-family: sans-serif;
+        text-align: center;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="this is an online interface for cmus media player and should be used in conjunction with radiofxns.php"
+  </head>
+  <body>
+    <p>
+      <button type="submit" name="cmd" value="prev" onclick="postData(this);">&#x25C4;&#x25C4;</button>
+      <button type="submit" name="cmd" value="pp" onclick="postData(this);" autofocus>&#x25BA;/<b>||</b></button>
+      <button type="submit" name="cmd" value="next" onclick="postData(this);">&#x25BA;&#x25BA;</button>
+    </p>
+    <input type="range" name="vol" min=0 max=100 onchange="postData(this);">
+    
+    
+    
+    <script type="text/javascript">
+      function postData(elem){
+        //https://code-boxx.com/submit-form-without-refreshing-page/
+        // (A) GET FORM DATA
+        var data = new FormData();
+        data.append(elem.name,elem.value);
+        //data.append("name", document.getElementById("user-name").value);
+        //data.append("email", document.getElementById("user-email").value);
+       
+        // (B) AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "radiofxns.php");
+        // What to do when server responds
+        xhr.onload = function(){ console.log(this.response); };
+        xhr.send(data);
+       
+        // (C) PREVENT HTML FORM SUBMIT
+        return false;
+      }
+      
+      //get info about the current playing song, and other server settings
+      function getInf() {
+        
+      }
+    </script>
+  </body>
+</html>

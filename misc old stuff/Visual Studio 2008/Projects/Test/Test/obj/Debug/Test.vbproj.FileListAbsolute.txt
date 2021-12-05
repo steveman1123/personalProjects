@@ -1,0 +1,30 @@
+C:\Users\User\AppData\Local\Temporary Projects\Test\bin\Debug\Test.exe
+C:\Users\User\AppData\Local\Temporary Projects\Test\bin\Debug\Test.pdb
+C:\Users\User\AppData\Local\Temporary Projects\Test\bin\Debug\Test.xml
+C:\Users\User\AppData\Local\Temporary Projects\Test\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\AppData\Local\Temporary Projects\Test\obj\Debug\Test.Form1.resources
+C:\Users\User\AppData\Local\Temporary Projects\Test\obj\Debug\Test.Resources.resources
+C:\Users\User\AppData\Local\Temporary Projects\Test\obj\Debug\Test.vbproj.GenerateResource.Cache
+C:\Users\User\AppData\Local\Temporary Projects\Test\obj\Debug\Test.exe
+C:\Users\User\AppData\Local\Temporary Projects\Test\obj\Debug\Test.xml
+C:\Users\User\AppData\Local\Temporary Projects\Test\obj\Debug\Test.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\bin\Debug\Test.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\bin\Debug\Test.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\bin\Debug\Test.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.Form1.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.Resources.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.vbproj.GenerateResource.Cache
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.exe
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.xml
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.pdb
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\bin\Debug\Test.exe
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\bin\Debug\Test.pdb
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\bin\Debug\Test.xml
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.Form1.resources
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.Resources.resources
+C:\Users\User\Desktop\Tech Stuff\Projects\Visual Studio 2008\Projects\Test\Test\obj\Debug\Test.vbproj.GenerateResource.Cache

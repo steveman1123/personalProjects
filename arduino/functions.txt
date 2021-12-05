@@ -1,0 +1,9 @@
+every time there's an intercept (in this case a falling edge), the function is called.
+
+function type 1
+function should compare current time to set start time, if it's greater than a measuring constant (eg 50ms), return the number of periods, else add 1 to the number of periods
+
+function type 2
+function should continue sampling periods till a constant is reached (eg 1000 periods), then return current time minus set initial time.
+
+both should set current time to initial time at the very end

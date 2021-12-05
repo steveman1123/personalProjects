@@ -1,0 +1,42 @@
+Sub Col2Cols()
+Dim numCols as Integer
+Dim targetCol as Integer
+Dim tagetRow as Integer
+Dim iCol as Integer
+dim AorD as Integer
+
+'number of columns to transform to
+numCols = InputBox("How many columns does the data need to fill across?", "Target Number of Columns", "1")
+if numCols = False then Exit Sub
+
+'1 if the table is supposed to fill across, 2 if down
+AorD = InputBox("Does the data need to fill across (1) or down (2)? Please only enter (1) or (2)","Fill Data Across or Down","1")
+if AorD = False then Exit Sub
+
+'starting cell to paste data into
+targetCol = Selection.Column
+targetRow = Selection.Row
+
+if aord=1 then
+  
+  'loop through every cell in the selected range
+  For i = 0 To Selection.Rows.Count - 1
+    'Change the value for the Target Column
+    TargetCol = TargetCol + 1
+
+     'Set the value of the Target Cell based our the Source Cell
+    Cells(TargetRow, TargetCol).Value = Cells(Selection.Row + i, Selection.Column).Value
+
+    'Reset the Target Column and change the value for the Target Row
+    If TargetCol = Selection.Column + numCols Then
+      TargetRow = TargetRow + 1
+      TargetCol = Selection.Column
+    End If
+  Next i
+  
+elseif aord=2 then
+  MsgBox "Not Available Yet"
+  
+end if
+
+End Sub

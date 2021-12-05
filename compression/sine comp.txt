@@ -1,0 +1,48 @@
+sinusoidal compression
+convert data from bytes to decimal, back to bytes (using each individual number - should triple the amount of data), then apply a sinusoid fit to that data (or multiple sinusoids)
+
+q1: can we find a given sinusoid equation given a certain number of points? If so, how many points to get such an equation?
+a1: a*sin(bx+c)+d can get us 3? points? What if instead of splitting into single numbers, we get the sinusoid for the larger numbers? That will have larger swings, but could also work due to not having to triple the amount of data
+
+applying additional constraints that a,c, and d are constant, then we can do simple fourior transforms (maybe it would make sense to have those degrees of freedom though? That would allow for larger swings) - on further analysis, removing those freedoms makes sense, simple fourier decomp may be more effective
+
+
+f(t) = A0+sum(An*sin(n*f*t),0,inf)+sum(An*cos(n*f*t),0,inf)
+
+(optional) split data into smaller sections for more managable amounts)
+isolate every third number (to maintain consistancy of amplitudes, should allow for smaller compression? That may need to be played with)
+(optional) split data again
+option 1) start with a small window to FFT (use every other value as real or complex), increase window size until data is fit perfectly
+option 2) start with window of entire data, decrease window size until data is no longer fit perfectly
+
+
+
+fourier transforms:
+question:
+how can I get the frequencies from a continuous time (sinusoidal) signal given a large window?
+
+aperiodic continuous time signal
+
+x(t) = (1/2pi)*int(X(jw)*e^(jwt)dw,-inf,inf)
+
+X(jw) = int(x(t)*e^(-jwt)dt,-inf,inf)
+
+
+
+
+basically applying a filter to aperiodic discrete data (LPF)
+
+https://thefouriertransform.com/series/coefficients.php
+
+x(t) = a0+sum(am*cos(M*t),m,-inf,inf)+sum(bn*sin(N*t),n,-inf,inf)
+m,n=integers
+M,N=2pi(m,n)/T
+T=fundimental period (length of dataset)
+
+What are a0/am/bn given x(t)?
+a0 = 1/T*int(x(t)dt,0,T)
+am = 2/T*int(x(t)*cos(Mt)dt,0,T)
+bn = 2/T*int(x(t)*sin(Nt)dt,0,T)
+
+
+

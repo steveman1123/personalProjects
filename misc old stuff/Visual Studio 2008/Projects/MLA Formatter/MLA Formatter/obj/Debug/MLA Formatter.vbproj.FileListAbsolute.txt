@@ -1,0 +1,20 @@
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\bin\Debug\MLA Formatter.exe
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\bin\Debug\MLA Formatter.pdb
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\bin\Debug\MLA Formatter.xml
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Debug\MLA_Formatter.Form1.resources
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Debug\MLA_Formatter.Resources.resources
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Debug\MLA Formatter.vbproj.GenerateResource.Cache
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Debug\MLA Formatter.exe
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Debug\MLA Formatter.xml
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Debug\MLA Formatter.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\obj\Debug\MLA Formatter.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\obj\Debug\MLA Formatter.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\obj\Debug\MLA Formatter.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\bin\Debug\MLA Formatter.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\bin\Debug\MLA Formatter.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\bin\Debug\MLA Formatter.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\obj\Debug\MLA_Formatter.Form1.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\obj\Debug\MLA_Formatter.Resources.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\MLA Formatter\MLA Formatter\obj\Debug\MLA Formatter.vbproj.GenerateResource.Cache

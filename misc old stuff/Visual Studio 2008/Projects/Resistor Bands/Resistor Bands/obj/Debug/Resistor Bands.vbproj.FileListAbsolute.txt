@@ -1,0 +1,20 @@
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\bin\Debug\Resistor Bands.exe
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\bin\Debug\Resistor Bands.pdb
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\bin\Debug\Resistor Bands.xml
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\obj\Debug\Resistor_Bands.Form1.resources
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\obj\Debug\Resistor_Bands.Resources.resources
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\obj\Debug\Resistor Bands.vbproj.GenerateResource.Cache
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\obj\Debug\Resistor Bands.exe
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\obj\Debug\Resistor Bands.xml
+C:\Users\User\AppData\Local\Temporary Projects\Resistor Bands\obj\Debug\Resistor Bands.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\obj\Debug\Resistor Bands.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\obj\Debug\Resistor Bands.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\obj\Debug\Resistor Bands.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\bin\Debug\Resistor Bands.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\bin\Debug\Resistor Bands.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\bin\Debug\Resistor Bands.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\obj\Debug\Resistor_Bands.Form1.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\obj\Debug\Resistor_Bands.Resources.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\Resistor Bands\Resistor Bands\obj\Debug\Resistor Bands.vbproj.GenerateResource.Cache

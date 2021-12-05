@@ -1,0 +1,37 @@
+'take in a cell with newlines split cell to new rows
+
+Sub SplitText()
+  Dim str() As String
+  Dim usrRows As Integer
+  Dim maxRow As Integer
+  
+  'in case if the user selects the whole col, this way it won't crash unless they select a very large number
+  usrRows = InputBox("How many rows will the final data have (after converting from single cells to multi-cells)? Can be greater.", "Final Rows", "500")
+
+  'limit max to user selection or, if selection is smaller, then use that
+  If Selection.Rows.Count > usrRows Then
+    maxRow = usrRows
+  Else
+    maxRow = Selection.Rows.Count
+  End If
+  
+  'loop thru to selected max row
+  For j = 0 To maxRow - 1
+    Cells(Selection.Row + j, Selection.Column).Activate 'activate cell
+    'ensure cell has text
+    If Len(ActiveCell.Value) Then
+      str = VBA.Split(ActiveCell.Value, vbLf) 'split text by newLines
+      For i = 0 To UBound(str) 'loop thru rows in text
+        If Len(str(i)) > 0 Then 'ensure row has text
+          If i < UBound(str) Then 'if not the last element
+            'insert number of rows=number of LF (which is = number of rows-1 = number of elements in str-1)
+            ActiveCell.Offset(rowOffset:=1, columnOffset:=0).EntireRow.Insert 'insert an entire row
+          End If
+          ActiveCell.Value = str(i) 'set cell value
+          ActiveCell.Offset(rowOffset:=1, columnOffset:=0).Activate 'activate next cell
+        End If
+      Next i
+    End If
+  Next j
+End Sub
+

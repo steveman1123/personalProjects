@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Boost Converter Calculator</title>
+  </head>
+  <body>
+<!--
+    <p>Check out <a href="https://en.wikipedia.org/wiki/Boost_converter" target="_blank">this</a> link for equation sources</p>
+    <table>
+      <tr><td><label for="vin">V<sub>in</sub> - Input Voltage (V): </label></td><td><input type="number" id="vin" onchange="updateVout();"></td></tr>
+      <tr><td><label for="dc">D - Duty Cycle (%): </label></td><td><input type="number" id="dc" onchange="updateVout();"></td></tr>
+      <tr><td><label for="l">L - Inductance (mH): </label></td><td><input type="number" id="l" onchange="updateVout();"></td></tr>
+      <tr><td><label for="r">R - Load Resistance (&Omega;): </label></td><td><input type="number" id="r" onchange="updateVout();"></td></tr>
+      <tr><td><label for="f">F - Frequency (Hz): </label></td><td><input type="number" id="f" onchange="updateVout();"></td></tr>
+      <tr><td>&nbsp;</td><td></td></tr>
+      <tr><td colspan=2>Discontinuous Mode:</td></tr>
+      <tr><td>V<sub>out</sub>:</td><td id="voutDM"></td></tr>
+      <tr><td colspan=2>Continous Mode:</td></tr>
+      <tr><td>V<sub>out</sub>:</td><td id="voutCM"></td></tr>
+    </table>
+-->
+    <br>
+    <br>
+    <p>Check out <a href="http://www.ti.com/lit/an/slva372c/slva372c.pdf" target="_blank">this</a> link for equation sources</p>
+    <p>This assumes infinite current from input power</p>
+    <table>
+      <tr><td><label for="vin2">V<sub>in</sub> - supplied input voltage (V): </label></td><td><input type="number" id="vin2" onchange="updateVout2();"></td></tr>
+      <tr><td><label for="vout2">V<sub>out</sub> - desired nominal output voltage (V): </label></td><td><input type="number" id="vout2" onchange="updateVout2();"></td></tr>
+      <tr><td><label for="eta2">&eta; - converter efficieny (%): </label></td><td><input type="number" id="eta2" onchange="updateVout2();"></td><td>Usually ~80%</td></tr>
+      <tr><td><label for="l2">L - selected inductor (mH): </label></td><td><input type="number" id="l2" onchange="updateVout2();"></td></tr>
+      <tr><td><label for="f2">F - swithcing frequency (Hz): </label></td><td><input type="number" id="f2" onchange="updateVout2();"></td></tr>
+      <tr><td><label for="ilim2">I<sub>LIM</sub> (A): </label></td><td><input type="number" id="ilim2" onchange="updateVout2();"></td><td>Is 20A for IRF540</td></tr>
+      <tr><td>&nbsp;</td><td></td></tr>
+      <tr><td>Duty Cycle:</td><td id="dc2"></td></tr>
+      <tr><td>I<sub>out(max)</sub>:</td><td id="iout2"></td></tr>
+      <tr><td>&Delta;I<sub>L</sub> - inductor ripple current:</td><td id="irip2"></td></tr>
+    </table>
+    <br>
+    <hr>
+    <br>
+    <p>Ion Force in Air:</p>
+    <p>This assumes output current from boost limits current rather than air resistivity limiting current</p>
+    <table>
+      <tr><td><label for="d">Distance between electrodes (mm): </label></td><td><input type="number" id="d" onchange="updateForce();"></td></tr>
+      <tr><td><label for="e1w">Electrode 1 Width (mm): </label></td><td><input type="number" id="e1w" onchange="updateForce();"></td></tr>
+      <tr><td><label for="e1h">Electrode 1 Height (mm): </label></td><td><input type="number" id="e1h" onchange="updateForce();"></td></tr>
+      <tr><td><label for="e2w">Electrode 2 Width (mm): </label></td><td><input type="number" id="e2w" onchange="updateForce();"></td></tr>
+      <tr><td><label for="e2h">Electrode 2 Height (mm): </label></td><td><input type="number" id="e2h" onchange="updateForce();"></td></tr>
+      <tr><td>&nbsp;</td><td></td></tr>
+      <tr><td>Max Force:</td><td id="frc"></td><td>Force limited by:</td><td id="limiter"></td></tr>
+      <tr><td>Max Voltage:</td><td id="vbr"></td></tr>
+      <tr><td>Max Boost Current:</td><td id="iBoost"></td></tr>
+      <tr><td>Max Air Electrical Current:</td><td id="iAir"></td></tr>
+      <tr><td>Air Electrical Reistance:</td><td id="rAir"></td></tr>
+    </table>
+  </body>
+</html>
+
+<script>
+  function updateVout() {
+    var vin = document.getElementById("vin").value;
+    var dc = document.getElementById("dc").value;
+    var l = document.getElementById("l").value/1000;
+    var r = document.getElementById("r").value;
+    var f = document.getElementById("f").value;
+    var k = 2*l/(r/f);
+    var dm = vin*(1+Math.sqrt(1+4*Math.pow((dc/100),2)/k));
+    var cm = vin/(1-dc/100);
+
+
+    document.getElementById("voutDM").innerHTML = dm;
+    document.getElementById("voutCM").innerHTML = cm;
+  }
+
+  function updateVout2() {
+    var vin = document.getElementById("vin2").value;
+    var vout = document.getElementById("vout2").value;
+    var eta = document.getElementById("eta2").value/100;
+    var l = document.getElementById("l2").value/1000;
+    var f = document.getElementById("f2").value;
+    var ilim = document.getElementById("ilim2").value;
+
+    var dc = 1-(vin*eta)/vout;
+    var irip = (vin*dc)/(f*l);
+    var imax = (ilim-irip/2)*(1-dc);
+
+    document.getElementById("dc2").innerHTML = (dc*100).toPrecision(6)+"%";
+    document.getElementById("iout2").innerHTML = (imax*1000).toPrecision(6)+"mA";
+    document.getElementById("irip2").innerHTML = (irip*1000).toPrecision(6)+"mA";
+    updateForce();
+  }
+
+  function updateForce() {
+    var iBoost = parseFloat(document.getElementById("iout2").innerHTML)/1000; //current able to be supplied by boost converter
+    var d = document.getElementById("d").value/1000; //distance (m) between electrodes
+    var v = document.getElementById("vout2").value; //voltage difference
+    var k = 2*Math.pow(10,-4); //k value of air
+
+    //dimensions of the electrodes
+    var e1w = document.getElementById("e1w").value/1000;
+    var e1h = document.getElementById("e1h").value/1000;
+    var e2w = document.getElementById("e2w").value/1000;
+    var e2h = document.getElementById("e2h").value/1000;
+
+    var rho = 2*Math.pow(10,16);//resistivity of air ohm/m - (1.3 to 3.3)*10^16
+    var r = rho*Math.pow(d,3)/(3*(e2w-e1w)*(e2h-e1h)); //improved resistance formula of two different shaped electrodes
+    var iAir = v/r; //current able to be passed through air
+
+    var vbr = 3*Math.pow(10,6)*d; //breakdown voltage
+    var f;
+    if(v > vbr) {
+      f = 0; //spark occured
+      document.getElementById("limiter").innerHTML = "sparking";
+    } else {
+      if(iAir>iBoost) {
+        f = iBoost*d/k; //iBoost is limiting factor
+        document.getElementById("limiter").innerHTML = "booster";
+      } else {
+        f = iAir*d/k; //iAir is limiting factor
+        document.getElementById("limiter").innerHTML = "air";
+      }
+    }
+    document.getElementById("frc").innerHTML = (f*1000).toPrecision(6)+"mN";
+    document.getElementById("vbr").innerHTML = (vbr/1000).toPrecision(6)+"kV";
+    document.getElementById("iBoost").innerHTML = (iBoost*1000).toPrecision(6)+"mA";
+    document.getElementById("iAir").innerHTML = (iAir*1000).toPrecision(6)+"mA";
+    document.getElementById("rAir").innerHTML = (r/1000).toPrecision(6)+"k&Omega;";
+  }
+</script>

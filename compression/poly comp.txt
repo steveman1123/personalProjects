@@ -1,0 +1,74 @@
+use polynomial compression:
+attempt to round coefficients to a certain number of sigfigs, 
+attempt perfect decompression to test, 
+if it doesn't work, add back sigfigs and/or change x/y values until it does work 
+^ sigfig number could be based on max number of decimal places available in a processor's 'int' (4bytes for 32bit, and usually 8bytes for 64bit)
+x/y values could have similar digit counts to minimize large swings in the coefficients (coefficients ideally should have few sigfigs)
+basic rule: coefficient digits plus x digits must be fewer than y digits in order for compression to occur
+
+
+
+
+eg:
+Hello, world.
+
+original data size: 13 bytes
+
+convert to ascii:
+072,101,108,108,111,044,032,119,111,114,108,064,046
+
+combine to single numeric:
+072101108108111044032119111114108064046
+
+take first quarter into x's, second 3/4 become y's (ratios change depending on number of coefficients desired):
+x1=07210
+x2=11081
+y1=08111044032119
+y2=111114108064046
+
+generate coefficient values given x and y:
+for 2 pairs, y=ax+b -> a=(y2-y1)/(x2-x1), b=y1-ax1
+
+a = 103003064031927/3871 = 26608903134.055023...
+b = -183739147564417.71583...
+
+remove sigfigs until no longer valid
+y1 = 26608903134.02202*7210-183739147564417.7158 = 8111044031881.0484 -> invalid, too many sigfigs (too many initial digits)
+
+attempt division into sixths (first third are x1/y1, etc)
+x1=0721011
+y1=081081
+x2=1104403
+y2=211911
+x3=1114108
+y3=064046
+
+for 3 pairs, y=ax^2+bx+c -> a=((y3-y2)/(x3-x2)-(y2-y1)/(x2-x1))/(x3-x1), b=, c=
+
+
+
+
+
+
+different method (akin to RLE (run length encoding)):
+set change points to 0's, use x as bit number, (y>0)=1, (y<=0)=0
+
+
+question:
+what is the y intercept of a polynomial that have the least bits of entropy that has the specified x intercepts (and <>0)?
+  for example, if there is a single x-int at x=5, then least bits of entropy would be +/-5 because having 0<a<1 introduces more entopy as a fraction (in ax+b), and a>1 could introduce more entropy in b (if b/a is not an integer)
+  for example, if there are two x-int at x=3 and x=8, then least bits of entropy would be [a,b,c]=[-1,11,-24] because 24 is the LCM
+  for example, if there are 3 x-ints at x=2, x=5, and x=12, then least bits of entropy would be [a,b,c,d]=[1,-19,94,-120]
+
+
+
+
+
+what about split data into every n switches (so we know when the 0's occur), apply the polynomial equation
+data has x bits
+data has y changes from 0 to 1 or 1 to 0
+y<x
+apply polynomial to encode switches every n switches (the larger the n, the longer the calculation, but potentially the more compression that can occur?)
+
+
+

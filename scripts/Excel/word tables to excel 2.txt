@@ -1,0 +1,35 @@
+'copy all tables from word doc to new seets in excel
+Sub CopyWordTables()
+    Dim wdDoc As Object
+    Dim wdFileName As Variant
+
+    wdFileName = Application.GetOpenFilename("Word files (*.docx),*.docx", , _
+    "Browse for word documents")
+
+    If wdFileName = False Then
+        Exit Sub
+    End If
+
+    Set wdDoc = GetObject(wdFileName)
+
+    If wdDoc.Tables.Count = 0 Then
+        MsgBox "There are no tables in the selected document."
+        Exit Sub
+    End If
+
+    Dim intTableCount As Integer
+    intTableCount = 1
+
+    For Each Table In wdDoc.Tables
+        Table.Select
+        wdDoc.Application.Selection.Copy
+        Set Sheet = Sheets.Add(After:=ActiveSheet)
+        Sheet.Name = "Table " & intTableCount
+        intTableCount = intTableCount + 1
+        Sheet.Select
+        ActiveSheet.Paste
+    Next
+
+    Set wdDoc = Nothing
+End Sub
+

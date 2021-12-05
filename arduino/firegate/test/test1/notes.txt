@@ -1,0 +1,40 @@
+physical:
+pilot solenoid
+pilot flame eye
+pilot starter
+main solenoid
+
+logical:
+pilot supposed to be lit
+number of flames
+time of mains to be on
+
+
+
+
+
+int flameEye[FLAMENUM] = {A0};
+int pilotLighter[FLAMENUM] = {A5};
+int pilots[FLAMENUM] = {A4};
+int mains[FLAMENUM] = {A3};
+
+remoteButton = A1
+
+
+
+
+
+
+if(button press) {
+  if(pilots out) {
+    open pilots
+    turn on pilotLighters
+    wait for pilots to light, or pilotlighters to timeout
+  } else {
+    open mains
+    reset pilot timeouts
+  }
+}
+if(pilots timeout) {
+  turn off pilots
+}

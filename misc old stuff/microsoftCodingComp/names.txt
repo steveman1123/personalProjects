@@ -1,0 +1,8 @@
+"nuclear", "aruncle"
+"go hang a salami","i'm a lasagna hog"
+"go hang a salami",  "I'm a lasagna hog"
+ "2 brown foxes", "2 boxes frown"
+
+
+"carbide", "cat bind"
+""I'm" here", "greet "me""

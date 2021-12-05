@@ -1,0 +1,10 @@
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\bin\Release\MLA Formatter.exe
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\bin\Release\MLA Formatter.pdb
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\bin\Release\MLA Formatter.xml
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Release\ResolveAssemblyReference.cache
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Release\MLA_Formatter.Form1.resources
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Release\MLA_Formatter.Resources.resources
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Release\MLA Formatter.vbproj.GenerateResource.Cache
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Release\MLA Formatter.exe
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Release\MLA Formatter.xml
+C:\Users\User\AppData\Local\Temporary Projects\MLA Formatter\obj\Release\MLA Formatter.pdb

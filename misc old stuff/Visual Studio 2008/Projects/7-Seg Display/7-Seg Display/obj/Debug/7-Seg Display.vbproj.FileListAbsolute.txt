@@ -1,0 +1,20 @@
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\bin\Debug\7-Seg Display.exe
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\bin\Debug\7-Seg Display.pdb
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\bin\Debug\7-Seg Display.xml
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\obj\Debug\_7_Seg_Display.Form1.resources
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\obj\Debug\_7_Seg_Display.Resources.resources
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\obj\Debug\7-Seg Display.vbproj.GenerateResource.Cache
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\obj\Debug\7-Seg Display.exe
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\obj\Debug\7-Seg Display.xml
+C:\Users\User\AppData\Local\Temporary Projects\7-Seg Display\obj\Debug\7-Seg Display.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\obj\Debug\7-Seg Display.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\obj\Debug\7-Seg Display.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\obj\Debug\7-Seg Display.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\bin\Debug\7-Seg Display.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\bin\Debug\7-Seg Display.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\bin\Debug\7-Seg Display.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\obj\Debug\_7_Seg_Display.Form1.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\obj\Debug\_7_Seg_Display.Resources.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\7-Seg Display\7-Seg Display\obj\Debug\7-Seg Display.vbproj.GenerateResource.Cache

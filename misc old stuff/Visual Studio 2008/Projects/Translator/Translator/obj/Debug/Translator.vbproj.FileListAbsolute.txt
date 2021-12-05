@@ -1,0 +1,28 @@
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Debug\Translator.exe
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Debug\Translator.pdb
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Debug\Translator.xml
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.Resources.resources
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.vbproj.GenerateResource.Cache
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.exe
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.xml
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.pdb
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Debug\Translator.exe.manifest
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Debug\Translator.application
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.Translator.resources
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.exe.manifest
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Debug\Translator.application
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\bin\Debug\Translator.exe.manifest
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\bin\Debug\Translator.application
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\bin\Debug\Translator.exe
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\bin\Debug\Translator.pdb
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\bin\Debug\Translator.xml
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.Translator.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.Resources.resources
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.vbproj.GenerateResource.Cache
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.exe.manifest
+C:\Users\User\Documents\Visual Studio 2008\Projects\Translator\Translator\obj\Debug\Translator.application

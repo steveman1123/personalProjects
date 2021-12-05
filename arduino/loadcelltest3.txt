@@ -1,0 +1,15 @@
+get input give outpput
+
+get clk in
+interpret
+give output
+
+clk in:
+get avg freq over period of time
+get avg duty cycle
+
+get avg freq:
+start time
+intercept falling edge for n cycles
+end time
+avg freq = # cycles

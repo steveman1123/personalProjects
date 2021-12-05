@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>ne555 Astable Calculator</title>
+  </head>
+  <body>
+    <p><img src="https://www.electronics-tutorials.ws/wp-content/uploads/2018/05/waveforms-tim47.gif"></p>
+    <p>Check out <a href="https://www.electronics-tutorials.ws/waveforms/555_oscillator.html" target="_blank">this</a> link for equation sources</p>
+    <p>Criteria:</p>
+    <ul>
+      <li>DC must be greater than 50%</li>
+      <li>Set R1 and R2 &lt;0 to calculate them</li>
+      <li>Set F and DC &lt;0 to calculate them</li>
+    </ul>
+
+    <table>
+      <tr><td><label for="f">Output Frequency: </label></td><td><input type="number" id="f" onchange="updateInfo();"></td><td id="fout"></td></tr>
+      <tr><td><label for="dc">Duty Cycle (%): </label></td><td><input type="number" id="dc" onchange="updateInfo();"></td><td id="dcout"></td></tr>
+      <tr><td><label for="c">Capacitor (&mu;F): </label></td><td><input type="number" id="c" onchange="updateInfo();"></td><td id="cout"></td></tr>
+      <tr><td><label for="r1">Resistor 1 (&Omega;): </label></td><td><input type="number" id="r1" onchange="updateInfo();"></td><td id="r1out"></td></tr>
+      <tr><td><label for="r2">Resistor 2 (&Omega;): </label></td><td><input type="number" id="r2" onchange="updateInfo();"></td><td id="r2out"></td></tr>
+    </table>
+  </body>
+</html>
+
+<script>
+  function updateInfo() {
+    var f = parseFloat(document.getElementById("f").value);
+    var dc = parseFloat(document.getElementById("dc").value/100);
+    var c = parseFloat(document.getElementById("c").value/1000000);
+    var r1 = parseFloat(document.getElementById("r1").value);
+    var r2 = parseFloat(document.getElementById("r2").value);
+
+
+    //alert(c);
+
+    if(f<0 && dc<0) {
+      f = (1/Math.log(2))/(c*(r1+2*r2));
+      dc = (r1+r2)/(r1+2*r2);
+    }
+    if(r1<0 && r2<0) {
+      var a = f*c*Math.log(2);
+      r1 = 2*(dc-0.5)/a;
+      r2 = (1-dc)/a;
+    }
+
+
+    document.getElementById("fout").innerHTML = f+" Hz";
+    document.getElementById("dcout").innerHTML = dc*100+" %";
+    document.getElementById("cout").innerHTML = c*1000000+" &mu;F";
+    document.getElementById("r1out").innerHTML = r1+" &Omega;";
+    document.getElementById("r2out").innerHTML = r2+" &Omega;";
+  }
+</script>

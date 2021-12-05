@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <title>Gantt Chart Maker</title>
+  </head>
+  <body onload="setup();">
+    <p id="test"></p>
+    <canvas id="canv">Canvas Not Supported</canvas>
+    <table id="itemList"><tbody></tbody></table>
+    <p><button onclick="addRow();">Add Row</button></p>
+  </body>
+</html>
+
+<style>
+body, html {
+  font-family: sans-serif;
+  text-align: center;
+  margin: 0;
+}
+
+table {
+  margin : 0 auto;
+}
+
+
+canvas {
+  border: solid black 1px;
+  margin: 30px;
+}
+</style>
+
+<script>
+var tbl, canvas, ctx;
+
+function setup() {
+  canvas = document.getElementById("canv");
+  ctx = canvas.getContext("2d");
+  canvas.width = 600;
+  canvas.height = 20;
+  setInterval(run, 200);
+}
+
+function run() {
+  tbl = document.getElementById("itemList").firstElementChild;
+  canvas.height = tbl.children.length*20+20;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(i=0;i<tbl.children.length;i++) {
+    //startDate = Math.floor(Math.random()*100);
+    //endDate = Math.floor(Math.random()*100+100);
+    infoText = tbl.children[i].children[0].children[0].value;
+    color = "#"+tbl.children[i].children[3].children[0].value;
+
+    startDate = new Date(tbl.children[i].children[1].children[0].value).getTime();
+    endDate = new Date(tbl.children[i].children[2].children[0].value).getTime();
+    beginning = new Date(tbl.children[0].children[1].children[0].value).getTime();
+    end = new Date(tbl.children[0].children[2].children[0].value).getTime();
+    if(startDate<beginning) { beginning = startDate; }
+    if(endDate>end) { end = endDate; }
+
+    //document.getElementById("test").innerHTML = (endDate-startDate)/(1000*60*60*24);
+    //color = getRandColor();
+    drawTimeline(i,beginning,end,startDate,endDate,infoText,color);
+  }
+}
+
+function drawTimeline(i,beginning,end,startDate,endDate,infoText,color) {
+  ctx.beginPath();
+  ctx.rect((startDate-beginning)/(1000*60*60*24)+50,20*i+20,(endDate-startDate)/(1000*60*60*24), 10);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.fillStyle = "black";
+  ctx.font = "10pt sans-serif";
+  ctx.fillText(infoText,5,20*i+30);
+  ctx.fill();
+  ctx.closePath();
+}
+
+function delRow(e) {
+  e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
+}
+
+function addRow() {
+  var tableElem = document.getElementById('itemList');
+  var row = tableElem.insertRow(tableElem.firstElementChild.children.length);
+  var cell = row.insertCell(0);
+  cell.innerHTML = 'Item Name: <input autofocus type="text" placeholder="Item Name" maxlength="20">';
+  cell = row.insertCell(1);
+  cell.innerHTML = 'Start Date: <input type="date">';
+  cell = row.insertCell(2);
+  cell.innerHTML = 'End Date: <input type="date">';
+  cell = row.insertCell(3);
+  cell.innerHTML = 'Color: #<input type="text" maxlength="6" size="6em" placeholder="RRGGBB"><button onclick="setRndColor(this);">?</button>';
+  cell = row.insertCell(4);
+  cell.innerHTML = '<button onclick="delRow(this);">Delete</button>';
+}
+
+function setRndColor(e) {
+  e.previousElementSibling.value = getRandColor().substring(1,7);
+}
+
+function getRandColor() {
+  chars = '0123456789ABCDEF';
+  randCol = '#';
+  for(j=0;j<6;j++) {
+    randCol += chars[Math.floor(Math.random()*chars.length)];
+  }
+  return randCol;
+}
+
+
+</script>

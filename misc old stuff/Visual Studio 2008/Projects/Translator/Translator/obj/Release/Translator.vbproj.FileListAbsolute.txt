@@ -1,0 +1,14 @@
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Release\Translator.exe
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Release\Translator.pdb
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Release\Translator.xml
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\ResolveAssemblyReference.cache
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.Translator.resources
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.Resources.resources
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.vbproj.GenerateResource.Cache
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.exe
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.xml
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.pdb
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Release\Translator.exe.manifest
+C:\Users\User\AppData\Local\Temporary Projects\Translator\bin\Release\Translator.application
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.exe.manifest
+C:\Users\User\AppData\Local\Temporary Projects\Translator\obj\Release\Translator.application

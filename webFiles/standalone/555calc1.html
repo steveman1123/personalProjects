@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>555 Calc</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+<p><label for="f">Freq (Hz):</input><input id="f" type=number onchange="update();"></p>
+<p><label for="dc">DC (%):</input><input id="dc" type=text onchange="update();"></p>
+<p><label for="c">C (pF):</input><input id="c" type=number onchange="update();"></p>
+<p><label for="ra">R1 (&Omega;):</input><input id="ra" type=number onchange="update();"></p>
+<p><label for="rb">R2 (&Omega;):</input><input id="rb" type=number onchange="update();"></p>
+<br>
+<p id="outa"></p>
+<p id="outb"></p>
+</body>
+</html>
+
+<script>
+function update() {
+var f = parseFloat(document.getElementById("f").value);
+var dc = parseFloat(document.getElementById("dc").value)/100;
+var c = parseFloat(document.getElementById("c").value)/1000000000000;
+var r1 = parseFloat(document.getElementById("ra").value);
+var r2 = parseFloat(document.getElementById("rb").value);
+if(f<0 || dc<0){
+f = (1/Math.log(2))/(c*(r1+2*r2));
+dc = (r1+r2)/(r1+2*r2)*100;
+
+document.getElementById("outa").innerHTML = "F: "+f+"Hz";
+document.getElementById("outb").innerHTML = "DC: "+dc+"%";
+} else if(r1<0 || r2<0) {
+var a = f*c*Math.log(2);
+r1 = 2*(dc-.5)/a;
+r2 = (1-dc)/a;
+document.getElementById("outa").innerHTML = "R1: "+r1+"&Omega;";
+document.getElementById("outb").innerHTML = "R2: "+r2+"&Omega;";
+}
+}
+
+
+</script>

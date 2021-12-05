@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Ion Wind Force Calculator</title>
+  </head>
+  <body>
+    <p>Check out <a href="https://en.wikipedia.org/wiki/Ion-propelled_aircraft" target="_blank">this</a> link for equation sources</p>
+    <table>
+      <tr><td><label for="d">d - distance between electrodes (mm): </label></td><td><input type="number" id="d" onchange="updateInfo();"></td></tr>
+      <tr><td><label for="v">V - Voltage between terminals (kV): </label></td><td><input type="number" id="v" onchange="updateInfo();"></td><td>Limit (breakdown) Voltage:</td><td id="vbr"></td></tr>
+      <tr><td><label for="l">l - length of wire (m): </label></td><td><input type="number" id="l" onchange="updateInfo();"></td></tr>
+      <tr><td><label for="w">W - Diameter of wire (&mu;m): </label></td><td><input type="number" id="w" onchange="updateInfo();"></td></tr>
+      <tr><td>&nbsp;</td><td></td></tr>
+      <tr><td>Force Generated:</td><td id="force"></td></tr>
+    </table>
+  </body>
+</html>
+
+<script>
+  function updateInfo() {
+    var d = document.getElementById("d").value/1000;
+    var v = document.getElementById("v").value*1000;
+    var l = document.getElementById("l").value;
+    var w = document.getElementById("w").value/1000000;
+    var k = 2*Math.pow(10,-4); //ion mobility
+    var rho = 2*Math.pow(10,16);//resistivity of air ohm/m - (1.3 to 3.3)*10^16
+    var vbr = 3*Math.pow(10,6)*d; //dielectric strength of air v/m * d between electrodes
+    var r = rho*d/(l*w); //electrical resistance of air between electrodes
+    var i = v/r; //current between electrodes
+    var f;
+    //make sure no spark has formed/dielectric breakdown has not occured
+    var vbrTol = 0.2;  //include tolerance just to be sure
+    if(v > vbr*(1-vbrTol)) {
+      f = 0;
+    } else {
+      f = i*d/k;
+    }
+
+    document.getElementById("vbr").innerHTML = (vbr/1000).toPrecision(6)+" kV, with tolerance: "+(vbr*(1-vbrTol)/1000)+" kV";
+    document.getElementById("force").innerHTML = f.toPrecision(6)+" N";
+  }
+
+
+
+  //for ref for later: https://courses.lumenlearning.com/boundless-physics/chapter/motion-of-a-charged-particle-in-a-magnetic-field/
+</script>

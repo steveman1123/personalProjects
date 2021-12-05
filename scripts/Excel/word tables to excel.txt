@@ -1,0 +1,45 @@
+'grab tables from word and put in excel
+Sub ImportWordTable()
+Dim wdDoc As Object
+Dim wdFileName As Variant
+Dim TableNo As Integer 'table number in Word
+Dim iRow As Long 'row index in Excel
+Dim iCol As Integer 'column index in Excel
+Dim iTab As Integer 'table index in the doc
+Dim lastRow As Integer
+
+
+wdFileName = Application.GetOpenFilename("Word files (*.docx),*.docx", , _
+"Browse for file containing table to be imported")
+
+If wdFileName = False Then Exit Sub '(user cancelled import file browser)
+Set wdDoc = GetObject(wdFileName) 'open Word file
+
+With wdDoc
+    TableNo = wdDoc.tables.Count
+    lastRow = 1 'latest row used, init to first row
+    If TableNo = 0 Then
+      MsgBox "This document contains no tables", _
+      vbExclamation, "Import Word Table"
+    Else
+      For iTab = 1 To TableNo
+        With .tables(iTab)
+          'copy cell contents from Word table cells to Excel cells
+          For iRow = 1 To .Rows.Count
+            For iCol = 1 To .Columns.Count
+              Cells(lastRow + iRow, iCol) = WorksheetFunction.Clean(.cell(iRow, iCol).Range.Text)
+            Next iCol
+          Next iRow
+          lastRow = lastRow + iRow + 1 'set last row to end of previous table plus a space
+        End With
+      Next iTab
+    End If
+    
+    
+End With
+
+Set wdDoc = Nothing
+
+End Sub
+
+
