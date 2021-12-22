@@ -9,12 +9,12 @@ print(jpgfile.bits, jpgfile.size, jpgfile.format)
 
 
 import skimage.color
-from skimage.color import rgb2grey
+from skimage.color import rgb2gray
 from skimage import data, io, filters
 from skimage.filters import gaussian
 
-image = data.imread('F:\\Docs\\Misc\\Tech\\MyPrograms\\nucTest\\duck.jpg')
-grey = rgb2grey(image)
+image = io.imread('./duck.jpg')
+grey = rgb2gray(image)
 hpf = gaussian(grey, sigma=0.4)
 
 io.imshow(image)

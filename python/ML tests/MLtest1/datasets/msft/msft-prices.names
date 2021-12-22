@@ -1,0 +1,6 @@
+
+  msft-prices column names:
+  Date, Close/Last, Volume, Open, High, Low, class
+  "Date", "Close/Last", "Volume", "Open", "High", "Low", "class"
+  
+  class is boolean int 0/1 determined by whether price increased from the previous day

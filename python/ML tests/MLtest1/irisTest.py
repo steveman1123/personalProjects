@@ -1,32 +1,7 @@
-# Check the versions of libraries
-
-# Python version
-import sys
-# scipy
-import scipy
-# numpy
-import numpy
-# matplotlib
-import matplotlib
-# pandas
-import pandas
-
-# scikit-learn
-import sklearn
-
-
-# print('Python: {}'.format(sys.version))
-# print('scipy: {}'.format(scipy.__version__))
-# print('numpy: {}'.format(numpy.__version__))
-# print('matplotlib: {}'.format(matplotlib.__version__))
-# print('pandas: {}'.format(pandas.__version__))
-# print('sklearn: {}'.format(sklearn.__version__))
-#
-# print('\n\n')
-
-
 # Load libraries
-import pandas
+import sys, sklearn, os
+import scipy, numpy, pandas
+
 from pandas.plotting import scatter_matrix
 import matplotlib.pyplot as plt
 from sklearn import model_selection
@@ -42,51 +17,52 @@ from sklearn.svm import SVC
 
 
 # Load dataset
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+filepath="./datasets/iris/iris.data"
+if(not os.path.exists(filepath)):
+  print("local file not found")
+  filepath = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+
 names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
-dataset = pandas.read_csv(url, names=names)
+dataset = pandas.read_csv(filepath, names=names)
 
-
-# shape
+print("dataset shape")
 print(dataset.shape)
 print('\n')
 
-# head
-print(dataset.head(20))
+print("dataset head")
+print(dataset.head(10))
 print('\n')
 
-# descriptions
+print("dataset description")
 print(dataset.describe())
 print('\n')
 
 
 # class distribution
-print(dataset.groupby('class').size())
-print('\n')
-
-# class distribution
+print("group data by classes")
 print(dataset.groupby('class').size())
 print('\n')
 
 # box and whisker plots
 dataset.plot(kind='box', subplots=True, layout=(2,2), sharex=False, sharey=False)
+#print("plotting box & whisker")
 # plt.show()
-
-
-# box and whisker plots
-dataset.plot(kind='box', subplots=True, layout=(2,2), sharex=False, sharey=False)
-# plt.show()
-
 
 # scatter plot matrix
 scatter_matrix(dataset)
+#print("plotting scatter matrix")
 # plt.show()
 
 
 # Split-out validation dataset
+print("splitting training and validation data")
 array = dataset.values
-X = array[:,0:4]
-Y = array[:,4]
+X = array[:,0:-1]
+Y = array[:,-1]
+
+#print("X","\n",X[:10])
+#print("Y","\n",Y[:10])
+
 validation_size = 0.20
 seed = 7
 X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, test_size=validation_size, random_state=seed)
@@ -99,22 +75,27 @@ scoring = 'accuracy'
 
 
 # Spot Check Algorithms
-models = []
-models.append(('LR', LogisticRegression()))
-models.append(('LDA', LinearDiscriminantAnalysis()))
-models.append(('KNN', KNeighborsClassifier()))
-models.append(('CART', DecisionTreeClassifier()))
-models.append(('NB', GaussianNB()))
-models.append(('SVM', SVC()))
+print("assigning algorithms")
+models = [
+  ('LR', LogisticRegression(max_iter=128)),
+  ('LDA', LinearDiscriminantAnalysis()),
+  ('KNN', KNeighborsClassifier()),
+  ('CART', DecisionTreeClassifier()),
+  ('NB', GaussianNB()), #gaussian naive bayes
+  ('SVM', SVC()) #support vector machine/classification
+]
+
 # evaluate each model in turn
+print("evaluating models")
 results = []
 names = []
+print("mdl\tmean\t\tstdev")
 for name, model in models:
-	kfold = model_selection.KFold(n_splits=10, random_state=seed)
+	kfold = model_selection.KFold(n_splits=10, random_state=seed, shuffle=True)
 	cv_results = model_selection.cross_val_score(model, X_train, Y_train, cv=kfold, scoring=scoring)
 	results.append(cv_results)
 	names.append(name)
-	msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
+	msg = "%s:\t%f\t(%f)" % (name, cv_results.mean(), cv_results.std())
 	print(msg)
 
 
@@ -124,14 +105,16 @@ fig.suptitle('Algorithm Comparison')
 ax = fig.add_subplot(111)
 plt.boxplot(results)
 ax.set_xticklabels(names)
+#print("algorithm comparison")
 # plt.show()
 
 
 
 # Make predictions on validation dataset
+print("make predictions")
 knn = KNeighborsClassifier()
 knn.fit(X_train, Y_train)
 predictions = knn.predict(X_validation)
-print(accuracy_score(Y_validation, predictions))
-print(confusion_matrix(Y_validation, predictions))
-print(classification_report(Y_validation, predictions))
+print("Accuracy score: ",accuracy_score(Y_validation, predictions))
+print("confusion matrix","\n",confusion_matrix(Y_validation, predictions))
+print("classification report","\n",classification_report(Y_validation, predictions))
