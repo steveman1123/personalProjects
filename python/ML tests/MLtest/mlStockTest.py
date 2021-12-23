@@ -1,10 +1,8 @@
+#use this to analyze stock prices
+
 # Load libraries
 import sys, sklearn, os
-
 import pandas as pd
-
-from pandas.plotting import scatter_matrix
-import matplotlib.pyplot as plt
 from sklearn import model_selection
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
@@ -26,7 +24,7 @@ else:
 verbose=False
 
 #TODO: add check if file exists, if not, then run the get-data file
-filepath=f"./stockdata/{symb}-prices.data"
+filepath=f"./stocks/stockdata/{symb}-prices.data"
 
 names = ["Date", "Close/Last", "Volume", "Open", "High", "Low", "class"]
 
@@ -72,8 +70,6 @@ validation_size = 0.20
 seed = 7
 X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, test_size=validation_size, random_state=seed)
 
-
-
 # Test options and evaluation metric
 seed = 7
 scoring = 'accuracy'
@@ -102,18 +98,6 @@ for name, model in models:
 	names.append(name)
 	msg = "%s:\t%f\t(%f)" % (name, cv_results.mean(), cv_results.std())
 	print(msg)
-
-
-# Compare Algorithms
-'''
-fig = plt.figure()
-fig.suptitle('Algorithm Comparison')
-ax = fig.add_subplot(111)
-plt.boxplot(results)
-ax.set_xticklabels(names)
-print("algorithm comparison")
-plt.show()
-'''
 
 
 # Make predictions on validation dataset

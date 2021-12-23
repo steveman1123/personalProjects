@@ -2,6 +2,10 @@
 #append column titled class of whether price increased or not
 #write to .data file without index or header
 
+#TODO:
+#should incorporate other stock info like news (headlines as word clouds), technical indicators, fundamentals
+#also generate company data organized by fundamentals and the Y values of increasing value over a given period of time
+
 import pandas as pd
 import datetime as dt
 import sys, time, json, requests
