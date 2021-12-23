@@ -1,1 +1,3 @@
 http://archive.ics.uci.edu/ml/datasets.php
+
+use get-data.py to generate stock data

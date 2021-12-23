@@ -18,35 +18,45 @@ from sklearn.svm import SVC
 
 
 # Load dataset
-filepath="./datasets/msft/msft-prices.data"
+if(len(sys.argv)==2):
+  symb = sys.argv[1]
+else:
+  raise ValueError("Must have exactly 1 argument of the stock symbol")
+
+verbose=False
+
+#TODO: add check if file exists, if not, then run the get-data file
+filepath=f"./stockdata/{symb}-prices.data"
+
 names = ["Date", "Close/Last", "Volume", "Open", "High", "Low", "class"]
 
 if(not os.path.exists(filepath)):
-  print("local file not found")
+  if(verbose): print("local file not found")
   raise ValueError("No local file found")
 
 dataset = pd.read_csv(filepath, names=names)
 
 #clean the data some more
+#TODO: this may need to change
 dataset.replace("?",0,inplace=True)
 
-print("dataset shape")
-print(dataset.shape)
-print('\n')
+if(verbose):
+  print("dataset shape")
+  print(dataset.shape)
+  print('\n')
 
-print("dataset head")
-print(dataset.head(30))
-print('\n')
+  print("dataset head")
+  print(dataset.head(30))
+  print('\n')
 
-print("dataset description")
-print(dataset.describe())
-print('\n')
+  print("dataset description")
+  print(dataset.describe())
+  print('\n')
 
-
-# class distribution
-print("group data by classes")
-print(dataset.groupby('class').size())
-print('\n')
+  # class distribution
+  print("group data by classes")
+  print(dataset.groupby('class').size())
+  print('\n')
 
 # Split-out validation dataset
 print("splitting training and validation data")
@@ -54,9 +64,9 @@ array = dataset.values
 X = array[:,1:-1]
 Y = array[:,-1].astype("str")
 
-
-print("X","\n",X[:10])
-print("Y","\n",Y[:10])
+if(verbose):
+  print("X","\n",X[:10])
+  print("Y","\n",Y[:10])
 
 validation_size = 0.20
 seed = 7
@@ -70,7 +80,7 @@ scoring = 'accuracy'
 
 
 # Spot Check Algorithms
-print("assigning algorithms")
+print("assigning models")
 models = [
   ('LR', LogisticRegression(max_iter=128)),
   ('LDA', LinearDiscriminantAnalysis()),
