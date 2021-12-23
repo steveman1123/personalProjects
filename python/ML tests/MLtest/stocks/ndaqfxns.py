@@ -8,17 +8,17 @@ import datetime as dt
 from time import sleep
 
 HEADERS={"user-agent":"-","contact":"github.com/steveman1123"}
-BASEURL="api.nasdaq.com/api"
+BASEURL="https://api.nasdaq.com/api"
 VALIDASSETS=["commodities","crypto","currencies","etf","fixedincome","futures","index","mutualfunds","stocks"]
 
 #robust request, standard request but simplified and made more robust
 #return request object
-def robreq(url,headers={},params={},method="get",maxTries=3,timeout=5):
+def robreq(url,method="get",headers={},params={},maxTries=3,timeout=5):
   tries=0
   while tries<maxTries or maxTries<0:
     try:
-      r=requests.request(method,url,params=params,timeout=timeout)
-      if(r is not None and len(r)>0):
+      r=requests.request(method,url,headers=headers,params=params,timeout=timeout)
+      if(r is not None and len(r.content)>0):
         return r
     except Exception:
       print(f"No connection or other error encountered for {url}")
@@ -26,7 +26,7 @@ def robreq(url,headers={},params={},method="get",maxTries=3,timeout=5):
       tries+=1
       sleep(3)
       continue
-  if(tries>=maxtries):
+  if(tries>=maxTries):
     print("url:",url)
     print("method:",method)
     print("headers:",headers)
@@ -49,7 +49,7 @@ def getQuote(assetclass,
             symb,
             data,
             fromdate=str(dt.date.today()-dt.timedelta(1)),
-            todate=str(dt,date.today()),
+            todate=str(dt.date.today()),
             offset=0,
             limit=15,
             charttype=None,
@@ -69,7 +69,7 @@ def getQuote(assetclass,
     params.update({"markettype":markettype})
   
   url = f"{BASEURL}/quote/{symb}/{data}"
-  r = robreq("get",url,headers=HEADERS,params=params).json()
+  r = robreq(url=url,method="get",headers=HEADERS,params=params).json()
   
   return r
 
@@ -83,7 +83,7 @@ def getWatchlist(symbclasslist=[], type=None):
   if(type is not None): type="Rv"
   params={"symbol":symbclasslist}
   url=f"{BASEURL}/quote/watchlist"
-  r = robreq("get",url,headers=HEADERS,params=params).json()
+  r = robreq(url=url,method="get",headers=HEADERS,params=params).json()
   return r
 
 
@@ -91,11 +91,14 @@ def getWatchlist(symbclasslist=[], type=None):
 #indexlist: list of format ["indexname",indexname",...]
 #chartlist: list of format ["indexname",indexname",...]
 #return json object
-def getIndicies(indexlist=None,chartlist=None):
-  url=f"{BASEURL}/quote/indicies"
-  params={"symbol":indexlist,"chartfor":chartlist}
-  r = robreq("get",url,headers=HEADERS,params=params).json()
-
+def getIndices(indexlist=None,chartlist=None):
+  url=f"{BASEURL}/quote/indices"
+  params={}
+  if(indexlist is not None): params['symbol']=indexlist
+  if(chartlist is not None): params['chartfor']=chartlist
+  print(params)
+  r = robreq(url=url,method="get",headers=HEADERS,params=params).json()
+  return r
 
 
 #get company info
@@ -128,7 +131,7 @@ def getCompany(symb,
     raise ValueError("invalid data specified")
   
   params={}
-  if(freq is not None and freq in validFreq):
+  if(freq is not None and freq in validfreq):
     params["frequency"]=freq
   if(data=="historical-nocp"):
     if(timeframe is not None and timeframe in validtime):
@@ -145,15 +148,15 @@ def getCompany(symb,
       params['type']=type
     if(sortColumn is not None and sortColumn in ["lastDate","insider","relation","transactionType","ownType","sharesTraded"]):
       params['sortColumn']=sortColumn
-  if(data=="sec-filing"):
+  if(data=="sec-filings"):
     if(sortColumn is not None):
       params['sortColumn']="filed"
   if(sortOrder is not None and sortOrder in ["DESC","ASC"]):
     params['sortOrder']=sortOrder
-  if(tableOnly is not None and tableOnly in ["true","false"):
+  if(tableOnly is not None and tableOnly in ["true","false"]):
     params['tableOnly']=tableOnly
   
-  r = robreq("get",url,HEADERS,params=params).json()
+  r = robreq(url=url,method="get",headers=HEADERS,params=params).json()
   return r
 
 
@@ -161,7 +164,7 @@ def getCompany(symb,
 #return json object
 def getMktInfo():
   url=f"{BASEURL}/market-info"
-  r=robreq("get",url,HEADERS).json()
+  r=robreq(url=url,method="get",headers=HEADERS).json()
   return r
 
 #get the biggest movers of the specified asset class, or of all available asset classes (stocks|etf|mutualfunds|commodities|futures)
@@ -171,7 +174,7 @@ def getMovers(assetclass=None):
   params={}
   if(assetclass is not None and assetclass in ["stocks","etf","mutualfunds","commodities","futures"]):
     params["assetclass"]=assetclass
-  r=robreq("get",url,HEADERS,params=).json()
+  r=robreq(url=url,method="get",headers=HEADERS,params=params).json()
   return r
 
 
@@ -179,12 +182,13 @@ def getMovers(assetclass=None):
 #data: the type to get (dividends|earnings|economicevents|splits|upcoming)
 #isipo: use the IPO calendar
 #date: the specific date to get the data for (yyyy-mm-dd for isipo=False, yyyy-mm for isipo=True)
-#type: used only if isipo=True
+#type: used only if isipo=True, can be set to SPO
 #return json object
 def getCalendar(data=None,isipo=False,date=None,type=None):
   if(isipo):
     url=f"{BASEURL}/ipo/calendar"
     #TODO: ensure date is in yyyy-mm format
+    if(type is not None): type="spo" #TODO: explore more if this can be other values
     params={"date":date,"type":type}
   else:
     validdata=["dividends","earnings","economicevents","splits","upcoming"]
@@ -194,7 +198,7 @@ def getCalendar(data=None,isipo=False,date=None,type=None):
     #TODO: ensure date is in yyyy-mm-dd format
     params={"date":date}
     
-  r=robreq("get",url,HEADERS,params=params).json()
+  r=robreq(url=url,method="get",headers=HEADERS,params=params).json()
   return r
 
 #asset screener
@@ -211,14 +215,14 @@ def screen(assetclass,
 
 #get the analyst data for a specific stock
 #symb: stock ticker symbol
-#data: analyst data (earnings-date|earnings-forcast|estimate-momentum|peg-ratio|ratings|targetprice)
+#data: analyst data (earnings-date|earnings-forecast|estimate-momentum|peg-ratio|ratings|targetprice)
 #return json object
 def getAnalyst(symb,data):
-  validdata=["earnings-date","earnings-forcast","estimate-momentum","peg-ratio","ratings","targetprice"]
+  validdata=["earnings-date","earnings-forecast","estimate-momentum","peg-ratio","ratings","targetprice"]
   if(data not in validdata):
     raise ValueError("Invalid data specified")
   url=f"{BASEURL}/analyst/{symb}/{data}"
-  r=robreq("get",url,HEADERS).json()
+  r=robreq(url=url,method="get",headers=HEADERS).json()
   return r
 
 
@@ -230,11 +234,11 @@ def getAnalyst(symb,data):
 #limit: limit the results to this many articles
 #return json object
 def getNews(symb,assetclass,offset=0,limit=5):
-  url=f"{BASEURL}/news/topic/articlesbysymbol"
+  url=f"{BASEURL}/news/topic/articlebysymbol"
   if(assetclass not in VALIDASSETS):
     raise ValueError("Invalid assetclass specified")
   params={"q":symb+"|"+assetclass,"offset":offset,"limit":limit}
   #TODO: explore other possible parameters
-  r=robreq("get",url,HEADERS,params=params).json()
+  r=robreq(url=url,method="get",headers=HEADERS,params=params).json()
   return r
 
