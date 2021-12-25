@@ -3,6 +3,8 @@
 
 import sys
 import ndaqfxns as n
+import pandas as pd
+import datetime as dt
 
 if(len(sys.argv)==2):
   symb = sys.argv[1]
@@ -33,4 +35,19 @@ file should include:
   dependent should be: price > some % over average of last week's
 '''
 def genData(symb):
+  
+  #price history
+  numDays=1000
+  fromdate=str(dt.date.today()-dt.timedelta(numDays))
+  hist = n.getQuote(assetclass="stocks",symb=symb,data="historical",limit=numDays)
+  #convert from json to csv
+  hist=hist['data']['tradesTable']['rows'] #list of dicts
+  #convert to dataframe
+  hist = pd.DataFrame(hist)
+  
+  #earnings, dividends and eps history
+  earn = n.getQuote(symb=symb,assetclass="stocks",data="earnings")
+  divs = n.getQuote(symb=symb,assetclass="stocks",data="dividends")
+  eps = n.getQuote(symb=symb,assetclass="stocks",data="eps")
+  
   return "function incomplete"
