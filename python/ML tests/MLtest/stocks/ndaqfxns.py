@@ -33,6 +33,11 @@ def robreq(url,method="get",headers={},params={},maxTries=3,timeout=5):
     print("params:",params)
     raise ValueError("Could not get response")
 
+#clean numbers and convert from strings to numerics (remove anything not numeric or ".")
+#where series is a pandas series containing strings with numbers
+def cleanNumbers(series):
+  nums = series.str.replace("[^0-9.]","",regex=True).astype(float)
+  return nums
 
 #get symbol quote info where:
 #assetclass: type of asset (commodities|crypto|currencies|fixedincome|futures|index|mutualfunds|stocks)
@@ -104,7 +109,7 @@ def getIndices(indexlist=None,chartlist=None):
 #get company info
 #symb: company ticker symbol
 #data: data about company (company-profile|earnings-surprise|financials|historical-nocp|insider-trades|institutional-holdings|revenue|sec-filings)
-#freq: period or quarter endings (1|2)
+#freq: period or quarter endings for financials,? (1|2)
 #timeframe: used in historical-nocp (d5|M1||M3|M6|Y1)
 #limit: limit number of rows
 #type: optional for institutional-holdings (TOTAL|NEW|INCREASED|DECREASED|ACTIVITY|SOLDOUT) and insider-trades (ALL|buys|sells)

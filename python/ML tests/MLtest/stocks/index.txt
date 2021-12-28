@@ -1,4 +1,0 @@
-
-
-  msft-prices.data
-  msft-prices.names
