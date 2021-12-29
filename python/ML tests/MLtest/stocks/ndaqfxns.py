@@ -35,6 +35,7 @@ def robreq(url,method="get",headers={},params={},maxTries=3,timeout=5):
 
 #clean numbers and convert from strings to numerics (remove anything not numeric or ".")
 #where series is a pandas series containing strings with numbers
+#TODO: check if something is formatted as a date (convert from mm/dd/yyyy to yyyy-mm-dd)
 def cleanNumbers(series):
   nums = series.str.replace("[^0-9.]","",regex=True).astype(float)
   return nums
