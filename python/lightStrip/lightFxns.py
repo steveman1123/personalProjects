@@ -1,18 +1,28 @@
 # This script updates some neopixel lights with some functions
+#TODO: make this an object with the pin and numLights (or just the strip) passed through
+
 
 import board, neopixel, time
 
 pin = board.D18
 numLights = 99
 
+'''
+class lightStrip:
+  def __init__(self,numLights,pin=board.D18):
+    self.pin = pin
+    self.numLights = numLights
+'''
+  
+
 # define pixels
 order = neopixel.GRB
 pixels = neopixel.NeoPixel(pin, numLights, brightness=0.2, auto_write=False, pixel_order=order)
 
 #lights that are dead or partially dead, in this strip, only the red lights here are dead
-
 deadR = [0,1,2,4,5,6,7,8,9,10,11,13,15,17,19,20,23,25,27,28,35,36,38,39,45,52,80]
-#deadR = []
+#deadG = []
+#deadB = []
 
 col = {
 'r':(0,255,0),
@@ -114,20 +124,21 @@ def rainbow_cycle(wait):
 
 
 #build up a tower of pixels till it's full, then clear and restart
+#c is the color to use, default to cyan
 #size is number of pixels to add at a time, default to 1
-def pixTower(size=1):
+def pixTower(c=col['c'],size=1):
   clearLights()
   for i in range(0,numLights,size):
-    pixels[0:i] = (col['c'],)*(i) #display tower
+    pixels[0:i] = (c,)*(i) #display tower
     for j in range(numLights-1,i-1,-1):
-      pixels[j] = col['c']
+      pixels[j] = c
       if(j<len(pixels)-size): #clear out previous one to make a dot
         pixels[j+size] = (0,0,0) #clear the one before to make a dot
       updateLights()
   for i in range(3): #flash lights at end
     clearLights()
     time.sleep(0.1)
-    pixels.fill(col['c'])
+    pixels.fill(c)
     updateLights()
     time.sleep(0.1)
   time.sleep(0.75)

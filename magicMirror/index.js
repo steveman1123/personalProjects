@@ -19,7 +19,7 @@ function updateWeather() {
   var weather = readTextFile("https://api.weather.gov/gridpoints/DVN/28,85/forecast");
   weather = weather['properties']['periods'];
 
-  document.getElementById('weatherList').innerHTML = "";
+  document.getElementById("weatherList").innerHTML = "";
 
   sectionNum = 5;
 
@@ -68,7 +68,7 @@ function time() {
   var dd = today.getDate();
 
   document.getElementById("clock").innerHTML = hh+":"+mm+":"+ss;
-  document.getElementById("date").innerHTML = dd+"/"+mo+"/"+yyyy;
+  document.getElementById("date").innerHTML = yyyy+"-"+mo+"-"+dd;
 
   if(!parseInt(hh+mm+ss)) { updateQuote(); } //update the quote at midnight
 }
@@ -81,8 +81,8 @@ function addZero(i) {
 }
 
 document.onload = updateWeather();
-document.onload = updateQuote();
-document.onload = updateCompliment();
+//document.onload = updateQuote();
+//document.onload = updateCompliment();
 document.onload = time();
 window.setInterval(updateWeather,60*60*1000); //update every hour
 window.setInterval(updateCompliment,6*60*60*1000); //update every 6 hours
