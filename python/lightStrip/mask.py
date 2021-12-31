@@ -8,9 +8,10 @@
 '''
 
 import board,neopixel,time,random,json
+from pandas import read_csv
 
 #lookup table for converting text into a 4x4 grid
-CHARS4X4 = json.loads(open("./4x4-letters.json","r").read())
+CHARS4X4 = read_csv("./4x4-chars.csv")
 
 #convert grid type to pixel type and display
 #isleft determines if the bottom left is the starting point or the bottom right
@@ -72,10 +73,34 @@ def box(grid,color):
 
 
 #display alphanumeric text scrolling from right to left
-#text is a string to display consisting only of a-z,0-9, and: ()[]!., /\'"-=+_^:;
-def scrollText(text,grid,pixels,delay=0.25):
+#text is a string to display consisting only of characters present in the lookup table
+#grid is the nxm grid
+#pixels is the neopixels to output to
+#color is the color to display the text as (tuple length 3)
+#delay is how long (in seconds) to disply a frame for
+
+#TODO: redo this whole thing so it can use bitshifting and such to speed it up
+def scrollText(text,grid,pixels,color,delay=0.125):
   #convert text using a lookup table of characters
-  #run this function until
+  #run this function until end of string is reached
+  #if invalid char is passed, just skip it
+  text = text.lower() #ensure lowercase since lookup table is in lowercase
+  gridcharlist = [] #list of grid array of characters
+  #generate the grid char list
+  for ch in text:
+    tablechar = CHARS4X4[CHARS4X4['char']==ch]
+    if(len(tablechar==1)): #ensure character is present
+      gridchar = tablechar[0]['grid'].split("|")
+      gridchar = [list(e) for e in gridchar] #turn the data into the grid list of lists
+      gridchar = [[color for pt in row if pt=="1" else (0,0,0)] for row in gridchar]
+      gridcharlist.append(gridchar)
+  
+  for ch in gridcharlist:
+    for l in range(len(grid[0])*3):
+      gridout = 
+    
+      updateStrip(gridout,pixels)
+      time.sleep(delay)
 
 
 #set the columns of the grid to certain colors
