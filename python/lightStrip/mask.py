@@ -1,4 +1,5 @@
 #use this file for a MxN led grid based on back and forth ws28xx led strips
+#intended use is for a light-up mask
 '''
 >>>>-dataout
 <<<<
@@ -6,9 +7,10 @@
 <<<<-datain
 '''
 
-import board,neopixel,time,random
+import board,neopixel,time,random,json
 
-
+#lookup table for converting text into a 4x4 grid
+CHARS4X4 = json.loads(open("./4x4-letters.json","r").read())
 
 #convert grid type to pixel type and display
 #isleft determines if the bottom left is the starting point or the bottom right
@@ -31,7 +33,10 @@ def updateStrip(grid,pixels,isleft=True,verbose=False):
   for r,cols in enumerate(grid):
     #for each column
     for c,pt in enumerate(cols):
-      #set the index according to the left alignment
+      #set the index according to the left/right alignment
+      #TODO: this could be made into a single statement to the effect of:
+      # idx = (rs-(r+(r+(int(not isleft)))%2))*cs-(c+(r+(int(isleft))%2))
+      #if using that statement, add additional comments to decompose how it works
       if(isleft):
         idx = (rs-(r+r%2))*cs-(c+(r+1)%2)
       else:
@@ -48,9 +53,9 @@ def updateStrip(grid,pixels,isleft=True,verbose=False):
 def clearGrid(grid):
   return [[(0,0,0)]*len(grid[0])]*len(grid)
 
-#set all values of the strip to off
-def clearStrip(pixels):
-  pixels.fill((0,0,0))
+#set the whole strip to a single color (0,0,0) for clearing
+def setStripColor(pixels,color):
+  pixels.fill(color)
   pixels.show()
 
 
@@ -63,6 +68,14 @@ def box(grid,color):
   [grid[1][0],grid[1][-1]] = [color]*2 #first and last column (of first row)
   grid[2:-1] = [grid[1]]*(len(grid)-3) #all the rest of the rows
   return grid
+
+
+
+#display alphanumeric text scrolling from right to left
+#text is a string to display consisting only of a-z,0-9, and: ()[]!., /\'"-=+_^:;
+def scrollText(text,grid,pixels,delay=0.25):
+  #convert text using a lookup table of characters
+  #run this function until
 
 
 #set the columns of the grid to certain colors
@@ -87,6 +100,7 @@ def rows(grid,rowColors):
   for r in range(len(grid)):
     grid[r] = [fittedColors[r]]*len(grid[r])
   return grid
+
 
 def main():
   #number of led rows

@@ -14,19 +14,19 @@ try:
   while True:
     #red
     print("test")
-    print("R",end=" ")
-    #pixels.fill((255,0,0))
-    #pixels.show()
+    print("R",end=" ",flush=True)
+    pixels.fill((255,0,0))
+    pixels.show()
     time.sleep(1)
     #green
-    print("G",end=" ")
-    #pixels.fill((0,0,255))
-    #pixels.show()
+    print("G",end=" ",flush=True)
+    pixels.fill((0,0,255))
+    pixels.show()
     time.sleep(1)
     #blue
     print("B")
-    #pixels.fill((0,255,0))
-    #pixels.show()
+    pixels.fill((0,255,0))
+    pixels.show()
     time.sleep(1)
 
 except KeyboardInterrupt:
