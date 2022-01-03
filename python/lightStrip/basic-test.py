@@ -35,13 +35,19 @@ try:
     pixels.show()
     time.sleep(1)
     
+    #fill from end to start (should start filling immediately after blue. If there's a wait, then the numPixels is larger than the actual number on the strip
     pixels.fill((0,0,0))
     for i in range(len(pixels)):
       pixels[-(i+1)] = (255,0,0)
       pixels.show()
+      time.sleep(0.125)
+    for i in range(3):
+      pixels.fill((192,255,0))
+      pixels.show()
       time.sleep(0.25)
-    pixels.fill((0,192,255))
-    time.sleep(1)
+      pixels.fill((0,0,0))
+      pixels.show()
+      time.sleep(0.25)
 
 except KeyboardInterrupt:
   pixels.fill((0,0,0))
