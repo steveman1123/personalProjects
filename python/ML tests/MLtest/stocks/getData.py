@@ -42,7 +42,7 @@ def genData(symb,verbose=True):
   #get historical data (from past, not present or future)
   #dividends, eps, short interest, earnings suprise, finanicials, insider trades, news headlines & related symbols, 
   if(verbose): print("getting dividends")
-  divs = n.getQuote(symb=symb,assetclass="stocks",data="dividends")
+  divs = n.getQuote(symb=symb,assetclass="stocks",data="dividends",limit=50) #limit to the 50 most recent since too far back the data becomes unstable
   df_divs = pd.DataFrame(divs['data']['dividends']['rows'])
   
   '''
@@ -113,9 +113,24 @@ def genData(symb,verbose=True):
   print(df_hist)
   # divs
   #should transform from cols of exDate,amt,decDate,recDate,pmtDate to 2 cols of amt and divDates where 0=not important, 1=ex,2=dec,3=rec,4=pmt
-  #ignore the type col, dates should also be transformed to date rather than string
+  #ignore the type col
   print("\ndivs")
   print(df_divs)
+  #remove unneeded column
+  df_divs.drop(columns='type',inplace=True)
+  #change string to number
+  df_divs['amount'] = n.cleanNumbers(df_divs['amount'])
+  #convert date columns from strings to date objects
+  #TODO: some data may come in as "N/A" instead of a datetime format. This should be able to be handled properly
+  
+  # df_divs['exOrEffDate'] = pd.to_datetime(df_divs['exOrEffDate'])
+  # df_divs['declarationDate'] = pd.to_datetime(df_divs['declarationDate'])
+  # df_divs['recordDate'] = pd.to_datetime(df_divs['recordDate'])
+  # df_divs['paymentDate'] = pd.to_datetime(df_divs['paymentDate'])
+  
+  dates=pd.concat([df_divs['exOrEffDate'],df_divs['declarationDate'],df_divs['recordDate'],df_divs['paymentDate']],ignore_index=True)
+  
+  
   '''
   # eps
   #omit. All useful data can be found in df_es
@@ -202,8 +217,12 @@ def genData(symb,verbose=True):
   
   #combine data into dataframe
   if(verbose): print("combining into single dataframe")
+  df_out = df_hist
+  df_out.merge(df_divs,how="outer")
   
   
+  #convert date to datetime rather than string
+  df_out.date = pd.to_datetime(df_out.date)
   
   if(verbose): print("done")  
   return df_out
