@@ -32,13 +32,14 @@ def genData(symb,verbose=True):
   #price history
   if(verbose): print("getting history")
   hist = n.getQuote(assetclass="stocks",symb=symb,data="historical",limit=numDays,fromdate=fromdate)
-  #convert from json to csv
-  hist=hist['data']['tradesTable']['rows'] #list of dicts
-  # convert to dataframe and convert strings to numbers
-  df_hist = pd.DataFrame(hist)
+  #convert to dataframe
+  df_hist = pd.DataFrame(hist['data']['tradesTable']['rows'])
+  #convert strings to numbers
   for e in df_hist:
     if(e!='date'): #do not parse the date
       df_hist[e] = n.cleanNumbers(df_hist[e])
+  #remove N/A values
+  df_hist = df_hist.replace("N/A",np.NaN).dropna()
   
   #get historical data (from past, not present or future)
   #dividends, eps, short interest, earnings suprise, finanicials, insider trades, news headlines & related symbols, 
@@ -65,19 +66,24 @@ def genData(symb,verbose=True):
   fin = n.getCompany(symb=symb,data="financials",freq=1)
   if(verbose): print("\tparsing income statement")
   #generate the income statement with the appropriate headers (and set the index as the header instead of being numeric) and transpose it so there's many columns with dates
-  df_incomeStatement = pd.DataFrame(fins['data']['incomeStatementTable']['rows']).rename(columns=fins['data']['incomeStatementTable']['headers']).set_index("Period Ending:").T
+  df_incomeStatement = pd.DataFrame(fin['data']['incomeStatementTable']['rows']).rename(columns=fin['data']['incomeStatementTable']['headers']).rename(columns={"Period Ending:":"date"}).set_index("date").T.reset_index().rename(columns={"index":"date"})
   
   if(verbose): print("\tparsing balance sheet")
-  df_balanceSheet = pd.DataFrame(fin['data']['balanceSheetTable']['rows'])
-  if(verbose): print("\tparsing cash flow")
-  df_cashFlow = pd.DataFrame(fin['data']['cashFlowTable']['rows'])
-  if(verbose): print("\tparsing financial ratios")
-  df_finRatios = pd.DataFrame(fin['data']['financialRatiosTable']['rows'])
+  df_balanceSheet = pd.DataFrame(fin['data']['balanceSheetTable']['rows']).rename(columns=fin['data']['balanceSheetTable']['headers']).rename(columns={"Period Ending:":"date"}).set_index("date").T.reset_index().rename(columns={"index":"date"})
   
+  if(verbose): print("\tparsing cash flow")
+  df_cashFlow = pd.DataFrame(fin['data']['cashFlowTable']['rows']).rename(columns=fin['data']['cashFlowTable']['headers']).rename(columns={"Period Ending:":"date"}).set_index("date").T.reset_index().rename(columns={"index":"date"})
+  
+  if(verbose): print("\tparsing financial ratios")
+  df_finRatios = pd.DataFrame(fin['data']['financialRatiosTable']['rows']).rename(columns=fin['data']['financialRatiosTable']['headers']).rename(columns={"Period Ending:":"date"}).set_index("date").T.reset_index().rename(columns={"index":"date"})
+  
+  '''
+  #skipping for now
   if(verbose): print("getting insider trades")
   intrades = n.getCompany(symb=symb,data="insider-trades",limit=1) #get the total number of trades
   intrades = n.getCompany(symb=symb,data="insider-trades",limit=int(intrades['data']['transactionTable']['totalRecords'])) #use the total number of trades to request all of them
   df_intrades = pd.DataFrame(intrades['data']['transactionTable']['table']['rows'])
+  '''
   
   '''
   if(verbose): print("getting news")
@@ -93,165 +99,226 @@ def genData(symb,verbose=True):
   #get the nasdax index
   if(verbose): print("getting nasdaq quote")
   ndx = n.getQuote(symb="ndx",assetclass="index",data="historical",limit=numDays,fromdate=fromdate) #nasdaq index
-  df_ndx = pd.DataFrame(ndx['data']['tradesTable']['rows']) #convert to dataframe
+  #convert to dataframe
+  df_ndx = pd.DataFrame(ndx['data']['tradesTable']['rows'])
+  #convert strings to numbers and rename columns
+  for e in df_ndx:
+    if(e!='date'): #do not parse the date
+      df_ndx[e] = n.cleanNumbers(df_ndx[e])
+      df_ndx.rename(columns={e:"ndx-"+e},inplace=True)
+  #remove N/A values
+  df_ndx = df_ndx.replace("N/A",np.NaN).dropna()
+  
   
   #calculate additional columns from historical
-  if(verbose): print("calculating vwap")
-  vwap = p.vwap(df_hist) #volume weight average price - https://www.investopedia.com/articles/trading/11/trading-with-vwap-mvwap.asp
+  if(verbose): print("calculating vwap5")
+  vwap5 = p.vwap(df_hist,length=5) #volume weight average price
+  if(verbose): print("calculating vwap20")
+  vwap20 = p.vwap(df_hist,length=20) #volume weight average price
   if(verbose): print("calculating vpt")
   vpt = p.vpt(df_hist) #volume price trend
-  if(verbose): print("calculating ema")
-  ema = p.ema(df_hist) #exponential moving average
-  if(verbose): print("calculating sma")
-  sma = p.sma(df_hist) #simple moving average
+  if(verbose): print("calculating ema5")
+  ema5 = p.ema(df_hist,length=5) #exponential moving average
+  if(verbose): print("calculating ema20")
+  ema20 = p.ema(df_hist,length=20) #exponential moving average
+  if(verbose): print("calculating sma5")
+  sma5 = p.sma(df_hist,length=5) #simple moving average
+  if(verbose): print("calculating sma20")
+  sma20 = p.sma(df_hist,length=20) #simple moving average
   if(verbose): print("calculating delta")
   delta = p.delta(df_hist) #change day over day
   if(verbose): print("calculating obv")
   obv = p.obv(df_hist) #on-balance volume
   
+  
   #prep the data so that it'll fit into the dataframe
   if(verbose): print("cleaning data")
-  # hist - baseline (should have the most data points)
-  print("hist")
-  print(df_hist)
+  
+  if(verbose):
+    print("\nhist")
+    print(df_hist)
+  
   # divs
   #should transform from cols of exDate,amt,decDate,recDate,pmtDate to 2 cols of amt and divDates where 0=not important, 1=ex,2=dec,3=rec,4=pmt
   #ignore the type col
-  print("\ndivs")
-  print(df_divs)
   #remove unneeded column
   df_divs.drop(columns='type',inplace=True)
   #change string to number
   df_divs['amount'] = n.cleanNumbers(df_divs['amount'])
   #remove N/A values
   df_divs = df_divs.replace("N/A",np.NaN).dropna()
-  #create new dataframe, 1 column of combined date columns
+  #create new dataframe, 1 column of combined date columns, 1 column of date types, 1 column of dividend amount
   df_divs = df_divs.melt(id_vars="amount",var_name="datetype",value_name="date").replace({"datetype":{"exOrEffDate":1,"declarationDate":2,"recordDate":3,"paymentDate":4}})
+  if(verbose):
+    print("\ndivs")
+    print(df_divs)
   
   '''
   # eps
   #omit. All useful data can be found in df_es
-  print("\neps")
-  print(df_eps)
+  if(verbose):
+    print("\neps")
+    print(df_eps)
   '''
+  
   # si
-  print("\nsi")
-  print(df_si)
-  #cols should be converted to numeric (date strings to dates)
+  #rename settlementDate to date
+  df_si.rename(columns={"settlementDate":"date"},inplace=True)
+  #cols should be converted to numeric
   df_si['interest'] = n.cleanNumbers(df_si['interest'])
   df_si['avgDailyShareVolume'] = n.cleanNumbers(df_si['avgDailyShareVolume'])
-  df_si['daysToCover'] = n.cleanNumbers(df_si['daysToCover'])
+  #daysToCover is already a float type
+  # df_si['daysToCover'] = n.cleanNumbers(df_si['daysToCover'])
+  if(verbose):
+    print("\nsi")
+    print(df_si)
   
   # es
-  print("\nes")
-  print(df_es)
   #rm fiscalQtrEnd col
   df_es.drop(columns="fiscalQtrEnd",inplace=True)
   #ensure cols are numeric (should be already)
-  df_es['eps'] = n.cleanNumbers(df_es['eps'])
+  #eps is already a float type
+  # df_es['eps'] = n.cleanNumbers(df_es['eps'])
   df_es['consensusForecast'] = n.cleanNumbers(df_es['consensusForecast'])
   df_es['percentageSurprise'] = n.cleanNumbers(df_es['percentageSurprise'])
+  #rename dateReported column to date
+  df_es.rename(columns={"dateReported":"date"},inplace=True)
+  if(verbose):
+    print("\nes")
+    print(df_es)
   
   # income
-  print("\nincome")
-  print(df_incomeStatement)
   #rename "Period Ending:" to "date"
-  df_incomeStatement.rename({"Period Ending:":"date"})
+  df_incomeStatement.rename(columns={"Period Ending:":"date"},inplace=True)
   for e in df_incomeStatement:
     if(e!="date"): #exclude the date from numeric conversion
       #ensure data is numeric
       df_incomeStatement[e] = n.cleanNumbers(df_incomeStatement[e])
+  if(verbose):
+    print("\nincome")
+    print(df_incomeStatement)
   
   # balance
-  #same as income
-  print("\nbalance")
-  print(df_balanceSheet)
   #rename "Period Ending:" to "date"
-  df_balanceSheet.rename({"Period Ending:":"date"})
+  df_balanceSheet.rename(columns={"Period Ending:":"date"},inplace=True)
   for e in df_balanceSheet:
     if(e!="date"): #exclude the date from numeric conversion
       #ensure data is numeric
       df_balanceSheet[e] = n.cleanNumbers(df_balanceSheet[e])
+  if(verbose):
+    print("\nbalance")
+    print(df_balanceSheet)
 
   # cash
-  #same as income
-  print("\ncash flow")
-  print(df_cashFlow)
   #rename "Period Ending:" to "date"
-  df_cashFlow.rename({"Period Ending:":"date"})
+  df_cashFlow.rename(columns={"Period Ending:":"date"},inplace=True)
   for e in df_cashFlow:
     if(e!="date"): #exclude the date from numeric conversion
       #ensure data is numeric
       df_cashFlow[e] = n.cleanNumbers(df_cashFlow[e])
+  if(verbose):
+    print("\ncash flow")
+    print(df_cashFlow)
 
   # ratios
-  #same as income
-  print("\nratios")
-  print(df_finRatios)
   #rename "Period Ending:" to "date"
-  df_finRatios.rename({"Period Ending:":"date"})
+  df_finRatios.rename(columns={"Period Ending:":"date"},inplace=True)
   for e in df_finRatios:
     if(e!="date"): #exclude the date from numeric conversion
       #ensure data is numeric
       df_finRatios[e] = n.cleanNumbers(df_finRatios[e])
+  if(verbose):
+    print("\nratios")
+    print(df_finRatios)
 
-  
+  '''
+  #skip for now, may come back when we know more
   # intrades
   #convert names, relations, xtn type, own type to numeric (based on uniqueness)
-  #ensure data is numeric
-  print("\nintrades")
-  print(df_intrades)
   #rm url col
-  df_intrades.drop(columns="url")
-  
+  df_intrades.drop(columns="url",inplace=True)
+  #renme date col for consistency
+  df_intrades.rename(columns={"lastDate":"date"},inplace=True)
+  #ensure data is numeric
+  for c in ["sharesTraded","lastPrice","sharesHeld"]:
+    df_intrades[c] = n.cleanNumbers(df_intrades[c])
+  if(verbose):
+    print("\nintrades")
+    print(df_intrades)
+  '''
   
   '''
   # news - omit for now (will have to make a secondary one for sentiment analysis of the headlines)
   #rm url,id,imagedomain,created,image,publisher cols
   #convert ago to date
-  print("\nnews")
-  print(df_news)
+  if(verbose):
+    print("\nnews")
+    print(df_news)
   '''
   # tgtp
-  #isolate to z (ignore x & y)
-  #add rows to complete to hist
-  #added rows of buy/hold/sell should have values of -1
-  #TODO: might want to consider experimenting with having the added rows have the previous value (so if 1/1 is 20, then 1/2-1/31 should also be 20 instead of -1)
-  #convert consensus to numeric (based on uniquness)
-  print("\ntgtp")
-  print(df_tgtp)
-  # ndx
-  #ensure numbers are numeric (also rename cols to differentiate from target asset)
-  print("\nndx")
-  print(df_ndx)
+  #isolate to z (ignore x & y) and explode into it's own columns (remove the "latest" column since it's mostly empty)
+  df_tgtp = pd.DataFrame(list(df_tgtp['z'])).drop(columns="latest")
+  #rename buy/hold/sell to shouldBuy,shouldHold,shouldSell
+  df_tgtp.rename(columns={"buy":"shouldBuy","sell":"shouldSell","hold":"shouldHold"},inplace=True)
+  #TODO: there may be other values other than these 3, or potentially no data at all. Those cases should be handled (should be based on uniqueness rather than direct translation)
+  #convert consensus to numeric  
+  df_tgtp['consensus'] = df_tgtp['consensus'].replace({"Buy":"1","Hold":"0","Sell":"-1"}).astype(int)
+  if(verbose):
+    print("\ntgtp")
+    print(df_tgtp)
   
-  '''
-  #calculated ones should be fine (just be appended to the output)
-  # vwap
-  print("\nvwap")
-  print(vwap)
-  # vpt
-  print("\nvpt")
-  print(vpt)
-  # ema
-  print("\nema")
-  print(ema)
-  # sma
-  print("\nsma")
-  print(sma)
-  # delta
-  print("\ndelta")
-  print(delta)
-  # obv
-  print("\nobv")
-  print(obv)
-  '''
+  # ndx
+  if(verbose):
+    print("\nndx")
+    print(df_ndx)
+  
+  if(verbose):
+    #calculated ones should be fine (just be appended to the output)
+    # vwap
+    print("\nvwap5")
+    print(vwap5)
+    print("\nvwap20")
+    print(vwap20)
+    # vpt
+    print("\nvpt")
+    print(vpt)
+    # ema
+    print("\nema5")
+    print(ema5)
+    print("\nema20")
+    print(ema20)
+    # sma
+    print("\nsma5")
+    print(sma5)
+    print("\nsma20")
+    print(sma20)
+    # delta
+    print("\ndelta")
+    print(delta)
+    # obv
+    print("\nobv")
+    print(obv)
   
   #combine data into dataframe
   if(verbose): print("combining into single dataframe")
   df_out = df_hist
-  df_out.merge(df_divs,how="outer").fillna(0)
-  
+  df_out = df_out.merge(df_divs,how="outer").fillna(0)
+  df_out = df_out.merge(df_si,how="outer").fillna(0)
+  df_out = df_out.merge(df_es,how="outer").fillna(0)
+  df_out = df_out.merge(df_incomeStatement,how="outer").fillna(0)
+  df_out = df_out.merge(df_balanceSheet,how="outer").fillna(0)
+  df_out = df_out.merge(df_cashFlow,how="outer").fillna(0)
+  df_out = df_out.merge(df_finRatios,how="outer").fillna(0)
+  df_out = df_out.merge(df_tgtp,how="outer").fillna(0)
+  df_out = df_out.merge(df_ndx,how="outer").fillna(0)
+  df_out['vwap5'] = vwap5
+  df_out['vwap20'] = vwap20
+  df_out['vpt'] = vpt
+  df_out['ema5'] = ema5
+  df_out['ema20'] = ema20
+  df_out['sma5'] = sma5
+  df_out['sma20'] = sma20
+  df_out['obv'] = obv
   
   #convert date to datetime rather than string
   df_out.date = pd.to_datetime(df_out.date)

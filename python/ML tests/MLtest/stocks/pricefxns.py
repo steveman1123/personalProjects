@@ -4,16 +4,17 @@ import pandas as pd
 
 
 # https://www.investopedia.com/terms/v/vwap.asp
+# https://www.investopedia.com/articles/trading/11/trading-with-vwap-mvwap.asp
 #calculate the vwap (volume weighted average price)
 #given prices is a pandas dataframe containing at the very least open, close, high, low, and volume columns
-#where cutoff is the number of periods
-def vwap(prices,cutoff=100):
+#where length is the number of periods to average over
+def vwap(prices,length=5):
   #calculate average prices
   avgprice = ((prices['high']+prices['low']+prices['close'])/3)
   #calculate cumulative avg prices
-  cumavg = avgprice.rolling(cutoff).sum()
+  cumavg = avgprice.rolling(length).sum()
   #calculate cumulative volume
-  cumvol = prices['volume'].rolling(cutoff).sum()
+  cumvol = prices['volume'].rolling(length).sum()
   #calculate vwap by cumavg/cumvol
   vwap = cumavg/cumvol
   

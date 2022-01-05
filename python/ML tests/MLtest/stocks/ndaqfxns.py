@@ -33,12 +33,17 @@ def robreq(url,method="get",headers={},params={},maxTries=3,timeout=5):
     print("params:",params)
     raise ValueError("Could not get response")
 
-#clean numbers and convert from strings to numerics (remove anything not numeric or ".")
+#clean numbers and convert from strings to numerics (remove anything not numeric or "." or "-", but replace "--" with "0")
 #where series is a pandas series containing strings with numbers
-def cleanNumbers(series):
-  nums = series.str.replace("[^-0-9.]","",regex=True).astype(float)
-  return nums
-
+def cleanNumbers(series,verbose=False):
+  try:
+    nums = series.str.replace("[^-0-9.]","",regex=True).str.replace("--","0").astype(float)
+    return nums
+  except Exception:
+    #data is not string type
+    if(verbose): print("data is not a string type. no changes made")
+    return series
+    
 #get symbol quote info where:
 #assetclass: type of asset (commodities|crypto|currencies|fixedincome|futures|index|mutualfunds|stocks)
 #symbol: security name (eg MSFT, BTC, EURUSD)
