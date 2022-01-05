@@ -5,6 +5,7 @@ import sys
 import ndaqfxns as n
 import pricefxns as p
 import pandas as pd
+import numpy as np
 import datetime as dt
 from workdays import workday as wd
 
@@ -63,7 +64,9 @@ def genData(symb,verbose=True):
   if(verbose): print("getting financials")
   fin = n.getCompany(symb=symb,data="financials",freq=1)
   if(verbose): print("\tparsing income statement")
-  df_incomeStatement = pd.DataFrame(fin['data']['incomeStatementTable']['rows'])
+  #generate the income statement with the appropriate headers (and set the index as the header instead of being numeric) and transpose it so there's many columns with dates
+  df_incomeStatement = pd.DataFrame(fins['data']['incomeStatementTable']['rows']).rename(columns=fins['data']['incomeStatementTable']['headers']).set_index("Period Ending:").T
+  
   if(verbose): print("\tparsing balance sheet")
   df_balanceSheet = pd.DataFrame(fin['data']['balanceSheetTable']['rows'])
   if(verbose): print("\tparsing cash flow")
@@ -120,16 +123,10 @@ def genData(symb,verbose=True):
   df_divs.drop(columns='type',inplace=True)
   #change string to number
   df_divs['amount'] = n.cleanNumbers(df_divs['amount'])
-  #convert date columns from strings to date objects
-  #TODO: some data may come in as "N/A" instead of a datetime format. This should be able to be handled properly
-  
-  # df_divs['exOrEffDate'] = pd.to_datetime(df_divs['exOrEffDate'])
-  # df_divs['declarationDate'] = pd.to_datetime(df_divs['declarationDate'])
-  # df_divs['recordDate'] = pd.to_datetime(df_divs['recordDate'])
-  # df_divs['paymentDate'] = pd.to_datetime(df_divs['paymentDate'])
-  
-  dates=pd.concat([df_divs['exOrEffDate'],df_divs['declarationDate'],df_divs['recordDate'],df_divs['paymentDate']],ignore_index=True)
-  
+  #remove N/A values
+  df_divs = df_divs.replace("N/A",np.NaN).dropna()
+  #create new dataframe, 1 column of combined date columns
+  df_divs = df_divs.melt(id_vars="amount",var_name="datetype",value_name="date").replace({"datetype":{"exOrEffDate":1,"declarationDate":2,"recordDate":3,"paymentDate":4}})
   
   '''
   # eps
@@ -138,41 +135,76 @@ def genData(symb,verbose=True):
   print(df_eps)
   '''
   # si
-  #cols should be converted to numeric (date strings to dates)
-  #add rows to complete to hist size
   print("\nsi")
   print(df_si)
+  #cols should be converted to numeric (date strings to dates)
+  df_si['interest'] = n.cleanNumbers(df_si['interest'])
+  df_si['avgDailyShareVolume'] = n.cleanNumbers(df_si['avgDailyShareVolume'])
+  df_si['daysToCover'] = n.cleanNumbers(df_si['daysToCover'])
+  
   # es
-  #rm fiscalQtrEnd col
-  #ensure cols are numeric (should be already)
-  #convert date string to date
-  #add rows to complete to hist size
   print("\nes")
   print(df_es)
+  #rm fiscalQtrEnd col
+  df_es.drop(columns="fiscalQtrEnd",inplace=True)
+  #ensure cols are numeric (should be already)
+  df_es['eps'] = n.cleanNumbers(df_es['eps'])
+  df_es['consensusForecast'] = n.cleanNumbers(df_es['consensusForecast'])
+  df_es['percentageSurprise'] = n.cleanNumbers(df_es['percentageSurprise'])
+  
   # income
-  #transform to have many columns, current value2-5 should be quarter-end dates gathered from the headers (before isolating to rows)
-  #ensure data is numeric
-  #add rows to complete to hist size
   print("\nincome")
   print(df_incomeStatement)
+  #rename "Period Ending:" to "date"
+  df_incomeStatement.rename({"Period Ending:":"date"})
+  for e in df_incomeStatement:
+    if(e!="date"): #exclude the date from numeric conversion
+      #ensure data is numeric
+      df_incomeStatement[e] = n.cleanNumbers(df_incomeStatement[e])
+  
   # balance
   #same as income
   print("\nbalance")
   print(df_balanceSheet)
+  #rename "Period Ending:" to "date"
+  df_balanceSheet.rename({"Period Ending:":"date"})
+  for e in df_balanceSheet:
+    if(e!="date"): #exclude the date from numeric conversion
+      #ensure data is numeric
+      df_balanceSheet[e] = n.cleanNumbers(df_balanceSheet[e])
+
   # cash
   #same as income
   print("\ncash flow")
   print(df_cashFlow)
+  #rename "Period Ending:" to "date"
+  df_cashFlow.rename({"Period Ending:":"date"})
+  for e in df_cashFlow:
+    if(e!="date"): #exclude the date from numeric conversion
+      #ensure data is numeric
+      df_cashFlow[e] = n.cleanNumbers(df_cashFlow[e])
+
   # ratios
   #same as income
   print("\nratios")
   print(df_finRatios)
+  #rename "Period Ending:" to "date"
+  df_finRatios.rename({"Period Ending:":"date"})
+  for e in df_finRatios:
+    if(e!="date"): #exclude the date from numeric conversion
+      #ensure data is numeric
+      df_finRatios[e] = n.cleanNumbers(df_finRatios[e])
+
+  
   # intrades
-  #rm url col
   #convert names, relations, xtn type, own type to numeric (based on uniqueness)
-  #ensure data is numeric (and date strings are dates)
+  #ensure data is numeric
   print("\nintrades")
   print(df_intrades)
+  #rm url col
+  df_intrades.drop(columns="url")
+  
+  
   '''
   # news - omit for now (will have to make a secondary one for sentiment analysis of the headlines)
   #rm url,id,imagedomain,created,image,publisher cols
@@ -218,7 +250,7 @@ def genData(symb,verbose=True):
   #combine data into dataframe
   if(verbose): print("combining into single dataframe")
   df_out = df_hist
-  df_out.merge(df_divs,how="outer")
+  df_out.merge(df_divs,how="outer").fillna(0)
   
   
   #convert date to datetime rather than string
