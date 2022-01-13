@@ -6,8 +6,8 @@ import pandas as pd
 # https://www.investopedia.com/terms/v/vwap.asp
 # https://www.investopedia.com/articles/trading/11/trading-with-vwap-mvwap.asp
 #calculate the vwap (volume weighted average price)
-#given prices is a pandas dataframe containing at the very least open, close, high, low, and volume columns
-#where length is the number of periods to average over
+#prices is a pandas dataframe containing at the very least open, close, high, low, and volume columns
+#length is the number of periods to average over
 def vwap(prices,length=5):
   #calculate average prices
   avgprice = ((prices['high']+prices['low']+prices['close'])/3)

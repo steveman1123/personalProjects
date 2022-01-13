@@ -20,7 +20,7 @@ else:
 #independent values are: historical data (and derivitives), 
 #dependent value 1 is t/f price>last week avg
 #dependent value 2 is t/f price>yesterday close3
-def genData(symb,verbose=True):
+def getData(symb,verbose=True):
   numDays=500 #appx number of trade days to get the history for (does not account for holidays)
   fromdate=str(wd(dt.date.today(),-numDays)) #approximate number of trade days ago
   maxNews = 150 #maximum number of news articles/headlines to pull in
@@ -148,7 +148,7 @@ def genData(symb,verbose=True):
   #remove N/A values
   df_divs = df_divs.replace("N/A",np.NaN).dropna()
   #create new dataframe, 1 column of combined date columns, 1 column of date types, 1 column of dividend amount
-  df_divs = df_divs.melt(id_vars="amount",var_name="datetype",value_name="date").replace({"datetype":{"exOrEffDate":1,"declarationDate":2,"recordDate":3,"paymentDate":4}})
+  df_divs = df_divs.melt(id_vars="amount",var_name="divdatetype",value_name="date").replace({"divdatetype":{"exOrEffDate":1,"declarationDate":2,"recordDate":3,"paymentDate":4}})
   if(verbose):
     print("\ndivs")
     print(df_divs)
@@ -302,15 +302,15 @@ def genData(symb,verbose=True):
   #combine data into dataframe
   if(verbose): print("combining into single dataframe")
   df_out = df_hist
-  df_out = df_out.merge(df_divs,how="outer").fillna(0)
-  df_out = df_out.merge(df_si,how="outer").fillna(0)
-  df_out = df_out.merge(df_es,how="outer").fillna(0)
-  df_out = df_out.merge(df_incomeStatement,how="outer").fillna(0)
-  df_out = df_out.merge(df_balanceSheet,how="outer").fillna(0)
-  df_out = df_out.merge(df_cashFlow,how="outer").fillna(0)
-  df_out = df_out.merge(df_finRatios,how="outer").fillna(0)
-  df_out = df_out.merge(df_tgtp,how="outer").fillna(0)
-  df_out = df_out.merge(df_ndx,how="outer").fillna(0)
+  df_out = df_out.merge(df_divs,how="outer")
+  df_out = df_out.merge(df_si,how="outer")
+  df_out = df_out.merge(df_es,how="outer")
+  df_out = df_out.merge(df_incomeStatement,how="outer")
+  df_out = df_out.merge(df_balanceSheet,how="outer")
+  df_out = df_out.merge(df_cashFlow,how="outer")
+  df_out = df_out.merge(df_finRatios,how="outer")
+  df_out = df_out.merge(df_tgtp,how="outer")
+  df_out = df_out.merge(df_ndx,how="outer")
   df_out['vwap5'] = vwap5
   df_out['vwap20'] = vwap20
   df_out['vpt'] = vpt
@@ -322,6 +322,14 @@ def genData(symb,verbose=True):
   
   #convert date to datetime rather than string
   df_out.date = pd.to_datetime(df_out.date)
+  #replace any NaN's with 0
+  # df_out.fillna(0,inplace=True)
+  #ensure dates are all consecutive and in chronological order
+  df_out.sort_values("date",inplace=True)
+  #TODO: ensure without duplicates
+  #TODO: ensure data are correct
   
-  if(verbose): print("done")  
+  df_out.to_csv("./"+symb+".csv")
+  
+  if(verbose): print("done")
   return df_out
