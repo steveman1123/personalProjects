@@ -1,6 +1,6 @@
 #use this file on a 4x4 alternating led grid
 
-#TODO: standardize output and functions so that they can be performed back to back
+#TODO: sest blackwhite to be monochrome intead and have specific values that can be set (as optional parameters)
 '''
 structure should look something like this:
 while True:
@@ -13,15 +13,15 @@ they should focus on one frame at a time (no loops except for displaying for tha
 should take in base color from the global hue variable
 '''
 
-import board,neopixel,time,random,json
+import board,neopixel,time,random #,json
 from adafruit_pixel_framebuf import PixelFramebuffer
 import adafruit_fancyled.adafruit_fancyled as fancy
 
 
 #lookup table for converting text into a 4x4 grid
-CHARS4X4 = json.loads(open("./4x4-chars.json",'r').read())
+#CHARS4X4 = json.loads(open("./4x4-chars.json",'r').read())
 #TODO: add special chars to 4xM grid such as horizontal smiley and heart
-CHARS4XM = json.loads(open("./4xM-chars.json",'r').read())
+#CHARS4XM = json.loads(open("./4xM-chars.json",'r').read())
 
 
 '''
@@ -39,7 +39,7 @@ pixel_height = 4
 pixels = neopixel.NeoPixel(
     pixel_pin,
     pixel_width * pixel_height,
-    brightness=0.05,
+    brightness=0.02,
     auto_write=False,
     pixel_order=neopixel.GRB
 )
@@ -213,9 +213,9 @@ def lines(hstep=1,hoffset=127,delay1=0.3,delay2=0.1,fps=30,dispTime=3):
     if(round(time.time()-updateFrame,2)>=round(1/fps,2)):
       h=(h+1)%256
       color1 = fancy.CHSV(h,255,255).pack()
-      color2 = fancy.CHSV(((h+127)%256),255,255).pack()
+      color2 = fancy.CHSV(((h+hoffset)%256),255,255).pack()
       updateFrame=time.time()
-      pixel_framebuf.fill(fancy.CHSV(h+64,255,64).pack())
+      pixel_framebuf.fill(fancy.CHSV(h+int(hoffset/2),255,50).pack())
       pixel_framebuf.line(x1,0,0,y1,color1)
       pixel_framebuf.line(x2,0,pixel_width-1+x2,y2,color2)
       pixel_framebuf.display()
@@ -241,20 +241,29 @@ def wipe(h=random.randint(0,256),hstep=20,frameTime=0.1,dispTime=3):
         pixel_framebuf.line(x-pixel_width,0,x,pixel_height,fancy.CHSV(h,255,255).pack())
 
       pixel_framebuf.display()
-      time.sleep(frametime)
+      time.sleep(frameTime)
     isLeft= not isLeft #toggle the side
 
 #outline the grid in one color, and fill the rest with another color
 #h is the hue in HSV
 #hstep is how different the hues are each frame
+#blackwhite is a boolean determining if the colors should be black and white or in color
 #dispTime is how long to display the pattern
 #frameTime is how long to display the indivdual frames
-def box(h=random.randint(0,256),hstep=5,dispTime=3,frameTime=0.05):
+def box(h=random.randint(0,256),hdiff=random.randint(20,235),hstep=5,blackwhite=False,dispTime=3,frameTime=0.05):
   startTime=time.time()
   while time.time()<startTime+dispTime:
     h = (h+hstep)%256
-    pixel_framebuf.fill(fancy.CHSV(h,255,255).pack())
-    pixel_framebuf.rect(1,1,pixel_width-2,pixel_height-2,fancy.CHSV((h+127)%256,255,255).pack())
+    if(blackwhite):
+      c1 = fancy.CHSV(h,0,255*(h%2)).pack()
+      c2 = fancy.CHSV(h,0,255*((h+1)%2)).pack()
+    else:
+      c1 = fancy.CHSV(h,255,255).pack()
+      c2 = fancy.CHSV(h+hdiff,255,255).pack()
+    
+    pixel_framebuf.fill(c1)
+    pixel_framebuf.rect(1,1,pixel_width-2,pixel_height-2,c2)
+
     pixel_framebuf.display()
     time.sleep(frameTime)
 
@@ -264,12 +273,19 @@ def box(h=random.randint(0,256),hstep=5,dispTime=3,frameTime=0.05):
 #hstep is how different the hues are each frame
 #dispTime is how long to display the pattern
 #frameTime is how long to display the indivdual frames
-def leftright(h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,dispTime=3,frameTime=0.05):
+def leftright(h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,blackwhite=False,dispTime=3,frameTime=0.05):
   startTime=time.time()
   while time.time()<startTime+dispTime:
     h = (h+hstep)%256
-    pixel_framebuf.rect(0,0,int(pixel_width/2),pixel_height,fancy.CHSV(h,255,255).pack())
-    pixel_framebuf.rect(int(pixel_width/2),0,int(pixel_width/2),pixel_height,fancy.CHSV(h+hdiff,255,255).pack())
+    if(blackwhite):
+      c1 = fancy.CHSV(h,0,255*(h%2)).pack()
+      c2 = fancy.CHSV(h,0,255*((h+1)%2)).pack()
+    else:
+      c1 = fancy.CHSV(h,255,255).pack()
+      c2 = fancy.CHSV(h+hdiff,255,255).pack()
+
+    pixel_framebuf.rect(0,0,int(pixel_width/2),pixel_height,c1)
+    pixel_framebuf.rect(int(pixel_width/2),0,int(pixel_width/2),pixel_height,c2)
     pixel_framebuf.display()
     time.sleep(frameTime)
 
@@ -279,12 +295,19 @@ def leftright(h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,dispT
 #hstep is how different the hues are each frame
 #dispTime is how long to display the pattern
 #frameTime is how long to display the indivdual frames
-def topbot(h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,dispTime=3,frameTime=0.05):
+def topbot(h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,blackwhite=False,dispTime=3,frameTime=0.05):
   startTime=time.time()
   while time.time()<startTime+dispTime:
     h = (h+hstep)%256
-    pixel_framebuf.rect(0,0,pixel_width,int(pixel_height/2),fancy.CHSV(h,255,255).pack())
-    pixel_framebuf.rect(0,int(pixel_height/2),pixel_width,int(pixel_height/2),fancy.CHSV(h+hdiff,255,255).pack())
+    if(blackwhite):
+      c1 = fancy.CHSV(h,0,255*(h%2)).pack()
+      c2 = fancy.CHSV(h,0,255*((h+1)%2)).pack()
+    else:
+      c1 = fancy.CHSV(h,255,255).pack()
+      c2 = fancy.CHSV(h+hdiff,255,255).pack()
+
+    pixel_framebuf.rect(0,0,pixel_width,int(pixel_height/2),c1)
+    pixel_framebuf.rect(0,int(pixel_height/2),pixel_width,int(pixel_height/2),c2)
     pixel_framebuf.display()
     time.sleep(frameTime)
 
@@ -301,10 +324,10 @@ def boxes(h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,blackwhit
     if(blackwhite):
       c1 = fancy.CHSV(h,0,255*(h%2)).pack()
       c2 = fancy.CHSV(h,0,255*((h+1)%2)).pack()
-      
     else:
       c1 = fancy.CHSV(h,255,255).pack()
       c2 = fancy.CHSV(h+hdiff,255,255).pack()
+
     pixel_framebuf.fill(c1)
     pixel_framebuf.rect(0,0,int(pixel_width/2),int(pixel_height/2),c2)
     pixel_framebuf.rect(int(pixel_width/2),int(pixel_height/2),pixel_width,pixel_height,c2)
@@ -320,45 +343,90 @@ def boxes(h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,blackwhit
 #hstep is how different the hues are each frame
 #dispTime is how long to display the pattern
 #frameTime is how long to display the indivdual frames
-def strips(isVert=False,h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,dispTime=3,frameTime=0.05):
+def strips(isVert=False,h=random.randint(0,256),hdiff=random.randint(15,240),hstep=5,blackwhite=False,dispTime=3,frameTime=0.05):
   startTime=time.time()
   while time.time()<startTime+dispTime:
     h = (h+hstep)%256
     pixel_framebuf.fill(fancy.CHSV(h,255,255).pack())
     
     if(isVert):
-      for c in range(int(pixel_width/2)):
-        pixel_framebuf.vline(2*c,0,pixel_height,fancy.CHSV(h+hdiff,255,255).pack())
+      for c in range(pixel_width):
+        if(blackwhite):
+          color = fancy.CHSV(h,0,255*random.getrandbits(1)).pack()
+        else:
+          color = fancy.CHSV(h+(pixel_width-c)*hdiff,255,255).pack()
+        pixel_framebuf.vline(c,0,pixel_height,color)
     else:
-      for r in range(int(pixel_height/2)):
-        pixel_framebuf.hline(0,2*r,pixel_width,fancy.CHSV(h+hdiff,255,255).pack())
+      for r in range(pixel_height):
+        if(blackwhite):
+          color = fancy.CHSV(h,0,255*random.getrandbits(1)).pack()
+        else:
+          color = fancy.CHSV(h+r*hdiff,255,255).pack()
+        pixel_framebuf.hline(0,r,pixel_width,color)
 
     pixel_framebuf.display()
     time.sleep(frameTime)
 
 
+#single pixels
+#numDots is how many dots to show
+
+def dots():
+  return False
+
+
 #main function to run
 def main():
-  timePerPattern = 3 #time to show each pattern, in seconds
-  #cycle through these patterns
-  patterns = [
-              'wipe(frametime=0.03,hstep=25,dispTime=timePerPattern)',
-              'rainbow(pattern="flat",dispTime=timePerPattern/2,step=random.randint(5,50),frameTime=0.03)',
-              'rainbow(pattern="spiral",dispTime=timePerPattern/2,step=random.randint(50,150),frameTime=0.05)',
-              'box(hstep=random.randint(5,50),dispTime=timePerPattern)',
+  colorTime = 30 #how long to display colors
+  bwTime = 10 #how long to display black and white
+
+  timePerPattern = 3 #time to show each individual pattern, in seconds
+  bwFrameTime = 0.1 #how long to display each frame while in the black & white state
+  slowFrame = 0.07 #for frames that should be displayed slightly longer
+  fastFrame = 0.03 #for frames that should be displayed slightly shorter
+
+  #color patterns
+  cpats = [
+              'wipe(frameTime=fastFrame,hstep=50,dispTime=timePerPattern)',
+              'rainbow(pattern="flat",dispTime=timePerPattern/2,step=random.randint(5,20),frameTime=fastFrame)',
+              'rainbow(pattern="spiral",dispTime=timePerPattern/2,step=random.randint(50,150),frameTime=slowFrame)',
+              'rainbow(pattern="spiral",dispTime=timePerPattern*2,step=random.randint(8,15),frameTime=slowFrame)',
+              'box(hstep=random.randint(5,50),dispTime=timePerPattern*2)',
               'leftright(hstep=random.randint(5,50),dispTime=timePerPattern)',
               'boxes(frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'boxes(frameTime=0.1,blackwhite=True,hstep=random.randrange(5,50,2),dispTime=timePerPattern/2)',
-              'strips(frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'strips(isVert=True,frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
+              'strips(frameTime=0.1,hdiff=50,hstep=random.randint(5,50),dispTime=timePerPattern)',
+              'strips(isVert=True,hdiff=75,frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
               'topbot(hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'lines(delay1=0.1,delay2=0.07,dispTime=timePerPattern)',
-              'rainbow(pattern="spiral",dispTime=timePerPattern,step=random.randint(8,15),frameTime=0.07)',
+              'lines(delay1=0.1,delay2=0.07,dispTime=timePerPattern*2)',
              ]
-  #randomly choose a pattern
+  #black & white patterns
+  bwpats = [
+            'box(frameTime=bwFrameTime,hstep=random.randrange(5,50,2),blackwhite=True,dispTime=random.randrange(1,timePerPattern))',
+            'boxes(frameTime=bwFrameTime,blackwhite=True,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
+            'strips(isVert=True,blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
+            'strips(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
+            'topbot(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
+            'leftright(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
+           ]
+  #pixels.brightness = 0.5 #probably can max out flashlight level to this value
   while True:
-    exec(random.choice(patterns))
+    #randomly choose a pattern based on if it's black and white or color
+    isBW = bool(random.getrandbits(1))
+    #set how long the pattern type should be displayed TODO: this should be improved
+    if(isBW):
+      timePerPatternType = bwTime
+    else:
+      timePerPatternType = colorTime
 
+    startTime = time.time()
+    while time.time()<startTime+timePerPatternType:
+      if(isBW):
+        exec(random.choice(bwpats))
+      else:
+        exec(random.choice(cpats))
+      
+      #TODO: add GPIO switches/buttons here that change what's displayed based on the state
+      #eg flashlight mode (red/white), speed controls, brightness control (too high can cause a lot of power draw though)
 
 if(__name__=="__main__"):
   try:
