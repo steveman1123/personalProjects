@@ -370,9 +370,29 @@ def strips(isVert=False,h=random.randint(0,256),hdiff=random.randint(15,240),hst
 
 #single pixels
 #numDots is how many dots to show
+#clearscreen is a bool that determines if the screen should be cleared between frames
+#h is the hue in hsv
+#hdiff is the difference between the colors of the dots
+#hstep is how much the hue changes per frame
+#blackwhite is a bool that says it should be black and white or color
+#dispTime is how long to show the pattern
+#frameTime is how long to show the individual frame
+def dots(numDots=3,clearscreen=True,h=random.randint(0,256),hdiff=25,hstep=5,blackwhite=False,dispTime=3,frameTime=0.03):
+  numDots = min(numDots,pixel_width*pixel_height-1)
+  startTime=time.time()
+  while time.time()<startTime+dispTime:
+    h = (h+hstep)%256
+    dots = [[random.randint(0,pixel_width),random.randint(0,pixel_height)] for _ in range(0,numDots)]
 
-def dots():
-  return False
+    if(clearscreen): pixel_framebuf.fill(0x000000)
+    for i,dot in enumerate(dots):
+      if(blackwhite):
+        pixel_framebuf.pixel(dot[0],dot[1],fancy.CHSV(h,0,255*random.getrandbits(1)).pack())
+      else:
+        pixel_framebuf.pixel(dot[0],dot[1],fancy.CHSV(h+i*hdiff,255,255).pack())
+
+    pixel_framebuf.display()
+    time.sleep(frameTime)
 
 
 #main function to run
@@ -398,8 +418,10 @@ def main():
               'strips(isVert=True,hdiff=75,frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
               'topbot(hstep=random.randint(5,50),dispTime=timePerPattern)',
               'lines(delay1=0.1,delay2=0.07,dispTime=timePerPattern*2)',
+              'dots(numDots=random.randint(2,7),hdiff=random.randint(25,200),clearscreen=True,dispTime=timePerPattern,frameTime=random.randint(3,20)/100)',
+              'dots(numDots=3,clearscreen=False,dispTime=timePerPattern,frameTime=fastFrame)',
              ]
-  #black & white patterns
+  #black & white patterns (makes it look glitchy)
   bwpats = [
             'box(frameTime=bwFrameTime,hstep=random.randrange(5,50,2),blackwhite=True,dispTime=random.randrange(1,timePerPattern))',
             'boxes(frameTime=bwFrameTime,blackwhite=True,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
@@ -407,11 +429,14 @@ def main():
             'strips(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
             'topbot(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
             'leftright(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
+            'dots(numDots=random.randint(2,7),blackwhite=True,hdiff=random.randint(25,200),clearscreen=True,dispTime=timePerPattern,frameTime=random.randint(3,20)/100)',
+            'dots(numDots=3,blackwhite=True,clearscreen=False,dispTime=timePerPattern,frameTime=fastFrame)',
            ]
   #pixels.brightness = 0.5 #probably can max out flashlight level to this value
   while True:
     #randomly choose a pattern based on if it's black and white or color
-    isBW = bool(random.getrandbits(1))
+    isBW = False #bool(random.getrandbits(1))
+
     #set how long the pattern type should be displayed TODO: this should be improved
     if(isBW):
       timePerPatternType = bwTime
