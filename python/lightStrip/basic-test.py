@@ -30,7 +30,7 @@ try:
     pixels.show()
     time.sleep(1)
     #blue
-    print("B")
+    print("B",flush=True)
     pixels.fill((0,255,0))
     pixels.show()
     time.sleep(1)

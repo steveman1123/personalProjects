@@ -1,41 +1,37 @@
 #use this file on a 4x4 alternating led grid
 
-#TODO: sest blackwhite to be monochrome intead and have specific values that can be set (as optional parameters)
-'''
-structure should look something like this:
-while True:
-  clear display
-  set buffer content/pattern based on time or pattern content
-  update display
+#TODO: pull the pattern functions into a seperate file
+#TODO: add button presses that can change the mode (BW/color/flashlight (fill white)/night light (fill red))
+# ^ https://duckduckgo.com/?q=python+gpio+interrupt
+# ^ this may be problematic since the board module is used in the pixel buffer, but the RPi.GPIO module is used in the interrupt handling
+#   I believe the pins may be referencable by the GPIO module
 
-pattern functions should saved states
-they should focus on one frame at a time (no loops except for displaying for that frame)
-should take in base color from the global hue variable
-'''
-
-import board,neopixel,time,random #,json
+import neopixel,time,random,board #,json
+#import RPi.GPIO as GPIO
 from adafruit_pixel_framebuf import PixelFramebuffer
 import adafruit_fancyled.adafruit_fancyled as fancy
 
 
 #lookup table for converting text into a 4x4 grid
 #CHARS4X4 = json.loads(open("./4x4-chars.json",'r').read())
-#TODO: add special chars to 4xM grid such as horizontal smiley and heart
 #CHARS4XM = json.loads(open("./4xM-chars.json",'r').read())
 
 
 '''
+framebuf docs:
 https://cdn-learn.adafruit.com/downloads/pdf/easy-neopixel-graphics-with-the-circuitpython-pixel-framebuf-library.pdf
-
 https://circuitpython.readthedocs.io/projects/pixel_framebuf/en/latest/examples.html
-
 https://docs.micropython.org/en/v1.11/library/framebuf.html#class-framebufferhttps://docs.micropython.org/en/v1.11/library/framebuf.html
 '''
 
-pixel_pin = board.D18
-pixel_width = 4
-pixel_height = 4
+#GPIO.setmode(GPIO.BOARD)
+#button_pin = GPIO.setup(23,GPIO.IN,pull_up_down=GPIO.PUD_UP) #incomplete/incorrect
+#pixel_pin = GPIO.setup(18,GPIO.OUT,pullup_down=GPIO.PUD_DOWN) #incomplete/incorrect
+pixel_pin = board.D18 #pin to output data on
+pixel_width = 4 #pixels in the x direction
+pixel_height = 4 #pixels in the y direction
 
+#pixel buffer (should really only be used in the framebuf
 pixels = neopixel.NeoPixel(
     pixel_pin,
     pixel_width * pixel_height,
@@ -44,6 +40,7 @@ pixels = neopixel.NeoPixel(
     pixel_order=neopixel.GRB
 )
 
+#pixel frame
 pixel_framebuf = PixelFramebuffer(
     pixels,
     pixel_width,
@@ -87,7 +84,7 @@ def scroll1char(text,color,backcolor,delay=0.2):
     chargrid = [e['grid'].split("|") for e in CHARS4X4 if e['char']==char][0]
     if(len(chargrid)>0):
       #clear display (set to back color)
-      pixels.fill(backcolor)
+      pixels_framebuf.fill(backcolor)
       #for each column in text*2: #*2 since it starts off screen and ends off screen
       for col in range(2*len(chargrid[0])):
         #shift
@@ -394,33 +391,37 @@ def dots(numDots=3,clearscreen=True,h=random.randint(0,256),hdiff=25,hstep=5,bla
     pixel_framebuf.display()
     time.sleep(frameTime)
 
+#handle the interrupt to increment the pattern type
+def interruptHandler(arg):
+  return False
+
 
 #main function to run
 def main():
-  colorTime = 30 #how long to display colors
-  bwTime = 10 #how long to display black and white
-
   timePerPattern = 3 #time to show each individual pattern, in seconds
   bwFrameTime = 0.1 #how long to display each frame while in the black & white state
   slowFrame = 0.07 #for frames that should be displayed slightly longer
   fastFrame = 0.03 #for frames that should be displayed slightly shorter
+  patternType = 0 #type of pattern to display (color, blackwhite, red flashlight, white flashlight)
+  patternBrightness = 0.02 #brightness to have the patterns display at
+  flashlightBrightness = 0.3 #brightness to have the flashlights display at
 
   #color patterns
   cpats = [
-              'wipe(frameTime=fastFrame,hstep=50,dispTime=timePerPattern)',
-              'rainbow(pattern="flat",dispTime=timePerPattern/2,step=random.randint(5,20),frameTime=fastFrame)',
-              'rainbow(pattern="spiral",dispTime=timePerPattern/2,step=random.randint(50,150),frameTime=slowFrame)',
-              'rainbow(pattern="spiral",dispTime=timePerPattern*2,step=random.randint(8,15),frameTime=slowFrame)',
-              'box(hstep=random.randint(5,50),dispTime=timePerPattern*2)',
-              'leftright(hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'boxes(frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'strips(frameTime=0.1,hdiff=50,hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'strips(isVert=True,hdiff=75,frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'topbot(hstep=random.randint(5,50),dispTime=timePerPattern)',
-              'lines(delay1=0.1,delay2=0.07,dispTime=timePerPattern*2)',
-              'dots(numDots=random.randint(2,7),hdiff=random.randint(25,200),clearscreen=True,dispTime=timePerPattern,frameTime=random.randint(3,20)/100)',
-              'dots(numDots=3,clearscreen=False,dispTime=timePerPattern,frameTime=fastFrame)',
-             ]
+           'wipe(frameTime=fastFrame,hstep=50,dispTime=timePerPattern)',
+           'rainbow(pattern="flat",dispTime=timePerPattern/2,step=random.randint(5,20),frameTime=fastFrame)',
+           'rainbow(pattern="spiral",dispTime=timePerPattern/2,step=random.randint(50,150),frameTime=slowFrame)',
+           'rainbow(pattern="spiral",dispTime=timePerPattern*2,step=random.randint(8,15),frameTime=slowFrame)',
+           'box(hstep=random.randint(5,50),dispTime=timePerPattern*2)',
+           'leftright(hstep=random.randint(5,50),dispTime=timePerPattern)',
+           'boxes(frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
+           'strips(frameTime=0.1,hdiff=50,hstep=random.randint(5,50),dispTime=timePerPattern)',
+           'strips(isVert=True,hdiff=75,frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
+           'topbot(hstep=random.randint(5,50),dispTime=timePerPattern)',
+           'lines(delay1=0.1,delay2=0.07,dispTime=timePerPattern*2)',
+           'dots(numDots=random.randint(2,7),hdiff=random.randint(25,200),clearscreen=True,dispTime=timePerPattern,frameTime=random.randint(3,20)/100)',
+           'dots(numDots=3,clearscreen=False,dispTime=timePerPattern,frameTime=fastFrame)',
+          ]
   #black & white patterns (makes it look glitchy)
   bwpats = [
             'box(frameTime=bwFrameTime,hstep=random.randrange(5,50,2),blackwhite=True,dispTime=random.randrange(1,timePerPattern))',
@@ -434,24 +435,23 @@ def main():
            ]
   #pixels.brightness = 0.5 #probably can max out flashlight level to this value
   while True:
-    #randomly choose a pattern based on if it's black and white or color
-    isBW = False #bool(random.getrandbits(1))
-
-    #set how long the pattern type should be displayed TODO: this should be improved
-    if(isBW):
-      timePerPatternType = bwTime
-    else:
-      timePerPatternType = colorTime
-
-    startTime = time.time()
-    while time.time()<startTime+timePerPatternType:
-      if(isBW):
-        exec(random.choice(bwpats))
-      else:
-        exec(random.choice(cpats))
+    #TODO: interrupt handling shouldbe something like setting a flag that it's been interrupted and incrimenting what pattern type should be used (instead of having it time based, it'd be interrupt based)
+    if(patternType==0):
+      pixels.brightness = patternBrightness
+      exec(random.choice(cpats))
+    elif(patternType==1):
+      pixels.brightness = patternBrightness
+      exec(random.choice(bwpats))
+    elif(patternType==2):
+      pixels.brightness = flashlightBrightness
+      pixel_framebuf.fill(0xFF0000)
+      pixel_framebuf.display()
+    elif(patternType==3):
+      pixels.brightness = flashlightBrightness
+      pixel_framebuf.fill(0xFFFFFF)
+      pixel_framebuf.display()
       
-      #TODO: add GPIO switches/buttons here that change what's displayed based on the state
-      #eg flashlight mode (red/white), speed controls, brightness control (too high can cause a lot of power draw though)
+
 
 if(__name__=="__main__"):
   try:
