@@ -4,10 +4,10 @@
 #TODO: add button presses that can change the mode (BW/color/flashlight (fill white)/night light (fill red))
 # ^ https://duckduckgo.com/?q=python+gpio+interrupt
 # ^ this may be problematic since the board module is used in the pixel buffer, but the RPi.GPIO module is used in the interrupt handling
-#   I believe the pins may be referencable by the GPIO module
+#   I believe the pins may be referencable by the GPIO module, not sure if the board module supports interrupts
 
-import neopixel,time,random,board #,json
-#import RPi.GPIO as GPIO
+import neopixel,time,random,board,digitalio #,json
+import threading
 from adafruit_pixel_framebuf import PixelFramebuffer
 import adafruit_fancyled.adafruit_fancyled as fancy
 
@@ -24,9 +24,10 @@ https://circuitpython.readthedocs.io/projects/pixel_framebuf/en/latest/examples.
 https://docs.micropython.org/en/v1.11/library/framebuf.html#class-framebufferhttps://docs.micropython.org/en/v1.11/library/framebuf.html
 '''
 
-#GPIO.setmode(GPIO.BOARD)
-#button_pin = GPIO.setup(23,GPIO.IN,pull_up_down=GPIO.PUD_UP) #incomplete/incorrect
-#pixel_pin = GPIO.setup(18,GPIO.OUT,pullup_down=GPIO.PUD_DOWN) #incomplete/incorrect
+button_pin = digitalio.DigitalInOut(board.D23) #pin to input button on
+button_pin.direction = digitalio.Direction.INPUT #set button as input
+button_pin.pull = digitalio.Pull.UP #set button as pulled up (since it's connected to ground)
+
 pixel_pin = board.D18 #pin to output data on
 pixel_width = 4 #pixels in the x direction
 pixel_height = 4 #pixels in the y direction
@@ -402,62 +403,92 @@ def main():
   bwFrameTime = 0.1 #how long to display each frame while in the black & white state
   slowFrame = 0.07 #for frames that should be displayed slightly longer
   fastFrame = 0.03 #for frames that should be displayed slightly shorter
-  patternType = 0 #type of pattern to display (color, blackwhite, red flashlight, white flashlight)
   patternBrightness = 0.02 #brightness to have the patterns display at
   flashlightBrightness = 0.3 #brightness to have the flashlights display at
 
+  patternType = 0 #type of pattern to display (color, blackwhite, red flashlight, white flashlight)
+
   #color patterns
   cpats = [
-           'wipe(frameTime=fastFrame,hstep=50,dispTime=timePerPattern)',
-           'rainbow(pattern="flat",dispTime=timePerPattern/2,step=random.randint(5,20),frameTime=fastFrame)',
-           'rainbow(pattern="spiral",dispTime=timePerPattern/2,step=random.randint(50,150),frameTime=slowFrame)',
-           'rainbow(pattern="spiral",dispTime=timePerPattern*2,step=random.randint(8,15),frameTime=slowFrame)',
-           'box(hstep=random.randint(5,50),dispTime=timePerPattern*2)',
-           'leftright(hstep=random.randint(5,50),dispTime=timePerPattern)',
-           'boxes(frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
-           'strips(frameTime=0.1,hdiff=50,hstep=random.randint(5,50),dispTime=timePerPattern)',
-           'strips(isVert=True,hdiff=75,frameTime=0.1,hstep=random.randint(5,50),dispTime=timePerPattern)',
-           'topbot(hstep=random.randint(5,50),dispTime=timePerPattern)',
-           'lines(delay1=0.1,delay2=0.07,dispTime=timePerPattern*2)',
-           'dots(numDots=random.randint(2,7),hdiff=random.randint(25,200),clearscreen=True,dispTime=timePerPattern,frameTime=random.randint(3,20)/100)',
-           'dots(numDots=3,clearscreen=False,dispTime=timePerPattern,frameTime=fastFrame)',
+           ['wipe',{'frameTime':fastFrame,'hstep':50,'dispTime':timePerPattern}],
+           ['rainbow',{'pattern':"flat",'dispTime':timePerPattern/2,'step':random.randint(5,20),'frameTime':fastFrame}],
+           ['rainbow',{'pattern':"spiral",'dispTime':timePerPattern/2,'step':random.randint(50,150),'frameTime':slowFrame}],
+           ['rainbow',{'pattern':"spiral",'dispTime':timePerPattern*2,'step':random.randint(8,15),'frameTime':slowFrame}],
+           ['box',{'hstep':random.randint(5,50),'dispTime':timePerPattern*2}],
+           ['leftright',{'hstep':random.randint(5,50),'dispTime':timePerPattern}],
+           ['boxes',{'frameTime':0.1,'hstep':random.randint(5,50),'dispTime':timePerPattern}],
+           ['strips',{'frameTime':0.1,'hdiff':50,'hstep':random.randint(5,50),'dispTime':timePerPattern}],
+           ['strips',{'isVert':True,'hdiff':75,'frameTime':0.1,'hstep':random.randint(5,50),'dispTime':timePerPattern}],
+           ['topbot',{'hstep':random.randint(5,50),'dispTime':timePerPattern}],
+           ['lines',{'delay1':0.1,'delay2':0.07,'dispTime':timePerPattern*2}],
+           ['dots',{'numDots':random.randint(2,7),'hdiff':random.randint(25,200),'clearscreen':True,'dispTime':timePerPattern,'frameTime':random.randint(3,20)/100}],
+           ['dots',{'numDots':3,'clearscreen':False,'dispTime':timePerPattern,'frameTime':fastFrame}],
           ]
   #black & white patterns (makes it look glitchy)
   bwpats = [
-            'box(frameTime=bwFrameTime,hstep=random.randrange(5,50,2),blackwhite=True,dispTime=random.randrange(1,timePerPattern))',
-            'boxes(frameTime=bwFrameTime,blackwhite=True,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
-            'strips(isVert=True,blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
-            'strips(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
-            'topbot(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
-            'leftright(blackwhite=True,frameTime=bwFrameTime,hstep=random.randrange(5,50,2),dispTime=random.randrange(1,timePerPattern))',
-            'dots(numDots=random.randint(2,7),blackwhite=True,hdiff=random.randint(25,200),clearscreen=True,dispTime=timePerPattern,frameTime=random.randint(3,20)/100)',
-            'dots(numDots=3,blackwhite=True,clearscreen=False,dispTime=timePerPattern,frameTime=fastFrame)',
+            ['box',{'frameTime':bwFrameTime,'hstep':random.randrange(5,50,2),'blackwhite':True,'dispTime':random.randrange(1,timePerPattern)}],
+            ['boxes',{'frameTime':bwFrameTime,'blackwhite':True,'hstep':random.randrange(5,50,2),'dispTime':random.randrange(1,timePerPattern)}],
+            ['strips',{'isVert':True,'blackwhite':True,'frameTime':bwFrameTime,'hstep':random.randrange(5,50,2),'dispTime':random.randrange(1,timePerPattern)}],
+            ['strips',{'blackwhite':True,'frameTime':bwFrameTime,'hstep':random.randrange(5,50,2),'dispTime':random.randrange(1,timePerPattern)}],
+            ['topbot',{'blackwhite':True,'frameTime':bwFrameTime,'hstep':random.randrange(5,50,2),'dispTime':random.randrange(1,timePerPattern)}],
+            ['leftright',{'blackwhite':True,'frameTime':bwFrameTime,'hstep':random.randrange(5,50,2),'dispTime':random.randrange(1,timePerPattern)}],
+            ['dots',{'numDots':random.randint(2,7),'blackwhite':True,'hdiff':random.randint(25,200),'clearscreen':True,'dispTime':timePerPattern,'frameTime':random.randint(3,20)/100}],
+            ['dots',{'numDots':3,'blackwhite':True,'clearscreen':False,'dispTime':timePerPattern,'frameTime':fastFrame}],
            ]
-  #pixels.brightness = 0.5 #probably can max out flashlight level to this value
-  while True:
-    #TODO: interrupt handling shouldbe something like setting a flag that it's been interrupted and incrimenting what pattern type should be used (instead of having it time based, it'd be interrupt based)
-    if(patternType==0):
-      pixels.brightness = patternBrightness
-      exec(random.choice(cpats))
-    elif(patternType==1):
-      pixels.brightness = patternBrightness
-      exec(random.choice(bwpats))
-    elif(patternType==2):
-      pixels.brightness = flashlightBrightness
-      pixel_framebuf.fill(0xFF0000)
-      pixel_framebuf.display()
-    elif(patternType==3):
-      pixels.brightness = flashlightBrightness
-      pixel_framebuf.fill(0xFFFFFF)
-      pixel_framebuf.display()
-      
 
+  '''
+inside infinite loop:
+if no thread running:
+  start a thread based on pattern type (thread should end after the pattern is done
+else:
+  pass
+
+if(buttonState==True and prevButtonState==False): (button has been released)
+  kill all pattern threads
+  increment patternType
+time.sleep(0.05)
+  '''
+  buttonState= button_pin.value
+  while True:
+    
+    prevButtonState = buttonState
+    #ensure that no thread is running before attempting to start another
+    if(len(threading.enumerate())<=1):
+      if(patternType==0):
+        pixels.brightness = patternBrightness
+        pat = random.choice(cpats)
+        patThread = threading.Thread(target=eval(pat[0]),kwargs=pat[1])
+        patThread.start()
+      elif(patternType==1):
+        pixels.brightness = patternBrightness
+        pat = random.choice(bwpats)
+        patThread = threading.Thread(target=eval(pat[0]),kwargs=pat[1])
+        patThread.start()
+      elif(patternType==2):
+        pixels.brightness = flashlightBrightness
+        pixel_framebuf.fill(0xFF0000)
+        pixel_framebuf.display()
+      elif(patternType==3):
+        pixels.brightness = flashlightBrightness
+        pixel_framebuf.fill(0xFFFFFF)
+        pixel_framebuf.display()
+    
+    time.sleep(0.05)
+    buttonState = button_pin.value
+    #if button has been released (previous state is True, current state is False)
+    if(not buttonState and prevButtonState):
+      #increment the pattern to use
+      patternType = (patternType+1)%4
+    #print(patternType)
 
 if(__name__=="__main__"):
   try:
     main()
   #clear the display if quit by keyboard
   except KeyboardInterrupt:
+    print("waiting for display thread to finish...")
+    #wait for the thread to finish
+    while len(threading.enumerate())>1: time.sleep(0.5)
     pixel_framebuf.fill(0x000000)
     pixel_framebuf.display()
 
