@@ -470,7 +470,8 @@ time.sleep(0.05)
         pixel_framebuf.display()
       elif(patternType==3):
         pixels.brightness = flashlightBrightness
-        pixel_framebuf.fill(0xFFFFFF)
+        pixel_framebuf.fill(0x000000)
+        pixel_framebuf.rect(1,1,pixel_width-2,pixel_height-2,0xFFFFFF)
         pixel_framebuf.display()
     
     time.sleep(0.05)
