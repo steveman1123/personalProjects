@@ -3,6 +3,9 @@
 # Load libraries
 import sys, sklearn, os
 import pandas as pd
+import numpy as np
+import datetime as dt
+from getData import getData
 from sklearn import model_selection
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
@@ -21,22 +24,31 @@ if(len(sys.argv)==2):
 else:
   raise ValueError("Must have exactly 1 argument of the stock symbol")
 
-verbose=False
+verbose=True
 
-#TODO: add check if file exists, if not, then run the get-data file
-filepath=f"./stocks/stockdata/{symb}-prices.data"
+filepath = f"./stockdata/{symb}.csv"
 
-names = ["Date", "Close/Last", "Volume", "Open", "High", "Low", "class"]
+if(not os.path.isfile(filepath)):
+  if(verbose): print(f"data file for {symb} does not exist. Generating data...")
+  getData(symb,verbose)
+
+#names = ["Date", "Close/Last", "Volume", "Open", "High", "Low", "class"]
 
 if(not os.path.exists(filepath)):
   if(verbose): print("local file not found")
-  raise ValueError("No local file found")
+  raise ValueError("No local file found. Possibly bad file path specified")
 
-dataset = pd.read_csv(filepath, names=names)
-
+dataset = pd.read_csv(filepath)
 #clean the data some more
 #TODO: this may need to change
-dataset.replace("?",0,inplace=True)
+
+#convert datetime strings to integer seconds
+dataset['date'] = (pd.to_datetime(dataset['date']) - dt.datetime(1970,1,1)).dt.total_seconds()
+#ensure that all NaN values are 0 (just in case something's wrong in the data file)
+dataset.replace(np.NaN,0,inplace=True)
+
+
+
 
 if(verbose):
   print("dataset shape")
@@ -52,9 +64,9 @@ if(verbose):
   print('\n')
 
   # class distribution
-  print("group data by classes")
-  print(dataset.groupby('class').size())
-  print('\n')
+  # print("group data by classes")
+  # print(dataset.groupby('class').size())
+  # print('\n')
 
 # Split-out validation dataset
 print("splitting training and validation data")

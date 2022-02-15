@@ -16,11 +16,16 @@ else:
   raise ValueError("Must have exactly 1 argument of the stock symbol")
 '''
 
+
+
 #generate the data file
 #independent values are: historical data (and derivitives), 
 #dependent value 1 is t/f price>last week avg
 #dependent value 2 is t/f price>yesterday close3
-def getData(symb,verbose=True):
+def getData(symb,verbose=True,outputpath="./stockdata/"):
+  outputfile = outputpath+symb+".csv"
+
+  
   numDays=500 #appx number of trade days to get the history for (does not account for holidays)
   fromdate=str(wd(dt.date.today(),-numDays)) #approximate number of trade days ago
   maxNews = 150 #maximum number of news articles/headlines to pull in
@@ -326,10 +331,12 @@ def getData(symb,verbose=True):
   # df_out.fillna(0,inplace=True)
   #ensure dates are all consecutive and in chronological order
   df_out.sort_values("date",inplace=True)
+  #ensure all nan values are actually 0
+  df_out.replace(np.NaN,0)
   #TODO: ensure without duplicates
   #TODO: ensure data are correct
   
-  df_out.to_csv("./"+symb+".csv")
+  df_out.to_csv(outputfle)
   
   if(verbose): print("done")
   return df_out
