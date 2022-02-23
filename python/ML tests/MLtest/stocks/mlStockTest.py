@@ -1,6 +1,11 @@
 #use this to analyze stock prices
 
+#set whether the program should be verbose in the output or not
+verbose=True
+
+
 # Load libraries
+if(verbose): print("importing modules")
 import sys, sklearn, os
 import pandas as pd
 import numpy as np
@@ -16,7 +21,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-
+if(verbose): print("done importing")
 
 # Load dataset
 if(len(sys.argv)==2):
@@ -24,7 +29,6 @@ if(len(sys.argv)==2):
 else:
   raise ValueError("Must have exactly 1 argument of the stock symbol")
 
-verbose=True
 
 filepath = f"./stockdata/{symb}.csv"
 
@@ -90,7 +94,7 @@ scoring = 'accuracy'
 # Spot Check Algorithms
 print("assigning models")
 models = [
-  ('LR', LogisticRegression(max_iter=128)),
+  # ('LR', LogisticRegression(max_iter=128),
   ('LDA', LinearDiscriminantAnalysis()),
   ('KNN', KNeighborsClassifier()),
   ('CART', DecisionTreeClassifier()),
