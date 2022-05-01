@@ -1,0 +1,183 @@
+<html>
+  <head>
+    <style>
+    /* just fucking around making a logo and experimenting with different designs and stuff */
+    
+    :root {
+      --text-color: #2af;
+      --text-weight: 10px;
+      --text-width: 60px;
+      --text-height: 70px;
+      --text-kerning: 7px;
+      --line-angle: 45;
+    }
+    
+    html, body {
+      margin: 0;
+      text-align: center;
+      width: 100%;
+    }
+    
+    #bk {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      z-index: -1;
+      opacity: 0.4;
+      background-image: url(https://www.youredm.com/wp-content/uploads/2019/01/rezz-hands-out-decadence-az-2018-rukes.jpg);
+      background-size: cover;
+    }
+    
+    #logo {
+      display: inline-table;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #logo > * {
+      display: inline-block;
+      padding: var(--text-kerning);
+      vertical-align: top;
+    }
+    
+    .let > * {
+      border-color: var(--text-color);
+    }
+    
+    #r1 {
+      background-color: var(--text-color);
+      width: var(--text-weight);
+      height: 65px;
+    }
+    #r2 {
+      background-color: var(--text-color);
+      width: var(text-width);
+      height: var(--text-weight);
+      margin-top: -65px;
+    }
+    #r3 {
+      background-color: var(--text-color);
+      width: var(--text-weight);
+      height: 35px;
+      margin-left: var(--text-width);
+      margin-top: calc(0px - var(--text-weight));
+    }
+    #r4 {
+      width: calc(var(--text-width) - var(--text-weight));
+      height: 0px;
+      border-top: solid var(--text-color) var(--text-weight);
+      border-left: solid transparent var(--text-weight);
+      border-right: solid var(--text-color) 0px;
+      margin-left: var(--text-weight);
+    }
+    
+    #r5 {
+      background-color: var(--text-color);
+      width: calc(3px + var(--text-weight));
+      height: 60px;
+      transform: skew(45deg);
+      margin-left: 40px;
+      margin-top: -10px;
+    }
+    
+    
+    #e1, #e2 {
+      margin-bottom: calc((var(--text-height) - 3 * var(--text-weight)) / 2);
+    }
+    
+    #e1, #e3 {
+      background-color: var(--text-color);
+      width: var(--text-width);
+      height: var(--text-weight);
+    }
+    
+    #e2 {
+      background-color: var(--text-color);
+      width: calc(var(--text-width) / 2);
+      height: var(--text-weight);
+      margin-left: calc(var(--text-width) / 2);
+    }
+    
+    
+    #za1 {
+      width: var(--text-width);
+      height: 0px;
+      border-top: solid var(--text-color) var(--text-weight);
+      border-left: solid var(--text-color) var(--text-weight);
+      border-right: solid transparent var(--text-weight);
+    }
+    
+    #za2 {
+      background-color: var(--text-color);
+      width: calc(5px + var(--text-weight));
+      height: calc(var(--text-height) - 2*var(--text-weight) - 5px);
+      transform: skew(calc(-45deg));
+      margin-left: calc(22.5px + var(--text-width) - 50px);
+    }
+    
+    #za3 {
+      border-bottom: solid var(--text-color) var(--text-weight);
+      border-left: solid transparent var(--text-weight);
+      border-right: solid var(--text-color) 0px;
+      margin-left: -3px;
+      margin-top: 5px;
+    }
+    
+    
+    #zb1 {
+      width: var(--text-width);
+      height: 0px;
+      border-top: solid var(--text-color) var(--text-weight);
+      border-left: solid var(--text-color) var(--text-weight);
+      border-right: solid transparent var(--text-weight);
+    }
+    
+    #zb2 {
+      background-color: var(--text-color);
+      width: calc(5px + var(--text-weight));
+      height: calc(var(--text-height) - 2*var(--text-weight) - 5px);
+      transform: skew(calc(-45deg));
+      margin-left: calc(22.5px + var(--text-width) - 50px);
+    }
+    
+    #zb3 {
+      border-bottom: solid var(--text-color) var(--text-weight);
+      border-left: solid transparent var(--text-weight);
+      border-right: solid var(--text-color) 0px;
+      margin-left: -3px;
+      margin-top: 5px;
+    }
+    
+    </style>
+  </head>
+  
+  <body>
+    <div id="logo">
+      <div id="r" class="let">
+        <div id="r1"></div>
+        <div id="r2"></div>
+        <div id="r3"></div>
+        <div id="r4"></div>
+        <div id="r5"></div>
+      </div>
+      <div id="e" class="let">
+        <div id="e1"></div>
+        <div id="e2"></div>
+        <div id="e3"></div>
+      </div>
+      <div id="za" class="let">
+        <div id="za1"></div>
+        <div id="za2"></div>
+        <div id="za3"></div>
+      </div>
+      <div id="zb" class="let">
+        <div id="zb1"></div>
+        <div id="zb2"></div>
+        <div id="zb3"></div>
+      </div>
+    </div>
+  <div id="bk"></div>
+  </body>
+</html>
+  

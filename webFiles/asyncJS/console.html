@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Async Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      * {
+        color: #0F0;
+        font-family: monospace;
+        background-color: #000;
+        font-size: 12pt;
+      }
+    </style>
+  </head>
+  <body title="for devices without access to an actual JS console">
+    <p>Pseudo Console Output</p>
+    <p>Loaded at: <span id="loadtime"></span>
+    <br>
+    <pre id="cons"></pre>
+  </body>
+  
+  <script>
+    //console display settings
+    
+    //display the text in the "console" interface
+    function disp(text,end="\n") {
+      document.getElementById("cons").innerHTML += String(text)+end;
+    }
+
+    //display when the document is first loaded
+    document.onload = time();
+
+    function time() {
+      var today = new Date();
+      var hh = addZero(today.getHours());
+      var mm = addZero(today.getMinutes());
+      var ss = addZero(today.getSeconds());
+      var yyyy = today.getYear()+1900;
+      var mo = addZero(today.getMonth()+1);
+      var dd = addZero(today.getDate());
+
+      document.getElementById("loadtime").innerHTML = yyyy+"-"+mo+"-"+dd+" | "+hh+":"+mm+":"+ss;
+    }
+
+    //add a leading 0 to single digit numbers
+    function addZero(i) {
+      return (i<10 ? "0" : "") + i;
+    }
+  </script>
+  
+  <script type="text/javascript" src="./asyncTest1.js"></script>
+  <script type="text/javascript" src="./asyncTest2.js"></script>
+
+</html>
