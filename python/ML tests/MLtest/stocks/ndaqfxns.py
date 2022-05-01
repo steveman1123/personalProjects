@@ -35,7 +35,7 @@ def robreq(url,method="get",headers={},params={},maxTries=3,timeout=5):
 
 #clean numbers and convert from strings to numerics (remove anything not numeric or "." or "-", but replace "--" with "0")
 #where series is a pandas series containing strings with numbers
-def cleanNumbers(series,verbose=False):
+def cleanNumbers(series,verbose=True):
   try:
     nums = series.str.replace("[^-0-9.]","",regex=True).str.replace("--","0").astype(float)
     return nums
@@ -48,8 +48,8 @@ def cleanNumbers(series,verbose=False):
 #assetclass: type of asset (commodities|crypto|currencies|fixedincome|futures|index|mutualfunds|stocks)
 #symbol: security name (eg MSFT, BTC, EURUSD)
 #data: data to return (chart|dividends|eps|extended-trading|historical|info|option-chain|realtime-trades|short-interest|summary)
-#fromdate: when getting history, specify the start date (in yyyy-mm-dd format)
-#todate: when getting histroy, specify the end date (in yyyy-mm-dd format)
+#fromdate: when getting history, specify the start date (datetime date type)
+#todate: when getting histroy, specify the end date (datetime date type)
 #offset: when getting history, can offset the number of days (eg if 100 days are requested, and 0-20 are returned, can offset by 20 to get 20-40)
 #limit: when getting history, number of days returned per request
 #charttype: when getting chart, omit for getting basic asset info (name, last sale price, etc), set to "real" to get volume, price, price close
@@ -58,10 +58,10 @@ def cleanNumbers(series,verbose=False):
 def getQuote(assetclass,
             symb,
             data,
-            fromdate=str(dt.date.today()-dt.timedelta(1)),
-            todate=str(dt.date.today()),
+            fromdate=dt.date.today()-dt.timedelta(1),
+            todate=dt.date.today(),
             offset=0,
-            limit=15,
+            limit=-1,
             charttype=None,
             markettype="pre"
             ):
@@ -72,7 +72,8 @@ def getQuote(assetclass,
   
   params={"assetclass":assetclass}
   if(data=="historical"):
-    params.update({"fromdate":fromdate,"todate":todate,"offset":offset,"limit":limit})
+    if(limit<=0): limit = (todate-fromdate).days
+    params.update({"fromdate":str(fromdate),"todate":str(todate),"offset":offset,"limit":limit})
   elif(data=="chart"):
     params.update({"charttype":charttype})
   elif(data=="extended-trading"):

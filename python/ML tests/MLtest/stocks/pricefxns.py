@@ -9,6 +9,7 @@ import pandas as pd
 #prices is a pandas dataframe containing at the very least open, close, high, low, and volume columns
 #length is the number of periods to average over
 def vwap(prices,length=5):
+  # print(prices)
   #calculate average prices
   avgprice = ((prices['high']+prices['low']+prices['close'])/3)
   #calculate cumulative avg prices
