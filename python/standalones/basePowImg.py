@@ -6,9 +6,9 @@ the purpose of this is to generate an image from 1's digits of different powers 
 '''
 
 import numpy as np
-import scipy.misc as sm
+from PIL import Image
 
-n = 2 #power
+n = 10 #power
 w = 1600 #number of numbers to go to
 h = 1600 #number of bases to check
 
@@ -20,8 +20,8 @@ for b in range(1,h):
     #pixel[b,x] = int(b*x)
 
 #print(np.max(pixel))
-pixel = (255*pixel/float(np.max(pixel))).astype(int) #scale to 255 as max
-# print(pixel)
+pixel = (255*pixel/float(np.max(pixel))).astype(np.uint8) #scale to 255 as max
+#print(pixel)
 print(n)
 
-sm.toimage(pixel).save('pow'+str(n)+'a.bmp')
+Image.fromarray(pixel).save('pow'+str(n)+'a.bmp')
