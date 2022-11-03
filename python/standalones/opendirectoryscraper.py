@@ -1,17 +1,23 @@
-import requests,time,re
+import requests,time,re,os
 
 savedir = "./opendirstuff/"
 #TODO: crawl reddit for urls labeled for movies
 #TODO: put urls' in their own file
-urllist = [#"https://dl1.3rver.org/",
-           #"https://dl3.3rver.org/",
-           #"http://ir2.papionvod.ir/Media/",
-           #"http://www.moviefyy.com/Film/",
+urllist = ["https://dl1.3rver.org/",
+           "https://dl3.3rver.org/",
+           #"http://ir2.papionvod.ir/Media/", #not available
+           #"http://www.moviefyy.com/Film/", #might be dead?
            #"http://103.222.20.150/ftpdata/Movies/", #slow
-           #"http://167.114.174.132:9092/movies/",
-           #"http://192.95.30.30/lol/films/",
-           #"http://158.69.224.17:88/movie/",
-           "http://167.114.174.132:9092/movies/"
+           "http://167.114.174.132:9092/movies/",
+           #"http://192.95.30.30/lol/films/", #empty
+           #"http://158.69.224.17:88/", #nerfed
+           "http://167.114.174.132:9092/movies/",
+           "http://3-152splinter.pulsedmedia.com/public-xyzzy/done/",
+           "http://dogjdw.ipdisk.co.kr/public/VOL1/public/movie/",
+           "http://92.131.197.89:8000/",
+           "http://51.158.151.61:8080/",
+           #"http://85.218.172.74/", #needs JS to turn vars into href links - not standard
+           "http://23.147.64.113/",
           ]
 
 #recursively get directories and videos from the directories
@@ -32,12 +38,14 @@ def getvids(curdir,vidlist):
 for u in urllist:
   r = requests.get(u).text #get the base url
   savefile = re.sub(r'[^\w]*','',u.split("://")[1].split("/")[0].split("?")[0])+".txt" #generate the savefile (trim to alphanumeric only)
-  print(f"save file: {savedir+savefile}.txt") #display where it's saved
+  print(f"\n\nsave file: {savedir+savefile}") #display where it's saved
+  if(os.path.isfile(savedir+savefile)):
+    print("file already exists")
+  else:
+    vidlist = [] #init the vidlist
+    getvids(u,vidlist) #get the videos
   
-  vidlist = [] #init the vidlist
-  getvids(u,vidlist) #get the videos
-  
-  #save the file
-  with open(savedir+savefile,"w") as f:
-    f.write("\n".join(vidlist))
-    f.close()
+    #save the file
+    with open(savedir+savefile,"w") as f:
+      f.write("\n".join(vidlist))
+      f.close()

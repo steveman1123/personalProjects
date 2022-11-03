@@ -48,8 +48,10 @@ dataset = pd.read_csv(filepath)
 
 #convert datetime strings to integer seconds
 dataset['date'] = (pd.to_datetime(dataset['date']) - dt.datetime(1970,1,1)).dt.total_seconds()
+#set the date as the index
+dataset.set_index("date",inplace=True)
 #ensure that all NaN values are 0 (just in case something's wrong in the data file)
-dataset.replace(np.NaN,0,inplace=True)
+#dataset.replace(np.NaN,0,inplace=True)
 
 
 
@@ -60,7 +62,7 @@ if(verbose):
   print('\n')
 
   print("dataset head")
-  print(dataset.head(30))
+  print(dataset.head(10))
   print('\n')
 
   print("dataset description")
