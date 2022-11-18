@@ -1,0 +1,35 @@
+{
+  "appinfo":{
+              "company":"Dolly's Trucking",
+              "position":"truck driver",
+              "positionType":"full-time",
+              "isRemote":false
+            },
+  "name":"John Doe",
+  "phone":"555-555-5555",
+  "website":"www.example.com",
+  "email":"jd@example.com",
+  "workhistory":[
+                  {
+                    "company":"truck drivers plus",
+                    "title":"truck driver",
+                    "time":"2 years"
+                  },
+                  {
+                    "company":"garden center plus",
+                    "title":"gardener",
+                    "time":"3 years"
+                  },
+                  {
+                    "company":"yogurt makers forever",
+                    "title":"yogurt maker",
+                    "time":"1 year"
+                  }
+                ],
+  "eduhist":[
+              {"degree":"Bachelor's","institute":"School of Hard Knocks","focus":"Basket Weaving"},
+              {"degree":"High School","institute":"The Best High School"}
+            ],
+  "references":{"Donn Joe":"555-555-5555","Uncle Sam":"555-555-5555","Dolly Bill":"555-555-5555"},
+  "projects":{}
+}
