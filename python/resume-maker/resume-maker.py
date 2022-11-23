@@ -13,6 +13,8 @@ import json
 
 skillListFile = "./sample-masterskills.txt" #where my skills are stored (one skill per line)
 myinfofile = "./sample-myinfo.json" #where my info is stored (name, contact, education, work, etc)
+
+
 datadir = "./data/" #where intermediate files should be stored
 with open(myinfofile,'r') as f:
   myinfo = json.loads(f.read())
