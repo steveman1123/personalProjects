@@ -5,6 +5,11 @@ savedir = "./opendirstuff/"
 #TODO: put urls' in their own file
 urllist = ["https://dl1.3rver.org/",
            "https://dl3.3rver.org/",
+           "http://5.135.178.104:10987/",
+           "http://37.187.121.54:38946/",
+           "http://78.203.154.250/",
+           "http://51.158.151.61:8080/",
+           #"http://85.218.172.74/" #needs JS
            #"http://ir2.papionvod.ir/Media/", #not available
            #"http://www.moviefyy.com/Film/", #might be dead?
            #"http://103.222.20.150/ftpdata/Movies/", #slow
