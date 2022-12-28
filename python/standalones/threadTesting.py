@@ -8,9 +8,9 @@ def main():
   global test
   
   while True:
-    if('test' not in [t.getName() for t in threading.enumerate()]):
+    if('test' not in [t.name for t in threading.enumerate()]):
       testThread = threading.Thread(target=testThreadFxn)
-      testThread.setName('test')
+      testThread.name = 'test'
       testThread.start()
     print(f"main {test}")
     time.sleep(5)
