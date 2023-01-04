@@ -38,9 +38,11 @@ for f in "$dir"/*.mp3; do
     trackandtitle+=( "${tmp%%"$delim"*}" );
     tmp=${tmp#*"$delim"};
   done
-  
+
+  #isolate the track
   track=${trackandtitle[0]}
-  title=${trackandtitle[1]}
+  #trim the ".mp3" from the filename to get the title
+  title=${trackandtitle[1]:0:${#trackandtitle[1]}-4}
   echo $track, $title;
 
   #write the tags
