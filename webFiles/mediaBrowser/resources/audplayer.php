@@ -10,11 +10,9 @@ if(is_file($curDir."/folder.jpg")) {
 }
 ?>
 <div id="player">
-  <span id="auddir" style="display: none;">
-  <?php
+  <span id="auddir" style="display: none;"><?php
   //this is a hack to pass php var to js indirectly. There's probably a better way, but this works
-  echo $curDir; ?>
-  </span>
+  echo $curDir; ?></span>
   <img id="folderpic" src="<?php echo $folderpic;?>">
   <audio id="playerAudio" controls></audio>
   <div id="playerList">
