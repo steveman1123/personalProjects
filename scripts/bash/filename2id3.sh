@@ -4,7 +4,8 @@
 
 #location of mp3 files
 #TODO: take in as a program argument
-dir="";
+dir=$PWD;
+echo $dir;
 
 #seperator between track and title
 delim=" - ";
@@ -21,23 +22,30 @@ artist=${dirarr[-2]}
 #album=dir.split[-1]
 album=${dirarr[-1]}
 
-echo $artist;
-echo $album;
+echo artist: $artist;
+echo album: $album;
 
 #for every mp3
-for f in $dir/*.mp3; do
+for f in "$dir"/*.mp3; do
   #split by / and get the filename
   IFS="/" filename=($f)
   filename=${filename[-1]}
-  #spkit filename by delim and get the track and title
-  IFS=$delim trackandtitle=($filename)
+  IFS=$ogifs;
+  
+  #split filename by delim and get the track and title
+  tmp=$filename$delim trackandtitle=();
+  while [[ $tmp ]]; do
+    trackandtitle+=( "${tmp%%"$delim"*}" );
+    tmp=${tmp#*"$delim"};
+  done
+  
   track=${trackandtitle[0]}
   title=${trackandtitle[1]}
   echo $track, $title;
 
   #write the tags
-  id3v2 -T $track $f;
-  id3v2 -t $title $f;
-  id3v2 -a $artist $f;
-  id3v2 -A $album $f;
+  id3v2 -T "$track" "$f";
+  id3v2 -t "$title" "$f";
+  id3v2 -a "$artist" "$f";
+  id3v2 -A "$album" "$f";
 done
