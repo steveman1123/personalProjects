@@ -1,10 +1,10 @@
 #convert the filename to format "{track with leading 0} - {title}.mp3"
 #so long as id3 tags are complete
 
-dir="."
+dir=".";
 delim="): ";
 
-for f in $dir/*.mp3; do
+for f in "$dir"/*.mp3; do
   echo $f;
   #isolate the line with the track number
   track=$(eval id3v2 --list \"$f\" | grep 'TRCK');
@@ -21,6 +21,7 @@ for f in $dir/*.mp3; do
     tmptrk=${tmptrk#*"$delim"};
     tmptit=${tmptit#*"$delim"};
   done
+
   
   track=$((10#${track[1]}));
   title=${title[1]};
