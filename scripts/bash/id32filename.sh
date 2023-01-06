@@ -1,7 +1,15 @@
 #convert the filename to format "{track with leading 0} - {title}.mp3"
 #so long as id3 tags are complete
 
-dir=".";
+#ensure directory is supplied as an arg
+if (( $# != 1 )); then
+  echo wrong number of args. Please supply the director
+  exit
+else
+  #set the directory to the supplied argument
+  dir=$1;
+fi
+
 delim="): ";
 
 for f in "$dir"/*.mp3; do
