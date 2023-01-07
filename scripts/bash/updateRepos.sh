@@ -18,11 +18,13 @@ for i in $gitdir/* ; do
     if  [[ "$dirs" == *".git/"* ]]; then
       #echo "pulling"
       #attempt to pull the new version
-      pulldata=$(git pull);
-      echo $pulldata
+      pulldata=$(git pull 2>&1);
+      
+      echo $pulldata;
+      
       #add the directory if necessary (first run)
       #TODO: this part isn't tested
-      if [[ $pulldata == *"git config --global --add safe.directory"* ]]; then
+      if [[ $pulldata == *"--add safe.directory"* ]]; then
         echo "adding new safe directory";
         git config --global --add safe.directory "$(pwd -P)"
         echo "attempting to pull again";
