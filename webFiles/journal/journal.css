@@ -1,0 +1,31 @@
+html,body {
+  margin: 0 auto;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+form {
+  margin-top: 5%;
+}
+
+form * {
+  margin: 5px;
+}
+
+textarea {
+  width: 50vw;
+  height: 50vh;
+}
+
+#passline {
+  margin-top: 45vh;
+}
+
+@media screen and (max-width: 640px) {
+  
+  textarea {
+    width: 90vw;
+    height: 90vh;
+  }
+
+}
