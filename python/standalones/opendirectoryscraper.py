@@ -2,12 +2,14 @@ import requests,time,re,os
 
 savedir = "./opendirstuff/"
 #TODO: crawl reddit for urls labeled for movies
-#TODO: put urls' in their own file
+#TODO: put url list in its own file
+
 urllist = ["https://dl1.3rver.org/",
            "https://dl3.3rver.org/",
+           "https://mp4mvz.in/",
            "http://5.135.178.104:10987/",
            "http://37.187.121.54:38946/",
-           "http://78.203.154.250/",
+           #"http://78.203.154.250/", #connection timeout
            "http://51.158.151.61:8080/",
            #"http://85.218.172.74/" #needs JS
            #"http://ir2.papionvod.ir/Media/", #not available
@@ -17,13 +19,28 @@ urllist = ["https://dl1.3rver.org/",
            #"http://192.95.30.30/lol/films/", #empty
            #"http://158.69.224.17:88/", #nerfed
            "http://167.114.174.132:9092/movies/",
-           "http://3-152splinter.pulsedmedia.com/public-xyzzy/done/",
+           #"http://3-152splinter.pulsedmedia.com/public-xyzzy/done/", #timedout
            "http://dogjdw.ipdisk.co.kr/public/VOL1/public/movie/",
-           "http://92.131.197.89:8000/",
+           #"http://92.131.197.89:8000/",
            "http://51.158.151.61:8080/",
            #"http://85.218.172.74/", #needs JS to turn vars into href links - not standard
            "http://23.147.64.113/",
-          ]
+           "http://51.15.174.150/torrent/",
+           "http://195.154.236.164:48/",
+           "http://51.159.53.92/",
+           "http://51.15.160.202:8080/",
+           "http://163.172.98.148:8081/",
+           "http://51.15.142.32:8008/",
+           "http://51.15.179.151/",
+           "https://dl3.doostihaa.com/Animation/",
+           "http://213.58.179.90/media/store/",
+           "https://51.178.9.98/",
+           "http://91.121.80.14:8080/",
+           "https://37.187.117.176:38946/",
+           "http://5.39.88.99:18080/",
+           "http://62.210.132.17/",
+           "http://51.158.153.210/",
+           ]
 
 #recursively get directories and videos from the directories
 def getvids(curdir,vidlist):
