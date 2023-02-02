@@ -43,9 +43,17 @@ urllist = ["https://dl1.3rver.org/",
            ]
 
 #recursively get directories and videos from the directories
-def getvids(curdir,vidlist):
+def getvids(curdir,vidlist,maxTries=10):
   print(curdir) #display where we are traversing
-  r = requests.get(curdir).text #get the new directory
+  tries=0
+  while tries<maxTries:
+    try:
+      r = requests.get(curdir).text #get the new directory
+      break
+    except Exception:
+      print(f"error requesting {curdir}. Trying again...")
+      tries+=1
+      time.sleep(3)
   time.sleep(0.05) #delay to not overload the server
   linklist = r.split("<a href=\"")[1:] #split by links, trim preceding text
   linklist = [e.split("\">")[0] for e in linklist[1:]] #split second half of the link, remove the parent directory link
@@ -58,16 +66,21 @@ def getvids(curdir,vidlist):
 
 
 for u in urllist:
-  r = requests.get(u).text #get the base url
-  savefile = re.sub(r'[^\w]*','',u.split("://")[1].split("/")[0].split("?")[0])+".txt" #generate the savefile (trim to alphanumeric only)
-  print(f"\n\nsave file: {savedir+savefile}") #display where it's saved
-  if(os.path.isfile(savedir+savefile)):
-    print("file already exists")
-  else:
-    vidlist = [] #init the vidlist
-    getvids(u,vidlist) #get the videos
-  
-    #save the file
-    with open(savedir+savefile,"w") as f:
-      f.write("\n".join(vidlist))
-      f.close()
+  try:
+    r = requests.get(u).text #get the base url
+  except Exception:
+    r = None
+
+  if(r is not None):
+    savefile = re.sub(r'[^\w]*','',u.split("://")[1].split("/")[0].split("?")[0])+".txt" #generate the savefile (trim to alphanumeric only)
+    print(f"\n\nsave file: {savedir+savefile}") #display where it's saved
+    if(os.path.isfile(savedir+savefile)):
+      print("file already exists")
+    else:
+      vidlist = [] #init the vidlist
+      getvids(u,vidlist) #get the videos
+    
+      #save the file
+      with open(savedir+savefile,"w") as f:
+        f.write("\n".join(vidlist))
+        f.close()

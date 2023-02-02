@@ -1,6 +1,10 @@
 #convert the filename to format "{track with leading 0} - {title}.mp3"
 #so long as id3 tags are complete
 
+#TODO: check that both the track and title are present
+#TODO: ensure unicode characters are allowed
+#TODO: expand ro recursive directories (only rename if all tracks in a folder have unique data for track and title)
+
 #ensure directory is supplied as an arg
 if (( $# != 1 )); then
   echo wrong number of args. Please supply the director
