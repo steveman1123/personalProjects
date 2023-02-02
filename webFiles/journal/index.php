@@ -1,6 +1,7 @@
 <?php
+//basic daily journaling web app. Not optimized at all, and probably will end up not working after a while as more data gets plugged in (should switch from having one large file to many small files)
 //password to access the entries
-$pass = "rectalgia";
+$pass = "password";
 
 //ensure proper time zone
 date_default_timezone_set('America/Chicago');
