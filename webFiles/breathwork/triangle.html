@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <title>Breathe</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1">
+<style>
+body,html {
+  color: #2af;
+  background-color: #000;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+#breatheborder {
+  margin: 20vh auto 0 auto;
+  width: 0px;
+  height: 0px;
+  border-left: solid transparent 50px;
+  border-right: solid transparent 50px;
+  border-bottom: solid #2af 100px;
+  position: relative;
+}
+#breatheborder:before {
+  width: 0px;
+  height: 0px;
+  border-left: solid transparent 48px;
+  border-right: solid transparent 48px;
+  border-bottom: solid #000 96.5px;
+  content: "";
+  position: absolute;
+  left: -47.5px;
+  top: 2px;
+  z-index: 0;
+}
+
+#breather {
+  width: 0px;
+  height: 0px;
+  border: solid #2af 10px;
+  border-radius: 50%;
+  animation: breather 12s infinite;
+  z-index: 999;
+}
+
+#textwrap {
+  position: relative;
+}
+
+#textwrap p {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%,0);
+}
+
+#in { animation: in 12s infinite; }
+#hold { animation: hold 12s infinite; }
+#out { animation: out 12s infinite; }
+
+@keyframes breather {
+0% {transform: translate(-60px,90px);}
+33% {transform: translate(-10px,-10px);}
+67% {transform: translate(40px,90px);}
+100% {transform: translate(-60px,90px);}
+}
+
+@keyframes in {
+0% { opacity: 0; }
+3% { opacity: 1; }
+30% { opacity: 1; }
+35% { opacity: 0; }
+100% { opacity: 0; }
+}
+
+@keyframes hold {
+0% { opacity: 1; }
+5% { opacity: 0; }
+66% { opacity: 0; }
+69% { opacity: 1; }
+100% { opacity: 1; }
+}
+
+@keyframes out {
+0% { opacity: 0; }
+30% { opacity: 0; }
+33% { opacity: 1; }
+66% { opacity: 1; }
+69% { opacity: 0; }
+100% { opacity: 0; }
+}
+</style>
+  </head>
+  <body>
+    <div id="breatheborder">
+      <div id="breather"></div>
+    </div>
+    <div id="textwrap">
+      <p id="in">Breathe In</p>
+      <p id="hold">Hold</p>
+      <p id="out">Breathe Out</p>
+    </div>
+
+</html>
