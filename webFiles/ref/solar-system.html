@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>rotation test</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1">
+<style>
+body {
+  background-color: black;
+}
+
+#sun,#merc,#earth,#mars,#venus {
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+}
+
+#sun {
+  border: solid #ff0 30px;
+  top: 300px;
+  transform: translate(-30px,15px);
+}
+#merc {
+  border: solid #aaa 5px;
+  top: 285px;
+  transform-origin: 0 65px;
+  animation: rot 1.5s infinite linear;
+}
+#venus {
+  border: solid #bb6 10px;
+  top: 250px;
+  transform-origin: 0 100px;
+  animation: rot 3s infinite linear;
+}
+#earth {
+  border: solid blue 10px;
+  top: 200px;
+  transform-origin: 0 150px;
+  animation: rot 4s infinite linear;
+}
+#mars {
+  border: solid #950 8px;
+  top: 150px;
+  transform-origin: 0 200px;
+  animation: rot 6s infinite linear;
+}
+
+#moon {
+  width: 0;
+  height: 0;
+  margin: 10px;
+  border-radius: 50%;
+  border: solid #aaa 5px;
+  transform-origin: -15px -10px;
+  animation: rot 1s infinite linear;
+}
+
+@keyframes rot { 100% { transform: rotateZ(360deg); } }
+</style>
+  </head>
+  <body>
+    <div id="sun"></div>
+    <div id="merc"></div>
+    <div id="venus"></div>
+    <div id="earth"><div id="moon"></div></div>
+    <div id="mars"></div>
+  </body
+</html>
