@@ -1,5 +1,10 @@
 #update all repos in a specified directory (relative or absolute)
 
+
+#ensure colors are always displayed
+#TODO: this should be moved to a git-setup file (where we also set credential.helper)
+git -c color.status=always
+
 #specify directory
 gitdir=".";
 
@@ -20,7 +25,7 @@ for i in $gitdir/* ; do
       #attempt to pull the new version
       pulldata=$(git pull 2>&1);
       
-      echo $pulldata;
+      echo "$pulldata"
       
       #add the directory if necessary (first run)
       #TODO: this part isn't tested
