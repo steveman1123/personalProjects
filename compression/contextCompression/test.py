@@ -18,6 +18,16 @@ Algorithm details:
 total: 8 bits (static - does not change with data size), 48 bits (variable - changes with data size)
 '''
 
+from mpmath import mp
+
+
+#set the seed/contex numbers
+#should have up to 256 of these (maybe only generate if they're referenced?)
+n1 = mp.pi
+n2 = mp.phi
+n3 = mp.e
+
+
 
 datain = "Hello, World. This is a test."
 print("".join([bin(ord(e))[2:] for e in datain]))

@@ -1,9 +1,8 @@
 #update all repos in a specified directory (relative or absolute)
+#TODO: create a git-setup file that does the following:
+#set: git config --global credential.helper "/path/to/git.tokens"
+#ensure colors can be displayed: git -c color.status=always status
 
-
-#ensure colors are always displayed
-#TODO: this should be moved to a git-setup file (where we also set credential.helper)
-git -c color.status=always
 
 #specify directory
 gitdir=".";
