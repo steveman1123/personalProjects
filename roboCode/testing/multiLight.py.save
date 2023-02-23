@@ -1,0 +1,37 @@
+#pwm output for multiple lights using keyboard
+
+
+import time
+import getKeys as gk
+import RPi.GPIO as gpio
+
+#set light output pins, init key var
+pinsOut = [16, 12, 26, 13]
+k = 0
+
+#set board type
+gpio.setmode(gpio.BCM)
+
+#set pins to output
+for i in pinsOut:
+  gpio.setup(i, gpio.OUT)
+
+#could probably put this in a loop
+#set output pins as pwm
+pwmPins = [gpio.PWM(pinsOut[0], 100), gpio.PWM(pinsOut[1], 100), gpio.PWM(pinsOut[2], 100), gpio.PWM(pinsOut[3], 100)]
+
+#start pwm pins
+for i in range(len(pwmPins)):
+  pwmPins[i].start(0)
+
+#loop until space is pressed
+while k<>" ":
+  k = gk.getkey()
+  
+  if k=="x"
+    pwmPins[i].ChangeDutyCycle(0)
+  time.sleep(0.5)
+  for i in range(len(pwmPins)):
+    for j in range(0, 100):
+      pwmPins[i].ChangeDutyCycle(j)
+      time.sleep(0.02)
