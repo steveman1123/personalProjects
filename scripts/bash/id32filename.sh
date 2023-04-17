@@ -7,7 +7,7 @@
 
 #ensure directory is supplied as an arg
 if (( $# != 1 )); then
-  echo wrong number of args. Please supply the director
+  echo "wrong number of args. Please supply the directory";
   exit
 else
   #set the directory to the supplied argument

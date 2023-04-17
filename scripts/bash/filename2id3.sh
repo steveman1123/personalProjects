@@ -16,6 +16,9 @@ echo $dir;
 #seperator between track and title
 delim=" - ";
 
+#extension of the files to parse
+fileext=".mp3"
+
 #obtain original Internal Field Seperator
 ogifs=$IFS;
 #split dir by /
@@ -33,7 +36,7 @@ echo album: $album;
 #TODO: add a confirm that these are OK to set
 
 #for every mp3
-for f in "$dir"/*.mp3; do
+for f in "$dir"/*"$fileext"; do
   #split by / and get the filename
   IFS="/" filename=($f);
   filename=${filename[-1]};
@@ -49,8 +52,8 @@ for f in "$dir"/*.mp3; do
 
   #isolate the track
   track=${trackandtitle[0]};
-  #trim the ".mp3" from the filename to get the title
-  title=${trackandtitle[1]:0:${#trackandtitle[1]}-4};
+  #trim the file extension from the filename to get the title
+  title=${trackandtitle[1]:0:${#trackandtitle[1]}-${#fileext}};
   echo $track, $title;
 
   #write the tags
