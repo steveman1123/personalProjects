@@ -9,12 +9,12 @@
 import random,json
 
 # Define the dataset
-datafile = "datasets/eurusd-close-minute.txt"
+datafile = "datasets/eurusd-minute-close.txt"
 with open(datafile,'r') as f:
   data = f.readlines()
   data = [float(e) for e in data]
 
-datalen = 3000 #length of dataset to use
+datalen = 1000 #length of dataset to use
 offset = random.randint(0,len(data)-datalen) #window of the overall dataset to use
 data = data[-(offset+datalen):-offset] #subset of data to use
 
@@ -108,6 +108,10 @@ actual_smallers = [int(data[i]>=data[i-1]) for i in range(len(data[1:]))]
 # print(predicted_smallers)
 # print(actual_smallers)
 
-prediciton_accuracy = sum([predicted_smallers[i]==actual_smallers[i+1] for i in range(len(predicted_smallers)-1)])/(len(predicted_smallers)-1)
+correct_predictions = sum([predicted_smallers[i]==actual_smallers[i+1] for i in range(len(predicted_smallers)-1)])
+total_predictions = len(predicted_smallers)-1
 
-print("prediciton_accuracy",round(prediciton_accuracy,5))
+prediction_accuracy = correct_predictions/total_predictions
+#prediciton_accuracy = sum([predicted_smallers[i]==actual_smallers[i+1] for i in range(len(predicted_smallers)-1)])/(len(predicted_smallers)-1)
+
+print("correct:",correct_predictions,"total:",total_predictions,"accuracy:",round(prediction_accuracy,5))
