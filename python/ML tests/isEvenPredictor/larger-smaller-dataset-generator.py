@@ -34,11 +34,11 @@ def makedataset(datapoints,pattern,datafile,verbose=False):
 datapoints = 25
 
 #first dataset should have even, even, even, odd
-makedataset(datapoints,[0,0,0,1],"ds1ls.txt")
-makedataset(datapoints,[0,1],"ds2ls.txt")
-makedataset(datapoints,[1,1,0,0,0,1,0],"ds3ls.txt")
-makedataset(datapoints,[1,1,1,1,0,1,0],"ds4ls.txt")
-makedataset(datapoints,[1,0],"ds5ls.txt")
+makedataset(datapoints,[0,0,0,1],"datasets/ds1ls.txt")
+makedataset(datapoints,[0,1],"datasets/ds2ls.txt")
+makedataset(datapoints,[1,1,0,0,0,1,0],"datasets/ds3ls.txt")
+makedataset(datapoints,[1,1,1,1,0,1,0],"datasets/ds4ls.txt")
+makedataset(datapoints,[1,0],"datasets/ds5ls.txt")
 
 
 print("done")

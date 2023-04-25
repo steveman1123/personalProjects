@@ -1,4 +1,4 @@
-#generate a dataset that hass even or odd numbers based on a pattern
+#generate a dataset that has even or odd numbers based on a pattern
 
 import random
 
@@ -26,11 +26,11 @@ def makedataset(datapoints,pattern,datafile,verbose=False):
 datapoints = 50
 
 #first dataset should have even, even, even, odd
-makedataset(datapoints,[0,0,0,1],"ds1eo.txt")
-makedataset(datapoints,[0,1],"ds2eo.txt")
-makedataset(datapoints,[1,1,0,0,0,1,0],"ds3eo.txt")
-makedataset(datapoints,[1,1,1,1,0,1,0],"ds4eo.txt")
-makedataset(datapoints,[1,0],"ds5eo.txt")
+makedataset(datapoints,[0,0,0,1],"datasets/ds1eo.txt")
+makedataset(datapoints,[0,1],"datasets/ds2eo.txt")
+makedataset(datapoints,[1,1,0,0,0,1,0],"datasets/ds3eo.txt")
+makedataset(datapoints,[1,1,1,1,0,1,0],"datasets/ds4eo.txt")
+makedataset(datapoints,[1,0],"datasets/ds5eo.txt")
 
 
 print("done")

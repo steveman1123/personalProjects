@@ -3,7 +3,7 @@
 import random,json
 
 # Define the dataset
-datafile = "ds2.txt"
+datafile = "datasets/ds2.txt"
 with open(datafile,'r') as f:
     data = f.readlines()
     data = [int(e) for e in data]
