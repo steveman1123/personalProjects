@@ -26,7 +26,7 @@ class Environment:
   def getAction(self):
     return [-1,1]
 
-  #
+  #tell us if the training is done
   def isDone(self):
     return self.remainingSteps==0
 
