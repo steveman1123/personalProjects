@@ -9,7 +9,7 @@
 import random,json
 
 # Define the dataset
-datafile = "datasets/eurusd-minute-close.txt"
+datafile = "datasets/eurusd-hour-close.txt"
 with open(datafile,'r') as f:
   data = f.readlines()
   data = [float(e) for e in data]
@@ -88,9 +88,9 @@ print()
 
 latesttestpoint = q_table[len(data)-2]
 if(max(latesttestpoint,key=latesttestpoint.get)=='increase'):
-  print(f'The next number ({data[-1]}) should be increase (than {data[-2]})')
+  print(f'The next number ({data[-1]}) should increase (from {data[-2]})')
 elif(max(latesttestpoint,key=latesttestpoint.get)=='decrease'):
-  print(f'The next number ({data[-1]}) should be decrease (than {data[-2]})')
+  print(f'The next number ({data[-1]}) should decrease (from {data[-2]})')
 else:
   print(f'The next number ({data[-1]}) should have a small change (between {round(data[-2]-mindiff,5)} and {round(data[-2]+mindiff,5)})')
 
