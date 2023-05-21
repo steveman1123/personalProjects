@@ -35,6 +35,7 @@ echo artist: $artist;
 echo album: $album;
 #TODO: add a confirm that these are OK to set
 
+
 #for every mp3
 for f in "$dir"/*"$fileext"; do
   #split by / and get the filename
@@ -57,9 +58,9 @@ for f in "$dir"/*"$fileext"; do
   echo $track, $title;
 
   #write the tags
-  id3v2 -T "$track" "$f";
-  id3v2 -t "$title" "$f";
-  id3v2 -a "$artist" "$f";
-  id3v2 -A "$album" "$f";
+  id3v2 -2 -T "$track" "$f";
+  id3v2 -2 -t "$title" "$f";
+  id3v2 -2 -a "$artist" "$f";
+  id3v2 -2 -A "$album" "$f";
 done
 

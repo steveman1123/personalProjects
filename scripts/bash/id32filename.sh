@@ -1,9 +1,8 @@
 #convert the filename to format "{track with leading 0} - {title}.mp3"
 #so long as id3 tags are complete
 
-#TODO: check that both the track and title are present
 #TODO: ensure unicode characters are allowed
-#TODO: expand ro recursive directories (only rename if all tracks in a folder have unique data for track and title)
+#TODO: expand to recursive directories (only rename if all tracks in a folder have unique data for track and title)
 
 #ensure directory is supplied as an arg
 if (( $# != 1 )); then
@@ -26,26 +25,39 @@ for f in "$dir"/*.mp3; do
   tmptit=$title$delim;
   track=();
   title=();
+  #split the track and title into the data
+  #while there's still data in the tmp data
   while [[ $tmptrk ]]; do
+    #append the data as an element
     track+=( "${tmptrk%%"$delim"*}" );
     title+=( "${tmptit%%"$delim"*}" );
 
+    #remove the text before the delim
     tmptrk=${tmptrk#*"$delim"};
     tmptit=${tmptit#*"$delim"};
   done
 
-  
+  #interpret the track as an arithmetic in base 10
   track=$((10#${track[1]}));
-  title=${title[1]};
+
+  #replace all illegal file name characters with "-"
+  title="${title[1]//[\>\<\:\"\/\\\|\?\*\#\%\&\@]/-}";
+
+  #TODO: ensure the data is present
+  #if(len(track)>0 and len(title)>0); then
+    #do all this stuff
+  #else
+    #echo "incomplete track or title data"
+  #fi
 
   #append leading 0 to tracks less than 10
   #TODO: instead of just 10, append min(1,log_10(number of tracks))
-  #That is: if <10: append 1 0, if <100: append 1 0, if <1000: append 2 0 to <10, append 1 0 to <100, etc, etc
+  #That is, make it look like 001,002,003...099,100,101...999
   if (( $track < 10 )); then
     track=0$track;
   fi
 
-  echo moving \"$f\" to \"$dir/$track - $title.mp3\";
+  #echo moving \"$f\" to \"$dir/$track - $title.mp3\";
   mv --verbose "$f" "$dir/$track - $title.mp3";
 
 done
