@@ -146,13 +146,13 @@ def decompress(datain):
         decompchunk=ctxb[startidx:startidx+numbits]
         decompdata+=decompchunk
 
-        unprocesseddata=unprocesseddata[1+seedbits+idxbits+compnumbits:]
+        unprocesseddata=unprocesseddata[1+seedbits+idxbits+compnumbitsbits:]
 
       else:
         print("chunk is not compressed")
-        numbits=int(unprocesseddata[1:1+uncompnumbitsbits],2)
+        numbits=int(unprocesseddata[1:uncompnumbitsbits+1],2)
         print("numbits",numbits)
-        decompchunk=unprocesseddata[1+uncompnumbitsbits:1+uncompnumbitsbits+numbits]
+        decompchunk=unprocesseddata[1+uncompnumbitsbits:uncompnumbitsbits+numbits+1]
         decompdata+=decompchunk
 
         unprocesseddata=unprocesseddata[1+uncompnumbitsbits+numbits:]
