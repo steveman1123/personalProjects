@@ -165,7 +165,7 @@ def decompress(datain):
 
 
 
-ctxnum=1
+ctxnum=5
 ctxdir="./contextFiles/"
 ctxfile=f"./contextFiles/ctx{ctxnum}.dat"
 
