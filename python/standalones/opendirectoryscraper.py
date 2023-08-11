@@ -9,6 +9,8 @@ urllist = ["https://dl1.3rver.org/",
            "https://mp4mvz.in/",
            "http://5.135.178.104:10987/",
            "http://37.187.121.54:38946/",
+           "https://sv3.hivamovie.com/",
+           "http://movie.basnetbd.com/Data/Movies/Hollywood/", #sometimes very slow
            #"http://78.203.154.250/", #connection timeout
            "http://51.158.151.61:8080/",
            #"http://85.218.172.74/" #needs JS
