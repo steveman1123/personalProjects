@@ -70,9 +70,11 @@ do
   if [ "${filename: -4}" == ".mkv" ]; #ensure that it's a .mkv first
   then
     newfilename="${filename::-4}.mp4"
-    echo "converting $filename --> $newfilename and scaling to 720p"
-    ffmpeg -vf scale=720:-1 -n "$filename" "$newfilename"
-    
+    echo "converting $filename --> $newfilename and scaling to 1080p"
+    ffmpeg -i "$filename" -y -vf scale="1080:trunc(ow/a/2)*2) "$newfilename"
+
+    #remove original mkv file
+    rm $filename
   fi
   
 done
