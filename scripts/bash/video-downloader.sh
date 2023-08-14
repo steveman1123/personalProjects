@@ -8,10 +8,10 @@ file="./files2download.txt"
 saveDir="/run/media/steve/Site/Site/stevenw/Medio/Unconverted Videos/"
 
 #convert the file from dos to unix format
-echo ensuring file is in unix format
+echo "ensuring file is in unix format"
 dos2unix $file
 
-
+echo "loading file into array"
 #load the file into an array
 mapfile -t urls < $file
 
@@ -21,6 +21,7 @@ mapfile -t urls < $file
 #echo ${urls[3]}
 #exit
 
+echo "looping through!"
 #for every object in the array
 for ((i=0;i<${#urls[@]};i++))
 do
@@ -31,32 +32,31 @@ do
   
     #set the filename
     
-    #replace "%20" with " "
-    #echo "replacing spaces"
-    #filename="${url//[%20]/ }/"
-    filename="${url//%20/ }/"
-    #join repeat spaces
-    #echo "joining spaces"
-    #filename=$(echo "$filename" | tr -s ' ')
-    
+    #echo "replacing some special chars"
+    #ensure there's a trailing "/" for when splitting the name apart
+    filename=$(echo "$url" | sed 's/%20/ /g; s/%2C/,/g; s/%2D/-/g')/
+
     #split location into proper file name (trim off beginning of link)
-    filenameparts=();
     #echo "isolating filename"
+    filenameparts=();
     while [[ $filename ]]; do
       filenameparts+=( "${filename%%"/"*}" );
       filename=${filename#*"/"};
-      #echo $filename
     done
     filename=${filenameparts[*]: -1}
+    
+    
+
 
     #specify the save dir
     filename=$saveDir$filename
     
     #display the current url line and the file it's saving to
     echo $i \| ${#urls[@]} - $filename;
-
+    
     #continually attempt to download if a failure is encountered (curl should return 0 if done, 1 if failed)
     #TODO: why doesn't it start over if the file already exists (ie program is exited during a download, then restarted)
+    #echo "downloading"
     while ! curl -L -o "$filename" "$url" -C -; do
       echo "errored, trying again"
       rm *.mkv
