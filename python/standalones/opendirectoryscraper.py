@@ -4,7 +4,7 @@ savedir = "./opendirstuff/"
 #TODO: crawl reddit for urls labeled for movies
 #TODO: put url list in its own file
 
-urllist = ["https://dl1.3rver.org/",
+urllist = ("https://dl1.3rver.org/",
            "https://dl3.3rver.org/",
            "https://mp4mvz.in/",
            "http://5.135.178.104:10987/",
@@ -42,10 +42,21 @@ urllist = ["https://dl1.3rver.org/",
            "http://5.39.88.99:18080/",
            "http://62.210.132.17/",
            "http://51.158.153.210/",
-           ]
+           "https://data1.basedate.workers.dev/movies/",
+           "http://195.154.166.82/",
+           "https://sv3.hivamovie.com/new/Movie/",
+           "http://vod.simpletv.eu/media/storage/",
+           "https://dl2.tarahipro.ir/",
+           "http://144.137.216.162:8080/",
+           "https://zfelleg.useribm.hu/videos/movies/",
+           "http://158.69.224.17:88/edmian/",
+           "http://212.66.58.15:88/",
+           "https://dl3.3rver.org/",
+           "http://188.165.227.112/portail/films/",
+           )
 
 #recursively get directories and videos from the directories
-def getvids(curdir,vidlist,maxTries=10):
+def getvids(curdir,vidlist,maxTries=1000):
   print(curdir) #display where we are traversing
   tries=0
   while tries<maxTries:
@@ -55,7 +66,7 @@ def getvids(curdir,vidlist,maxTries=10):
     except Exception:
       print(f"error requesting {curdir}. Trying again...")
       tries+=1
-      time.sleep(3)
+      time.sleep(30)
   time.sleep(0.05) #delay to not overload the server
   linklist = r.split("<a href=\"")[1:] #split by links, trim preceding text
   linklist = [e.split("\">")[0] for e in linklist[1:]] #split second half of the link, remove the parent directory link
