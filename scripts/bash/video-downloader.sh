@@ -1,6 +1,6 @@
 #download/save multiple video files specified from a file containing 1 url per line
 #convert all mkvs to mp4s
-#TODO: specify an array of filenames and loop through to read all of them
+#TODO: check file size, if it's smaller than some amount (or if there's a way to detect a specific error (like 429), then wait for a longer period of time
 
 #specify the file to read the urls from
 file="./files2download.txt"
@@ -34,7 +34,7 @@ do
     
     #echo "replacing some special chars"
     #ensure there's a trailing "/" for when splitting the name apart
-    filename=$(echo "$url" | sed 's/%20/ /g; s/%2C/,/g; s/%2D/-/g')/
+    filename=$(echo "$url" | sed "s/%20/ /g; s/%2C/,/g; s/%2D/-/g; s/%27/\'/g; s/%26/&/g")/
 
     #split location into proper file name (trim off beginning of link)
     #echo "isolating filename"
