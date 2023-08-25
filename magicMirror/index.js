@@ -1,4 +1,5 @@
 
+//TODO: this is depreciated
 function readTextFile(file) {
   var output = "";
   var rawFile = new XMLHttpRequest();
@@ -16,7 +17,23 @@ function readTextFile(file) {
 }
 
 function updateWeather() {
-  var weather = readTextFile("https://api.weather.gov/gridpoints/DVN/28,85/forecast");
+
+  //TODO: get coords based on external IP, then get gridpoints, then get weather (could also get geocoding via http://www.geoplugin.net/php.gp?ip={external-ip} get coords from there, then get gridpoints and city/state)
+  //https://weather-gov.github.io/api/gridpoints
+  //gridpoints = readTextFile("https://api.weather.gov/points/{lat},{lon}")
+  /*
+  coords, gridid, gridpoints:
+  cedar rapids: (41.97, -91.67) DVN (30,86)
+  phoenix: (33.49, -112.05) PSR (160,60)
+  nyc: (40.71, -74.01) OKX (33, 35)
+  LA: (34.05, -118.25) LOX (115,45)
+  */
+
+  gridid = "PSR"
+  gridx = "160";
+  gridy = "60";
+
+  var weather = readTextFile("https://api.weather.gov/gridpoints/"+gridid+"/"+gridx+","+gridy+"/forecast");
   weather = weather['properties']['periods'];
 
   document.getElementById("weatherList").innerHTML = "";
@@ -64,8 +81,8 @@ function time() {
   var mm = addZero(today.getMinutes());
   var ss = addZero(today.getSeconds());
   var yyyy = today.getYear()+1900;
-  var mo = today.getMonth()+1;
-  var dd = today.getDate();
+  var mo = addZero(today.getMonth()+1);
+  var dd = addZero(today.getDate());
 
   document.getElementById("clock").innerHTML = hh+":"+mm+":"+ss;
   document.getElementById("date").innerHTML = yyyy+"-"+mo+"-"+dd;
@@ -81,8 +98,8 @@ function addZero(i) {
 }
 
 document.onload = updateWeather();
-//document.onload = updateQuote();
-//document.onload = updateCompliment();
+document.onload = updateQuote();
+document.onload = updateCompliment();
 document.onload = time();
 window.setInterval(updateWeather,60*60*1000); //update every hour
 window.setInterval(updateCompliment,6*60*60*1000); //update every 6 hours
