@@ -2,10 +2,11 @@
 #convert all mkvs to mp4s
 #TODO: check file size, if it's smaller than some amount (or if there's a way to detect a specific error (like 429), then wait for a longer period of time
 
+
 #specify the file to read the urls from
 file="./files2download.txt"
-#specify the directory to save the downloaded files to
-saveDir="/run/media/steve/Site/Site/stevenw/Medio/Unconverted Videos/"
+#specify the directory to save the downloaded files to as an argument
+saveDir=$1
 
 #convert the file from dos to unix format
 echo "ensuring file is in unix format"
@@ -76,7 +77,7 @@ do
     ffmpeg -hwaccel auto -i "$filename" -ac 2 -vf scale="1080:trunc(ow/a/2)*2" -y "$newfilename"
 
     #remove original mkv file
-    rm "$filename"
+    #rm "$filename"
     #TODO: write the current url as commented once it's all done
   fi
   

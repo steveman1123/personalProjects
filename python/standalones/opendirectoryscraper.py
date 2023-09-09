@@ -3,9 +3,10 @@ import requests,time,re,os
 savedir = "./opendirstuff/"
 #TODO: crawl reddit for urls labeled for movies
 #TODO: put url list in its own file
+#TODO: have a timeout if sometime's taking too long
 
 urllist = ("https://dl1.3rver.org/",
-           "https://dl3.3rver.org/",
+           #"https://dl3.3rver.org/", #sometimes works, but also sometimes slow
            "https://mp4mvz.in/",
            "http://5.135.178.104:10987/",
            "http://37.187.121.54:38946/",
@@ -47,7 +48,8 @@ urllist = ("https://dl1.3rver.org/",
            "https://sv3.hivamovie.com/new/Movie/",
            "http://vod.simpletv.eu/media/storage/",
            "https://dl2.tarahipro.ir/",
-           "http://144.137.216.162:8080/",
+           "http://144.137.216.162:8080/Movies/",
+           "http://144.137.216.162:8080/TV Shows/",
            "https://zfelleg.useribm.hu/videos/movies/",
            "http://158.69.224.17:88/edmian/",
            "http://212.66.58.15:88/",
@@ -61,7 +63,7 @@ def getvids(curdir,vidlist,maxTries=1000):
   tries=0
   while tries<maxTries:
     try:
-      r = requests.get(curdir).text #get the new directory
+      r = requests.get(curdir,timeout=10).text #get the new directory
       break
     except Exception:
       print(f"error requesting {curdir}. Trying again...")
@@ -80,7 +82,8 @@ def getvids(curdir,vidlist,maxTries=1000):
 
 for u in urllist:
   try:
-    r = requests.get(u).text #get the base url
+    print("getting",u)
+    r = requests.get(u,timeout=10).text #get the base url
   except Exception:
     r = None
 

@@ -4,7 +4,8 @@
 #specify the file to read the urls from
 file="./files2download.txt"
 #specify the directory to save the downloaded files to
-saveDir="./"
+#saveDir="./"
+saveDir=$1
 
 #convert the file from dos to unix format
 echo ensuring file is in unix format
@@ -47,7 +48,7 @@ do
     
     #display the current url line and the file it's saving to
     echo $i \| ${#urls[@]} - $filename;
-    curl -L -o "$filename" "$url"
+    curl -L -o "$filename" "$url" -C -
     echo -e
   fi
   
