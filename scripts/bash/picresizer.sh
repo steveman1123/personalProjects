@@ -26,7 +26,7 @@ do
   #if the widths do not match, then resize to match
   if(($oldimgwidth != $newimgwidth)); then
     echo "$oldimgwidth --> $newimgwidth";
-    convert $i -resize $imgwidth $i;
+    convert "$i" -resize $newimgwidth "$i";
   else
     #else, don't resize (save some time)
     echo "same size";

@@ -56,12 +56,11 @@ do
     echo $i \| ${#urls[@]} - $filename;
     
     #continually attempt to download if a failure is encountered (curl should return 0 if done, 1 if failed)
-    #TODO: why doesn't it start over if the file already exists (ie program is exited during a download, then restarted)
     #echo "downloading"
-    while ! curl -L -o "$filename" "$url" -C -; do
+    while ! curl --speed-time 7 --speed-limit 500 --connect-timeout 5 -L -o "$filename" "$url" -C -; do
       echo "errored, trying again"
-      rm *.mkv
-      sleep 120
+      #rm *.mkv
+      sleep 3
     done
     echo -e
   fi

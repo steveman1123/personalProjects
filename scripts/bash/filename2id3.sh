@@ -33,7 +33,13 @@ album=${dirarr[-1]}
 
 echo artist: $artist;
 echo album: $album;
+
+
+
 #TODO: add a confirm that these are OK to set
+#TODO: add a prompt to ask to delete all previous data (id3v2 -D)
+#TODO: prompt for year and genre, then write if it's not null
+
 
 
 #for every mp3
@@ -58,9 +64,10 @@ for f in "$dir"/*"$fileext"; do
   echo $track, $title;
 
   #write the tags
-  id3v2 -2 -T "$track" "$f";
-  id3v2 -2 -t "$title" "$f";
-  id3v2 -2 -a "$artist" "$f";
-  id3v2 -2 -A "$album" "$f";
+  id3v2 -T "$track" "$f";
+  id3v2 -t "$title" "$f";
+  id3v2 -a "$artist" "$f";
+  id3v2 -A "$album" "$f";
 done
+
 
