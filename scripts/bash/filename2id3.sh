@@ -40,6 +40,52 @@ echo album: $album;
 #TODO: add a prompt to ask to delete all previous data (id3v2 -D)
 #TODO: prompt for year and genre, then write if it's not null
 
+echo -n "delete all existing metadata? (y/N) "
+read deleteall;
+
+echo $deleteall;
+if [[ "${deleteall,,}" == "y" ]] then
+  #echo "deleting existing tags"
+  deleteall="y";
+else
+  #echo "not deleting existing tags"
+  deleteall="n";
+fi
+
+#TODO: check if yesr and genre are nuneric
+#https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash#3951175
+
+echo -n "release year: "
+read year;
+
+if [[ ${#year} -eq 4 ]] then
+  #echo "year is $year"
+else
+  #echo "year not valid"
+fi
+
+
+id3v2 -L
+echo -n "album genre number: "
+read genreNum;
+
+if [[ $genreNum -gt 0 ]] then
+  #echo "genre is $(id3v2 -L | grep $genreNum)"
+else
+  #echo "bad genre"
+fi
+
+echo -e
+echo -e
+echo "deleting existing tags? $deleteall"
+echo "writing the following:"
+echo "artist: $artist"
+echo "album: $album"
+echo "year: $year"
+echo "genre: $(id3v2 -L | grep $genreNum)"
+
+echo -n "continue? (Y/n)"
+read okgo
 
 
 #for every mp3
