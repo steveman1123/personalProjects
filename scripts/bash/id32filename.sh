@@ -3,6 +3,7 @@
 
 #TODO: ensure unicode characters are allowed
 #TODO: expand to recursive directories (only rename if all tracks in a folder have unique data for track and title)
+#TODO: improve handling of filenames with ' in them
 
 #ensure directory is supplied as an arg
 if (( $# != 1 )); then

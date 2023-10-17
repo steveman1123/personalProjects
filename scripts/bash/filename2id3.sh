@@ -44,7 +44,7 @@ echo -n "delete all existing tags? (y/N) "
 read deleteall;
 
 echo $deleteall;
-if [[ "${deleteall,,}" == "y" ]] then
+if [[ "${deleteall,,}" == "y" ]]; then
   #echo "deleting existing tags"
   deleteall="y";
 else
@@ -58,7 +58,7 @@ fi
 echo -n "release year: "
 read year;
 
-#if [[ ${#year} -eq 4 ]] then
+#if [[ ${#year} -eq 4 ]]; then
 #  echo "year is $year"
 #else
 #  echo "year not valid"
@@ -69,7 +69,7 @@ id3v2 -L
 echo -n "album genre number: "
 read genreNum;
 
-#if [[ $genreNum -gt -1 ]] then
+#if [[ $genreNum -gt -1 ]]; then
 #  echo "genre is $(id3v2 -L | grep $genreNum)"
 #else
 #  echo "bad genre"
@@ -82,20 +82,20 @@ echo "writing the following:"
 echo "artist: $artist"
 echo "album: $album"
 echo "year: $year"
-echo "genre: $(id3v2 -L | grep $genreNum)"
+echo "genre: $(id3v2 -L | grep $genreNum | head -1)"
 
 echo -n "continue? (Y/n)"
 read okgo
 
-if [[ ${okgo,,} == "n" ]] then
+if [[ ${okgo,,} == "n" ]]; then
   okgo="n";
 else
   okgo="y";
 fi
 
-if [[ $okgo == "y" ]] then
+if [[ $okgo == "y" ]]; then
 
-  if [[ $deleteall == "y" ]] then
+  if [[ $deleteall == "y" ]]; then
     echo "deleting existing tags";
     id3v2 -D
   fi
