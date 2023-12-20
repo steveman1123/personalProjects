@@ -1,6 +1,11 @@
 #convert a file name to id3v2 tags
 #especially of format "{track} - {title}.mp3"
-#also set containing folfer as album and next folder up as artist
+#also sets containing folder as album and next folder up as artist
+#prompts for other tags
+#checks for "folder.jpg" and if exists, asks to set as cover art
+
+#TODO: account for folder structure of "artist/album/Disc X/"
+
 
 #set the location of mp3 files as an arg
 if (( $# != 1 )); then
@@ -36,10 +41,6 @@ echo album: $album;
 
 
 
-#TODO: add a confirm that these are OK to set
-#TODO: add a prompt to ask to delete all previous data (id3v2 -D)
-#TODO: prompt for year and genre, then write if it's not null
-
 echo -n "delete all existing tags? (y/N) "
 read deleteall;
 
@@ -52,7 +53,20 @@ else
   deleteall="n";
 fi
 
-#TODO: check if yesr and genre are nuneric
+
+if test -f "$dir/folder.jpg"; then
+  echo -n "\"folder.jpg\" is found. Resize to 800x800 and use it as the cover art? (Y/n)"
+  read writeimg;
+  if [[ ${writeimg,,} == "n" ]]; then
+    writeimg="n";
+  else
+    writeimg="y"
+  fi
+fi
+
+
+
+#TODO: check if year and genre are nuneric
 #https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash#3951175
 
 echo -n "release year: "
@@ -65,7 +79,7 @@ read year;
 #fi
 
 
-id3v2 -L
+id3v2 -L | less
 echo -n "album genre number: "
 read genreNum;
 
@@ -79,6 +93,9 @@ echo -e
 echo -e
 echo "deleting existing tags? $deleteall"
 echo "writing the following:"
+if [[ $writeimg == "y" ]]; then
+  echo "resizing folder.jpg and setting as album cover art"
+fi
 echo "artist: $artist"
 echo "album: $album"
 echo "year: $year"
@@ -95,9 +112,11 @@ fi
 
 if [[ $okgo == "y" ]]; then
 
-  if [[ $deleteall == "y" ]]; then
-    echo "deleting existing tags";
-    id3v2 -D
+  #resize the folder.jpg image
+  if [[ $writeimg == "y" ]]; then
+    echo "resizing folder.jpg"
+    convert -resize "800x800>" "$dir/folder.jpg" "$dir/tmp.jpg"
+    mv "$dir/tmp.jpg" "$dir/folder.jpg"
   fi
 
   #for every mp3
@@ -128,6 +147,10 @@ if [[ $okgo == "y" ]]; then
     id3v2 -A "$album" "$f";
     id3v2 -g "$genreNum" "$f";
     id3v2 -y "$year" "$f";
+
+    if [[ $writeimg == "y" ]]; then
+      eyeD3 --add-image "$dir/folder.jpg":FRONT_COVER "$f";
+    fi
   done
 
 else

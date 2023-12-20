@@ -63,25 +63,21 @@ do
       sleep 3
     done
     echo -e
-  fi
   
 
+    #convert from mkv to mp4 if applicable
+    #TODO: ensure it's lowercase using ,,
+    if [ "${filename: -4}" == ".mkv" ]; #ensure that it's a .mkv first
+    then
+      newfilename="${filename::-4}.mp4"
+      echo "converting $filename --> $newfilename and scaling to 1080p"
+      ffmpeg -hwaccel auto -i "$filename" -ac 2 -vf scale="1080:trunc(ow/a/2)*2" -c:v libx264 -crf 23 -c:a aac -y "$newfilename"
 
-  #convert from mkv to mp4 if applicable
-  #TODO: ensure it's lowercase using ,,
-  if [ "${filename: -4}" == ".mkv" ]; #ensure that it's a .mkv first
-  then
-    newfilename="${filename::-4}.mp4"
-    echo "converting $filename --> $newfilename and scaling to 1080p"
-    ffmpeg -hwaccel auto -i "$filename" -ac 2 -vf scale="1080:trunc(ow/a/2)*2" -y "$newfilename"
-
-    #remove original mkv file
-    #rm "$filename"
-    #TODO: write the current url as commented once it's all done
+      #remove original mkv file
+      #rm "$filename"
+      #TODO: write the current url as commented once it's all done
+    fi
   fi
-  
 done
 
-
 echo "done"
-
