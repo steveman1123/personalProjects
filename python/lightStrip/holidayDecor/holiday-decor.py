@@ -17,7 +17,8 @@ def main():
       startTime,endTime,
       dt.date(dt.date.today().year,10,1),
       dt.date(dt.date.today().year,11,1)
-   )
+    )
+
     #generic fall colors
     runFadeStrip(
       l.everyNthLight([l.col['o'],l.col['p'],l.col['y'],l.col['r']],1),
@@ -26,7 +27,8 @@ def main():
       startTime,endTime,
       dt.date(dt.date.today().year,11,1),
       dt.date(dt.date.today().year,12,1)
-   )
+    )
+
     #christmas colors
     runFadeStrip(
       l.everyNthLight([l.col['r'],l.col['g'],l.col['w']],5),
@@ -35,8 +37,52 @@ def main():
       startTime,endTime,
       dt.date(dt.date.today().year,12,1),
       dt.date(dt.date.today().year+1,1,1)
-   )
-    
+    )
+
+    #generic winter colors
+    runFadeStrip(
+      l.everyNthLight([l.col['c'],l.col['b'],l.col['c'],l.col['w']],1),
+      l.everyNthLight([l.col['w'],l.col['v'],l.col['c']],3),
+      -1,
+      startTime,endTime,
+      dt.date(dt.date.today().year,1,1),
+      dt.date(dt.date.today().year,2,1)
+    )
+
+    #valentine's colors
+    runFadeStrip(
+      l.everyNthLight([l.col['c'],l.col['b'],l.col['c'],l.col['w']],1),
+      l.everyNthLight([l.col['w'],l.col['p'],l.col['r'],l.col['p']],3),
+      -1,
+      startTime,endTime,
+      dt.date(dt.date.today().year,2,1),
+      dt.date(dt.date.today().year,2,16)
+    )
+
+
+    #st pattys day
+    runFadeStrip(
+      l.everyNthLight([l.col['g'],l.col['g'],l.col['y'],l.col['g'],l.col['w']],1),
+      l.everyNthLight([l.col['g'],l.col['w'],l.col['o']],3),
+      -1,
+      startTime,endTime,
+      dt.date(dt.date.today().year,2,16),
+      dt.date(dt.date.today().year,3,17)
+    )
+
+    #generic spring colors
+    runFadeStrip(
+      l.everyNthLight([l.col['p'],l.col['g'],l.col['c'],l.col['y'],l.col['v']],2),
+      l.everyNthLight([l.col['w'],l.col['g'],l.col['g'],l.col['b'],l.col['g']],1),
+      -1,
+      startTime,endTime,
+      dt.date(dt.date.today().year,3,17),
+      dt.date(dt.date.today().year,4,20)
+    )
+
+
+
+
     time.sleep(15)
     l.clearLights()
 
@@ -48,10 +94,10 @@ def main():
 
 
 
-#fade between two setsn times or between two day times, default to running forever
+#fade between two sets n times or between two day times, default to running forever
 #where startSet=the list of tuple colors to display first
 #endSet=the list of tuple colors to display second
-#n=the number of times to flip between the two
+#n=the number of times to flip between the two (-1 for infinite)
 #startTime=time of day to start displaying
 #endTime=time of day to end displaying
 #startDate=day of year to start displaying
