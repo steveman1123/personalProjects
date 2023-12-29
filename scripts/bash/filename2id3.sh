@@ -1,11 +1,11 @@
 #convert a file name to id3v2 tags
 #especially of format "{track} - {title}.mp3"
-#also sets containing folder as album and next folder up as artist
+#sets containing folder as album and next folder up as artist, also checks for multi discs
 #prompts for other tags
 #checks for "folder.jpg" and if exists, asks to set as cover art
 
-#TODO: account for folder structure of "artist/album/Disc X/"
-
+echo -e
+echo -e
 
 #set the location of mp3 files as an arg
 if (( $# != 1 )); then
@@ -32,39 +32,47 @@ IFS="/" dirarr=($dir)
 IFS=$ogifs;
 
 
-#if folders found starting with "disc", "disk", or "part" and no mp3's found, then loop through each of those folders and set album name to "Album Name (Disc #)"
-#
+#if folders found starting with "disc", "disk", or "part", then set album name to "Album Name (Disc #)"
+isseries="n";
+if [[ $(echo "${dirarr[-1]}" | grep -E "^(Part|Disc|Disk) [0-9]+$") ]]; then
+  echo -n "is this album part of a series? (Y/n) "
+  read isseries;
+fi
+
+
+if [[ "${isseries,,}" == "n" ]]; then
+  #is organized as /artist/album/
+  #artist=grandparent dir
+  artist=${dirarr[-2]}
+  #album=parent dir
+  album=${dirarr[-1]}
+else
+  #is organized as /artist/album/Disc X
+  artist=${dirarr[-3]}
+  album="${dirarr[-2]} (${dirarr[-1]})"
+fi
+
+#echo artist: $artist;
+#echo album: $album;
 
 
 
 
-#assume that it's a standard /artist/album/ listing
-
-#artist=grandparent dir
-artist=${dirarr[-2]}
-#album=parent dir
-album=${dirarr[-1]}
-
-echo artist: $artist;
-echo album: $album;
-
-
-
-echo -n "delete all existing tags? (y/N) "
+echo -n "delete all existing tags? (Y/n) "
 read deleteall;
 
 echo $deleteall;
-if [[ "${deleteall,,}" == "y" ]]; then
+if [[ "${deleteall,,}" == "n" ]]; then
   #echo "deleting existing tags"
-  deleteall="y";
+  deleteall="n";
 else
   #echo "not deleting existing tags"
-  deleteall="n";
+  deleteall="y";
 fi
 
 
 if test -f "$dir/folder.jpg"; then
-  echo -n "\"folder.jpg\" is found. Resize to 800x800 and use it as the cover art? (Y/n)"
+  echo -n "\"folder.jpg\" is found. Resize to 600x600 and use it as the cover art? (Y/n)"
   read writeimg;
   if [[ ${writeimg,,} == "n" ]]; then
     writeimg="n";
@@ -100,11 +108,10 @@ read genreNum;
 
 echo -e
 echo -e
-echo "deleting existing tags? $deleteall"
 echo "writing the following:"
-if [[ $writeimg == "y" ]]; then
-  echo "resizing folder.jpg and setting as album cover art"
-fi
+echo -e
+echo "deleting existing tags? $deleteall"
+echo "set folder.jpg as album cover? $writeimg"
 echo "artist: $artist"
 echo "album: $album"
 echo "year: $year"
@@ -124,7 +131,7 @@ if [[ $okgo == "y" ]]; then
   #resize the folder.jpg image
   if [[ $writeimg == "y" ]]; then
     echo "resizing folder.jpg"
-    convert -resize "800x800>" "$dir/folder.jpg" "$dir/tmp.jpg"
+    convert -resize "600x600>" "$dir/folder.jpg" "$dir/tmp.jpg"
     mv "$dir/tmp.jpg" "$dir/folder.jpg"
   fi
 

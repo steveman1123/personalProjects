@@ -6,7 +6,6 @@ savedir = "./opendirstuff/"
 #TODO: have a timeout if sometime's taking too long
 
 urllist = ("https://dl1.3rver.org/",
-           #"https://dl3.3rver.org/", #sometimes works, but also sometimes slow
            "https://mp4mvz.in/",
            "http://5.135.178.104:10987/",
            "http://37.187.121.54:38946/",
