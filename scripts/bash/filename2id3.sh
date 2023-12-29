@@ -31,6 +31,15 @@ IFS="/" dirarr=($dir)
 #reset seperator (this kind of split only works for single char delims)
 IFS=$ogifs;
 
+
+#if folders found starting with "disc", "disk", or "part" and no mp3's found, then loop through each of those folders and set album name to "Album Name (Disc #)"
+#
+
+
+
+
+#assume that it's a standard /artist/album/ listing
+
 #artist=grandparent dir
 artist=${dirarr[-2]}
 #album=parent dir
