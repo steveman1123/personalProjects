@@ -135,6 +135,7 @@ if [[ $okgo == "y" ]]; then
     mv "$dir/tmp.jpg" "$dir/folder.jpg"
   fi
 
+
   #for every mp3
   for f in "$dir"/*"$fileext"; do
     #split by / and get the filename
@@ -156,6 +157,13 @@ if [[ $okgo == "y" ]]; then
     title=${trackandtitle[1]:0:${#trackandtitle[1]}-${#fileext}};
     echo $track, $title;
 
+    #delete all previous tags if requested
+    if [[ $deleteall == "y" ]]; then
+      id3v2 -D "$f"
+    fi
+
+    echo -e
+    echo "writing new tags"
     #write the tags
     id3v2 -T "$track" "$f";
     id3v2 -t "$title" "$f";
@@ -167,6 +175,8 @@ if [[ $okgo == "y" ]]; then
     if [[ $writeimg == "y" ]]; then
       eyeD3 --add-image "$dir/folder.jpg":FRONT_COVER "$f";
     fi
+    echo -e
+    echo -e
   done
 
 else

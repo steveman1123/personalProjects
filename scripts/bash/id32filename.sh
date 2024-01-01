@@ -18,9 +18,11 @@ delim="): ";
 
 for f in "$dir"/*.mp3; do
   echo $f;
+  
   #isolate the line with the track number
-  track=$(eval id3v2 --list \"$f\" | grep 'TRCK');
-  title=$(eval id3v2 --list \"$f\" | grep 'TIT2');
+  #replace instances of "$" with "\$" in the filename
+  track=$(eval id3v2 --list \"${f//$/\\$}\" | grep 'TRCK');
+  title=$(eval id3v2 --list \"${f//$/\\$}\" | grep 'TIT2');
   
   tmptrk=$track$delim;
   tmptit=$title$delim;
@@ -37,9 +39,12 @@ for f in "$dir"/*.mp3; do
     tmptrk=${tmptrk#*"$delim"};
     tmptit=${tmptit#*"$delim"};
   done
+  #sometimes the tracks are <track>/<totalTracks>, this scrubs the second totalTracks
+  track=${track[1]};
+  track=( "${track%%/*}" );
 
   #interpret the track as an arithmetic in base 10
-  track=$((10#${track[1]}));
+  track=$((10#${track}));
 
   #replace all illegal file name characters with "-"
   title="${title[1]//[\>\<\:\"\/\\\|\?\*\#\%\&\@]/-}";
