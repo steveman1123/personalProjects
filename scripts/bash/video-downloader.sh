@@ -4,9 +4,11 @@
 
 
 #specify the file to read the urls from
-file="./files2download.txt"
+#file="./files2download.txt"
+file=$1
+
 #specify the directory to save the downloaded files to as an argument
-saveDir=$1
+saveDir=$2
 
 #convert the file from dos to unix format
 echo "ensuring file is in unix format"

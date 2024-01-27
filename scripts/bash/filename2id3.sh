@@ -34,7 +34,7 @@ IFS=$ogifs;
 
 #if folders found starting with "disc", "disk", or "part", then set album name to "Album Name (Disc #)"
 isseries="n";
-if [[ $(echo "${dirarr[-1]}" | grep -E "^(Part|Disc|Disk) [0-9]+$") ]]; then
+if [[ $(echo "${dirarr[-1]}" | grep -E "^(Part|Disc|Disk|Vol|Volume) [0-9]+$") ]]; then
   echo -n "is this album part of a series? (Y/n) "
   read isseries;
 fi

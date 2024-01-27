@@ -16,8 +16,10 @@ fi
 
 delim="): ";
 
+#condense whitespaces since id3v2 has an issue with them (and they look bad anyway)
+find "$dir" -type f -exec bash -c 'mv "$1" "$(echo "$1" | sed "s/  */ /g")"' _ {} \;
+
 for f in "$dir"/*.mp3; do
-  echo $f;
   
   #isolate the line with the track number
   #replace instances of "$" with "\$" in the filename
