@@ -4,6 +4,8 @@
 #prompts for other tags
 #checks for "folder.jpg" and if exists, asks to set as cover art
 
+#TODO: check if it's in a "Various Artists" or "Soundtracks" dir, if so, then ensure the file is in the format "{track} - {title} ({artist}).mp3", then read in that way instead and rename to remove the artist)
+
 echo -e
 echo -e
 

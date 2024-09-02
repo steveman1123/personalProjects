@@ -12,7 +12,13 @@ urllist = ("https://dl1.3rver.org/",
            "https://sv3.hivamovie.com/",
            "http://movie.basnetbd.com/Data/Movies/Hollywood/", #sometimes very slow
            #"http://78.203.154.250/", #connection timeout
+           "http://149.202.66.6:8080/",
+           "http://ns1.kwiti.net/",
+           "https://www.cdn4.dlmvz.ir/",
            "http://51.158.151.61:8080/",
+           "http://movie.basnetbd.com/Data/Movies/Hollywood/",
+           "http://movie.basnetbd.com/Data/movies1/hollywood/",
+           "https://dl2.tarahipro.ir/",
            #"http://85.218.172.74/" #needs JS
            #"http://ir2.papionvod.ir/Media/", #not available
            #"http://www.moviefyy.com/Film/", #might be dead?

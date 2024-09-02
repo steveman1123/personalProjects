@@ -1,6 +1,8 @@
 #download/save multiple video files specified from a file containing 1 url per line
 #convert all mkvs to mp4s
 #TODO: check file size, if it's smaller than some amount (or if there's a way to detect a specific error (like 429), then wait for a longer period of time
+#TODO: https://docs.nvidia.com/video-technologies/video-codec-sdk/12.0/ffmpeg-with-nvidia-gpu/index.html
+
 
 
 #specify the file to read the urls from
