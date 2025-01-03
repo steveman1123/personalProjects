@@ -67,11 +67,12 @@ do
       sleep 3
     done
     echo -e
-  
 
-    #convert from mkv to mp4 if applicable
+    
+    
+    #convert to mp4 if applicable
     #TODO: ensure it's lowercase using ,,
-    if [ "${filename: -4}" == ".mkv" ]; #ensure that it's a .mkv first
+    if [ "${filename: -4}" == ".mkv" ] || [ "${filename: -4}" == ".avi" ]; #ensure that it's a .mkv first
     then
       newfilename="${filename::-4}.mp4"
       echo "converting $filename --> $newfilename and scaling to 1080p"

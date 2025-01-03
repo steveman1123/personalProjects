@@ -19,12 +19,20 @@ delim="): ";
 #condense whitespaces since id3v2 has an issue with them (and they look bad anyway)
 find "$dir" -type f -exec bash -c 'mv "$1" "$(echo "$1" | sed "s/  */ /g")"' _ {} \;
 
-for f in "$dir"/*.mp3; do
+echo -e
+echo -e
+
+find "$dir" -type f -iname "*.mp3" | while read f; do
+  echo "$f"
   
   #isolate the line with the track number
   #replace instances of "$" with "\$" in the filename
   track=$(eval id3v2 --list \"${f//$/\\$}\" | grep 'TRCK');
   title=$(eval id3v2 --list \"${f//$/\\$}\" | grep 'TIT2');
+
+  #echo track: $track
+  #echo title: $title
+
   
   tmptrk=$track$delim;
   tmptit=$title$delim;
@@ -41,9 +49,14 @@ for f in "$dir"/*.mp3; do
     tmptrk=${tmptrk#*"$delim"};
     tmptit=${tmptit#*"$delim"};
   done
-  #sometimes the tracks are <track>/<totalTracks>, this scrubs the second totalTracks
+  #sometimes the tracks are <track>/<totalTracks>, this scrubs the second totalTracks, also rm non numeric
   track=${track[1]};
-  track=( "${track%%/*}" );
+  track=( "${track%%/*}" )
+  track=$(echo "$track" | sed 's/[^0-9]//g')
+
+  #echo track: $track;
+  #printf '%s' "$track" | hexdump -C  # Shows hidden characters
+  
 
   #interpret the track as an arithmetic in base 10
   track=$((10#${track}));

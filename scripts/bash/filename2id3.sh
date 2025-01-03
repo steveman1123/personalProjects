@@ -166,6 +166,7 @@ if [[ $okgo == "y" ]]; then
 
     echo -e
     echo "writing new tags"
+    #TODO: replace id3v2 - https://unix.stackexchange.com/questions/4961/which-mp3-tagging-tool-for-linux
     #write the tags
     id3v2 -T "$track" "$f";
     id3v2 -t "$title" "$f";
