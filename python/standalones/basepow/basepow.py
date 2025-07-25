@@ -21,17 +21,17 @@ def numberToBase(n, b):
   return digits[::-1]
 
 
-r = 9
-d = 1
+r = 7
+d = 2
 
 #maxX = r**(d+1)+r
 maxX = 20
-maxN = 90
+maxN = 500
 
 print(f"r={r}, d={d}")
 print()
 
-for n in range(maxN):
+for n in [*range(10),*range(140,155)]: #range(maxN):
   print(n,end="\t")
   for x in range(maxX):
     a = x**n
