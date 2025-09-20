@@ -61,7 +61,7 @@ do
     
     #continually attempt to download if a failure is encountered (curl should return 0 if done, 1 if failed)
     #echo "downloading"
-    while ! curl --speed-time 7 --speed-limit 500 --connect-timeout 5 -L -o "$filename" "$url" -C -; do
+    while ! curl --insecure --speed-time 7 --speed-limit 500 --connect-timeout 5 -L -o "$filename" "$url" -C -; do
       echo "errored, trying again"
       #rm *.mkv
       sleep 3

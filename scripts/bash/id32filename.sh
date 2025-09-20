@@ -30,8 +30,8 @@ find "$dir" -type f -iname "*.mp3" | while read f; do
   track=$(eval id3v2 --list \"${f//$/\\$}\" | grep 'TRCK');
   title=$(eval id3v2 --list \"${f//$/\\$}\" | grep 'TIT2');
 
-  #echo track: $track
-  #echo title: $title
+  echo track: $track
+  echo title: $title
 
   
   tmptrk=$track$delim;

@@ -62,7 +62,7 @@ for i,u in enumerate(urllist):
         f.close()
 
   else:
-    print("error getting {u}")
+    print(f"error getting {u}")
     print("commenting url")
     urllist[i] = "#"+u
     with open(urlfile,"w") as f:

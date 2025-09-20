@@ -43,14 +43,16 @@ for f in "$dir"/*"$fileext"; do
   #trim the file extension from the filename to get the title
   title=${trackandtitle[1]:0:${#trackandtitle[1]}-${#fileext}};
 
-
-  echo -e
-  echo "writing track and title"
-  echo $f
-  echo $track, $title;
-  #write the tags
-  id3v2 -T "$track" "$f";
-  id3v2 -t "$title" "$f";
+  if [ ${#track} -gt 0 -a ${#title} -gt 0 ]; then
+    echo -e
+    echo "writing track and title"
+    echo $f
+    echo $track, $title;
+    #write the tags
+    id3v2 -T "$track" -t "$title" "$f";
+  else
+    echo "missing track or title?"
+  fi
 
   echo -e
   echo -e
