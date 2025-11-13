@@ -1,0 +1,158 @@
+* {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+
+body {
+  margin: 10px;
+  overflow: clip;
+}
+
+.calendar {
+  margin: 0 auto;
+	background: #ccc;
+	width: 33%;
+  min-width: 450px;
+	border-radius: 10px;
+}
+
+.calendar header {
+	display: flex;
+	align-items: center;
+	padding: 25px 30px 10px;
+	justify-content: space-between;
+}
+
+.calendar header * {
+  font-size: large;
+}
+
+input[type=number].no-spinner {
+   appearance: textfield;
+}
+
+
+header .calendar-navigation {
+	display: flex;
+}
+
+#settoday {
+  padding: 5px;
+  border-radius: 20%;
+  background-color: #aad;
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
+}
+
+#settoday:hover {
+  background-color: #eee;
+}
+
+header .calendar-navigation span, .eventadder {
+	height: 38px;
+	width: 38px;
+	margin: 0 1px;
+	cursor: pointer;
+	text-align: center;
+	line-height: 38px;
+	border-radius: 50%;
+	user-select: none;
+	font-size: 1.9rem;
+}
+
+.calendar-navigation span:last-child {
+	margin-right: -10px;
+}
+
+header .calendar-navigation span:hover, .eventadder:hover {
+	background-color: #eee;
+  border-radius: 50%;
+}
+
+.eventadder, .closeevent {
+  background-color: #aad;
+  cursor: pointer;
+  border-radius: 20%;
+  transition: all 0.25s;
+}
+
+
+header .calendar-current-date {
+	font-weight: 500;
+	font-size: 1.45rem;
+}
+
+.calendar-body {
+	padding: 20px;
+}
+
+.calendar-body ul {
+	list-style: none;
+	flex-wrap: wrap;
+	display: flex;
+	text-align: center;
+}
+
+.calendar-body .calendar-dates {
+	margin-bottom: 20px;
+}
+
+.calendar-body li {
+	width: calc(100% / 7);
+	font-size: 1.07rem;
+}
+
+.calendar-body .calendar-weekdays li {
+	cursor: default;
+	font-weight: 500;
+}
+
+.caldate {
+	margin-top: 30px;
+	position: relative;
+	z-index: 1;
+}
+
+.calendar-dates li.inactive {
+	color: #aaa;
+}
+
+.calendar-dates li::before {
+	position: absolute;
+	content: "";
+	z-index: -1;
+	top: 50%;
+	left: 50%;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.calendar-dates li.active::before {
+	background: #aad;
+}
+.calendar-dates li:not(.inactive) {
+	cursor: pointer;
+}
+.calendar-dates li:not(.active):not(.inactive):hover::before {
+	background: #eee;
+}
+/*
+.calendar-dates li:not(.active):not(.inactive):focus::before {
+	background: #eee;
+}
+*/
+
+@media screen and (max-width: 640px) {
+  .calendar {
+    width: 95%;
+    min-width: initial;
+  }
+  
+  .calendar-event {
+    width: 90%;
+  }
+}

@@ -2,6 +2,7 @@ import requests,time,re,os
 
 savedir = "./dirs/"
 #TODO: crawl reddit for urls labeled for movies
+#https://old.reddit.com/r/opendirectories/search?sort=new&restrict_sr=on&q=flair%3AMovies
 #TODO: have a timeout if sometime's taking too long
 
 #file containing 1 url per line
