@@ -76,7 +76,7 @@ do
     then
       newfilename="${filename::-4}.mp4"
       echo "converting $filename --> $newfilename and scaling to 1080p"
-      ffmpeg -hwaccel auto -i "$filename" -ac 2 -vf scale="1080:trunc(ow/a/2)*2" -c:v libx264 -crf 23 -c:a aac -y "$newfilename"
+      ffmpeg -hwaccel auto -i "$filename" -map 0:v -map 0:a -map 0:s? -ac 2 -vf scale="1080:trunc(ow/a/2)*2" -c:v libx264 -crf 23 -pix_fmt yuv420p -level 4.1 -c:a aac -c:s mov_text -movflags +faststart -y "$newfilename"
 
       #remove original mkv file
       #rm "$filename"
