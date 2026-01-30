@@ -20,25 +20,33 @@ def numberToBase(n, b):
     n //= b
   return digits[::-1]
 
+#radix
+r = 10
+#digit significance (0=least significant)
+d = 1
 
-r = 7
-d = 2
-
-#maxX = r**(d+1)+r
-maxX = 20
-maxN = 500
+maxX = r**(d+1)+r
+#maxX = 30
+maxN = 100
 
 print(f"r={r}, d={d}")
 print()
 
-for n in [*range(10),*range(140,155)]: #range(maxN):
+
+#TODO: add a set of unique digitstr's and call out if the next exists in the set
+occurances = dict()
+for n in range(maxN): #[*range(17),*range(140,155)]: #range(maxN):
   print(n,end="\t")
+  digitstr = ""
   for x in range(maxX):
     a = x**n
     b = numberToBase(a,r)
     if(len(b)<d+1):
       b = [0]*(d+1-len(b))+b
-    #print(b)
-    print(b[-(d+1)],end="")
-  print("")
+    digitstr += str(b[-(d+1)])
+    if(digitstr in occurances):
+      occurances[digitstr] += 1
+    else:
+      occurances[digitstr] = 0
+  print(digitstr,sum([int(e) for e in digitstr]),occurances[digitstr],sep="\t")
   
