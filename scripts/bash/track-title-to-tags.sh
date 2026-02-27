@@ -29,19 +29,16 @@ for f in "$dir"/*"$fileext"; do
   IFS="/" filename=($f);
   filename=${filename[-1]};
   IFS=$ogifs;
-  
-  #split filename by delim and get the track and title
-  tmp=$filename$delim;
-  trackandtitle=();
-  while [[ $tmp ]]; do
-    trackandtitle+=( "${tmp%%"$delim"*}" );
-    tmp=${tmp#*"$delim"};
-  done
+
+  basename="${filename%.*}"
+  #echo $basename;
 
   #isolate the track
-  track=${trackandtitle[0]};
+  track="${basename%%"$delim"*}";
   #trim the file extension from the filename to get the title
-  title=${trackandtitle[1]:0:${#trackandtitle[1]}-${#fileext}};
+  title="${basename#*"$delim"}";
+
+  #echo $track, $title;
 
   if [ ${#track} -gt 0 -a ${#title} -gt 0 ]; then
     echo -e
