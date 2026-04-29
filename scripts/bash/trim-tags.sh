@@ -95,17 +95,37 @@ def trim_id3v1(data):
     tag = bytearray(data[-ID3V1_SIZE:])
     changes = []
 
+    # Detect ID3v1.1: comment field byte 28 == 0x00 and byte 29 != 0x00.
+    # In that case byte 29 is the track number and must not be touched,
+    # because track numbers 10-13 map to \x0A-\x0D which Python's strip()
+    # treats as whitespace (newline, VT, FF, CR) and would silently erase.
+    comment_offset = 97  # absolute offset of comment field within the 128-byte tag
+    is_v1_1 = (tag[comment_offset + 28] == 0x00 and tag[comment_offset + 29] != 0x00)
+
     for name, offset, length in ID3V1_FIELDS:
         raw = tag[offset:offset+length]
-        # Decode as latin-1, strip null bytes then strip whitespace
-        decoded = raw.rstrip(b"\x00").decode("latin-1")
-        trimmed = decoded.strip()
-        if trimmed != decoded:
-            changes.append((f"ID3v1:{name}", repr(decoded), repr(trimmed)))
-            encoded = trimmed.encode("latin-1")[:length]
-            # Pad with null bytes
-            padded = encoded.ljust(length, b"\x00")
-            tag[offset:offset+length] = padded
+
+        if name == "comment" and is_v1_1:
+            # Only trim the text portion (bytes 0-27); preserve bytes 28-29
+            text_raw    = raw[:28]
+            track_bytes = raw[28:]          # b"\x00" + track_byte
+            decoded = text_raw.rstrip(b"\x00").decode("latin-1")
+            trimmed = decoded.strip()
+            if trimmed != decoded:
+                changes.append((f"ID3v1:{name}", repr(decoded), repr(trimmed)))
+                encoded = trimmed.encode("latin-1")[:28]
+                padded  = encoded.ljust(28, b"\x00") + track_bytes
+                tag[offset:offset+length] = padded
+        else:
+            # Decode as latin-1, strip null bytes then strip whitespace
+            decoded = raw.rstrip(b"\x00").decode("latin-1")
+            trimmed = decoded.strip()
+            if trimmed != decoded:
+                changes.append((f"ID3v1:{name}", repr(decoded), repr(trimmed)))
+                encoded = trimmed.encode("latin-1")[:length]
+                # Pad with null bytes
+                padded = encoded.ljust(length, b"\x00")
+                tag[offset:offset+length] = padded
 
     new_data = data[:-ID3V1_SIZE] + bytes(tag)
     return new_data, changes
