@@ -1,12 +1,14 @@
+#!/bin/bash
+
 #convert a file name to id3v2 tags
 #especially of format "{track} - {title}.mp3"
-#DOES NOTE set containing folder as album and next folder up as artist, also checks for multi discs
+#DOES NOT set containing folder as album and next folder up as artist, or check for multi discs
 echo -e
 
 #set the location of mp3 files as an arg
-if (( $# != 1 )); then
-  echo "wrong number of args. Please pass the directory to work from"
-  exit;
+if [[ $# -ne 1 ]]; then
+  echo "wrong number of args. Please pass the directory to work from";
+  exit 1;
 else
   #set the directory var
   dir=$1;
@@ -23,15 +25,27 @@ fileext=".mp3"
 #obtain original Internal Field Seperator
 ogifs=$IFS;
 
+
 #for every mp3
-for f in "$dir"/*"$fileext"; do
+if [[ "$dir" == *"$fileext" ]]; then
+  #just specifying one file
+  search=("$dir");
+  echo "single file";
+else
+  #searching a whole directory
+  search=("$dir"/*"$fileext");
+  echo "directory";
+fi
+
+for f in "${search[@]}"; do
+#for f in "$dir"/*"$fileext"; do
   #split by / and get the filename
   IFS="/" filename=($f);
   filename=${filename[-1]};
   IFS=$ogifs;
 
   basename="${filename%.*}"
-  #echo $basename;
+  echo $basename;
 
   #isolate the track
   track="${basename%%"$delim"*}";
