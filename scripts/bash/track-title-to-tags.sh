@@ -1,12 +1,14 @@
+#!/bin/bash
+
 #convert a file name to id3v2 tags
 #especially of format "{track} - {title}.mp3"
-#DOES NOTE set containing folder as album and next folder up as artist, also checks for multi discs
+#DOES NOT set containing folder as album and next folder up as artist, or check for multi discs
 echo -e
 
 #set the location of mp3 files as an arg
-if (( $# != 1 )); then
-  echo "wrong number of args. Please pass the directory to work from"
-  exit;
+if [[ $# -ne 1 ]]; then
+  echo "wrong number of args. Please pass the directory to work from";
+  exit 1;
 else
   #set the directory var
   dir=$1;
@@ -23,25 +25,34 @@ fileext=".mp3"
 #obtain original Internal Field Seperator
 ogifs=$IFS;
 
+
 #for every mp3
-for f in "$dir"/*"$fileext"; do
+if [[ "$dir" == *"$fileext" ]]; then
+  #just specifying one file
+  search=("$dir");
+  echo "single file";
+else
+  #searching a whole directory
+  search=("$dir"/*"$fileext");
+  echo "directory";
+fi
+
+for f in "${search[@]}"; do
+#for f in "$dir"/*"$fileext"; do
   #split by / and get the filename
   IFS="/" filename=($f);
   filename=${filename[-1]};
   IFS=$ogifs;
-  
-  #split filename by delim and get the track and title
-  tmp=$filename$delim;
-  trackandtitle=();
-  while [[ $tmp ]]; do
-    trackandtitle+=( "${tmp%%"$delim"*}" );
-    tmp=${tmp#*"$delim"};
-  done
+
+  basename="${filename%.*}"
+  echo $basename;
 
   #isolate the track
-  track=${trackandtitle[0]};
+  track="${basename%%"$delim"*}";
   #trim the file extension from the filename to get the title
-  title=${trackandtitle[1]:0:${#trackandtitle[1]}-${#fileext}};
+  title="${basename#*"$delim"}";
+
+  #echo $track, $title;
 
   if [ ${#track} -gt 0 -a ${#title} -gt 0 ]; then
     echo -e
